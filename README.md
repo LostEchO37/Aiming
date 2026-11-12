@@ -14,8 +14,10 @@ Aiming。一个宇宙是一块地方：学习、讨论机会、找同路人。
 | 宇宙列表 | `universes.html` |
 | 宇宙详情（各宇宙共用这一页） | `universe.html?id=yingxiao` 等 |
 | 学习 | `learn.html` |
-| 讨论与机会 | `discuss.html` |
-| 找同路人 | `people.html` |
+| 讨论 | `discuss.html` |
+| 同路人 | `people.html` |
+
+讨论和同路人从搜索开始，可以搜话题、帖子、机会和人。宇宙页里的讨论只看该宇宙。
 | 关于 | `about.html` |
 
 宇宙 id：`yingxiao` 营销，`renshi` 人事，`kaifa` 数字开发，`meishu` 美术，`anquan` 安全。

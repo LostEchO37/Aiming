@@ -47,7 +47,7 @@
   }
 
   function loadStore() {
-    const empty = { threads: [], opportunities: [], people: [], read: {} };
+    const empty = { threads: [], opportunities: [], people: [], posts: [], replies: {}, likes: {}, read: {} };
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return empty;
@@ -57,6 +57,9 @@
         threads: Array.isArray(data.threads) ? data.threads.filter(validNote) : [],
         opportunities: Array.isArray(data.opportunities) ? data.opportunities.filter(validNote) : [],
         people: Array.isArray(data.people) ? data.people.filter(validPerson) : [],
+        posts: Array.isArray(data.posts) ? data.posts.filter(validPost) : [],
+        replies: cleanReplies(data.replies),
+        likes: cleanFlags(data.likes),
         read: data.read && typeof data.read === "object" ? data.read : {},
       };
     } catch (err) {
@@ -76,8 +79,43 @@
     return item && knownId(item.universeId) && typeof item.can === "string" && typeof item.want === "string" && typeof item.id === "string";
   }
 
+  function validPost(item) {
+    return item
+      && knownId(item.universeId)
+      && typeof item.id === "string"
+      && typeof item.body === "string"
+      && item.body.trim()
+      && (item.kind === "topic" || item.kind === "post" || item.kind === "opportunity");
+  }
+
+  function cleanReplies(raw) {
+    const out = {};
+    if (!raw || typeof raw !== "object") return out;
+    Object.entries(raw).forEach(([key, list]) => {
+      if (!Array.isArray(list)) return;
+      const rows = list.filter((row) => row && typeof row.id === "string" && typeof row.body === "string" && row.body.trim());
+      if (rows.length) out[key] = rows.slice(0, 50);
+    });
+    return out;
+  }
+
+  function cleanFlags(raw) {
+    const out = {};
+    if (!raw || typeof raw !== "object") return out;
+    Object.entries(raw).forEach(([key, value]) => {
+      if (value && typeof key === "string") out[key] = true;
+    });
+    return out;
+  }
+
   function saveStore(store) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+      return true;
+    } catch (err) {
+      setStatus("这台浏览器没有记下。可能是存储满了，或停用了本地存储。");
+      return false;
+    }
   }
 
   function uid(prefix) {
@@ -218,15 +256,15 @@
     rooms.append(h("h2", { class: "block-title", text: "三处" }));
     const grid = h("div", { class: "room-grid", style: "margin-top:0.8rem" });
     [
-      ["01", "学习", universe.rooms.learn, "learn.html?id=" + universe.id],
-      ["02", "讨论与机会", universe.rooms.discuss, "discuss.html?id=" + universe.id],
-      ["03", "找同路人", universe.rooms.people, "people.html?id=" + universe.id],
-    ].forEach(([index, title, copy, href]) => {
+      ["01", "学习", universe.rooms.learn, "learn.html?id=" + universe.id, "进去"],
+      ["02", "讨论与机会", universe.rooms.discuss, "#community", "去搜索"],
+      ["03", "找同路人", universe.rooms.people, "#community", "去搜索"],
+    ].forEach(([index, title, copy, href, go]) => {
       grid.append(h("a", { class: "room", href }, [
         h("span", { class: "idx", text: index }),
         h("h3", { text: title }),
         h("p", { text: copy }),
-        h("span", { class: "go" }, ["进去 ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
+        h("span", { class: "go" }, [go + " ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
       ]));
     });
     rooms.append(grid);
@@ -254,7 +292,18 @@
     });
     mats.append(links);
     stack.append(mats);
+
+    const community = h("section", {
+      class: "community",
+      id: "community",
+      "aria-labelledby": "community-heading",
+    });
+    community.append(h("h2", { class: "block-title", id: "community-heading", text: "讨论与同路人" }));
+    const mount = h("div", { id: "community-root" });
+    community.append(mount);
+    stack.append(community);
     root.append(stack);
+    mountCommunity(mount, { lens: "both" });
   }
 
   let learnScrolled = false;
@@ -347,29 +396,11 @@
     }
   }
 
-  function combine(localItems, seedItems, universe, mine) {
-    const match = (item) => !universe || item.universeId === universe.id;
-    const local = localItems.filter(match).slice().sort((a, b) => String(b.created || "").localeCompare(String(a.created || "")));
-    const seeds = mine ? [] : seedItems.filter(match);
-    return local.concat(seeds);
-  }
-
   function emptyBox(title, body) {
     return h("div", { class: "empty" }, [
       h("strong", { text: title }),
       h("p", { text: body }),
     ]);
-  }
-
-  function badge(seed) {
-    return h("span", { class: seed ? "badge" : "badge badge--local", text: seed ? "示例" : "本机" });
-  }
-
-  function savedWhere(kind, universeId, filterUniverse) {
-    if (filterUniverse && filterUniverse.id !== universeId) {
-      return "已记在「" + universeName(universeId) + "」。当前列表只显示" + filterUniverse.name + "，可以改上面的筛选。";
-    }
-    return kind + "已记在这台浏览器里。";
   }
 
   function setStatus(text) {
@@ -434,273 +465,942 @@
     return { wrap, control, err };
   }
 
-  function renderDiscuss() {
-    const root = document.getElementById("discuss-root");
-    if (!root) return;
-    const { universe, invalid, id } = currentUniverse();
-    const mine = query().get("mine") === "1";
-    root.replaceChildren();
-    if (invalid) root.append(missingBanner(id));
-    root.append(filters());
-    root.append(h("div", { class: "toolbar" }, [
-      h("p", { class: "local-note", text: "你写下的内容只记在这台浏览器里。示例是写好的样子，不是真实的人。" }),
-      h("a", { class: "text-btn", href: hrefWith({ mine: mine ? null : "1" }) }, mine ? "也看示例" : "只看我写的"),
-    ]));
-    root.append(h("p", { class: "status", id: "status", role: "status" }));
 
-    root.append(h("h2", { class: "block-title", text: "讨论" }));
-    root.append(threadForm(universe));
-    root.append(h("div", { id: "thread-list" }));
+  const KIND = { topic: "话题", post: "帖子", opportunity: "机会" };
 
-    const oppHead = h("div", { style: "margin-top:1.6rem" });
-    oppHead.append(h("h2", { class: "block-title", text: "机会" }));
-    oppHead.append(h("p", { class: "page-intro", text: "机会是一件想找人一起做的小事，不是招聘，也不是岗位。" }));
-    root.append(oppHead);
-    root.append(opportunityForm(universe));
-    root.append(h("div", { id: "opp-list" }));
-
-    paintDiscussLists();
+  function withQuery(file, params) {
+    const sp = new URLSearchParams();
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value == null || value === "") return;
+      sp.set(key, String(value));
+    });
+    const q = sp.toString();
+    return file + (q ? "?" + q : "");
   }
 
-  function paintDiscussLists() {
-    const { universe, invalid } = currentUniverse();
-    const mine = query().get("mine") === "1";
-    const store = loadStore();
-    const threads = invalid ? [] : combine(store.threads, window.AIMING.seeds.threads, universe, mine);
-    const opps = invalid ? [] : combine(store.opportunities, window.AIMING.seeds.opportunities, universe, mine);
-    fillList(document.getElementById("thread-list"), threads, "threads", universe, mine, invalid);
-    fillList(document.getElementById("opp-list"), opps, "opportunities", universe, mine, invalid);
+  function formatTime(iso) {
+    const then = new Date(iso);
+    const t = then.getTime();
+    if (!iso || Number.isNaN(t)) return "";
+    const delta = Date.now() - t;
+    if (delta < 45000) return "刚刚";
+    const min = Math.floor(delta / 60000);
+    if (min < 60) return min + " 分钟前";
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return hr + " 小时前";
+    const day = Math.floor(hr / 24);
+    if (day < 7) return day + " 天前";
+    return (then.getMonth() + 1) + "月" + then.getDate() + "日";
+  }
 
-    const hasLocal = store.threads.length + store.opportunities.length > 0;
-    let clearer = document.getElementById("discuss-clear");
-    if (clearer) clearer.remove();
-    if (hasLocal) {
-      const holder = h("div", { id: "discuss-clear" });
-      holder.append(clearControl("清除我在讨论里写下的", () => {
-        const next = loadStore();
-        next.threads = [];
-        next.opportunities = [];
-        saveStore(next);
-        renderDiscuss();
-        setStatus("讨论和机会已从这台浏览器清除。");
-      }));
-      document.getElementById("discuss-root").append(holder);
+  function initial(name) {
+    const ch = String(name || "我").trim().charAt(0);
+    return ch || "我";
+  }
+
+  function universeOrder(id) {
+    const u = window.AIMING.byId[id];
+    return u ? u.index : "99";
+  }
+
+  function allPosts(store) {
+    const list = [];
+    store.posts.forEach((p) => {
+      list.push({
+        id: p.id,
+        seed: false,
+        kind: p.kind,
+        universeId: p.universeId,
+        author: p.author || "我",
+        title: p.title || "",
+        body: p.body,
+        created: p.created || "",
+        likes: p.likes || 0,
+        replies: [],
+      });
+    });
+    store.threads.forEach((item) => {
+      list.push({
+        id: item.id,
+        seed: false,
+        kind: "topic",
+        universeId: item.universeId,
+        author: "我",
+        title: item.title,
+        body: item.body,
+        created: item.created || "",
+        likes: 0,
+        replies: [],
+      });
+    });
+    store.opportunities.forEach((item) => {
+      list.push({
+        id: item.id,
+        seed: false,
+        kind: "opportunity",
+        universeId: item.universeId,
+        author: "我",
+        title: item.title,
+        body: item.body,
+        created: item.created || "",
+        likes: 0,
+        replies: [],
+      });
+    });
+    (window.AIMING.posts || []).forEach((p) => {
+      list.push({
+        id: p.id,
+        seed: true,
+        kind: p.kind,
+        universeId: p.universeId,
+        author: p.author,
+        title: p.title || "",
+        body: p.body,
+        created: p.created,
+        likes: p.likes || 0,
+        replies: p.replies || [],
+      });
+    });
+    list.sort((a, b) => String(b.created || "").localeCompare(String(a.created || "")) || String(a.id).localeCompare(String(b.id)));
+    return list;
+  }
+
+  function allPeople(store) {
+    const list = store.people.map((p) => ({
+      id: p.id,
+      seed: false,
+      universeId: p.universeId,
+      name: p.name || "未署名",
+      can: p.can,
+      want: p.want,
+      created: p.created || "",
+    })).concat((window.AIMING.people || []).map((p) => ({
+      id: p.id,
+      seed: true,
+      universeId: p.universeId,
+      name: p.name,
+      can: p.can,
+      want: p.want,
+      created: p.created || "",
+    })));
+    list.sort((a, b) => {
+      if (Boolean(a.seed) !== Boolean(b.seed)) return a.seed ? 1 : -1;
+      return universeOrder(a.universeId).localeCompare(universeOrder(b.universeId))
+        || String(a.name).localeCompare(String(b.name), "zh");
+    });
+    return list;
+  }
+
+  function allReplies(post, store) {
+    const base = (post.replies || []).map((r) => ({
+      id: r.id,
+      seed: true,
+      author: r.author,
+      body: r.body,
+      created: r.created || "",
+    }));
+    const extra = (store.replies[post.id] || []).map((r) => ({
+      id: r.id,
+      seed: false,
+      author: r.author || "我",
+      body: r.body,
+      created: r.created || "",
+    }));
+    return base.concat(extra).sort((a, b) => String(a.created || "").localeCompare(String(b.created || "")));
+  }
+
+  function fold(value) {
+    return String(value || "").toLowerCase().replace(/\s+/g, "");
+  }
+
+  function matches(hay, q) {
+    if (!q) return true;
+    return fold(hay).includes(fold(q));
+  }
+
+  function postHay(post, store) {
+    const replies = allReplies(post, store);
+    return [
+      post.title,
+      post.body,
+      post.author,
+      universeName(post.universeId),
+      KIND[post.kind] || "",
+    ].concat(replies.map((r) => (r.body || "") + (r.author || ""))).join("\n");
+  }
+
+  function personHay(person) {
+    return [person.name, person.can, person.want, universeName(person.universeId), "同路人"].join("\n");
+  }
+
+  function avatar(name) {
+    return h("span", { class: "avatar", "aria-hidden": "true", text: initial(name) });
+  }
+
+  function stateHref(extra) {
+    const input = document.getElementById("community-q");
+    const params = {
+      id: query().get("id") || "",
+      q: input ? input.value.trim() : (query().get("q") || ""),
+      mine: query().get("mine") || "",
+    };
+    Object.entries(extra || {}).forEach(([key, value]) => {
+      if (value) params[key] = value;
+    });
+    return withQuery(pageFile(), params);
+  }
+
+  function personForAuthor(store, name, universeId) {
+    return allPeople(store).find((p) => p.name === name && p.universeId === universeId) || null;
+  }
+
+  function noticeAfterSave(kind, universeId, filterUniverse) {
+    const input = document.getElementById("community-q");
+    const q = input ? input.value.trim() : "";
+    if (filterUniverse && filterUniverse.id !== universeId) {
+      return "已记在「" + universeName(universeId) + "」。当前只显示" + filterUniverse.name + "。";
     }
+    if (q) return kind + "已记下。如果和搜索对不上，清除搜索就能看见。";
+    return kind + "已记在这台浏览器里。";
   }
 
-  function fillList(node, items, kind, universe, mine, invalid) {
-    if (!node) return;
-    node.replaceChildren();
-    if (!items.length) {
-      node.append(emptyBox(
-        emptyCopy(kind, universe, mine, invalid).title,
-        emptyCopy(kind, universe, mine, invalid).body
-      ));
+  function sharePost(post, button) {
+    const url = new URL(withQuery("discuss.html", { post: post.id }), location.href).href;
+    const title = post.title || "Aiming";
+    const done = () => {
+      button.textContent = "已复制";
+      setStatus("链接已复制。");
+      setTimeout(() => { button.textContent = "转发"; }, 1600);
+    };
+    if (navigator.share) {
+      navigator.share({ title, text: post.body || title, url }).then(() => {}).catch((err) => {
+        if (err && err.name === "AbortError") return;
+        copyLink(url, done);
+      });
       return;
     }
-    items.forEach((item) => node.append(noteCard(item, kind)));
+    copyLink(url, done);
   }
 
-  function emptyCopy(kind, universe, mine, invalid) {
-    if (invalid) return { title: "没有内容", body: "筛选对不上现有的宇宙。可以改选「全部」。" };
-    const place = universe ? universe.name + "宇宙" : "这里";
-    if (mine) {
-      if (kind === "threads") return { title: "你还没有写讨论", body: "上面的表单会记在这台浏览器里。换一台设备就没有了。" };
-      if (kind === "opportunities") return { title: "你还没有写机会", body: "写一件想找人一起做的小事。它只留在这台浏览器。" };
-      return { title: "你还没有留纸条", body: "上面的表单会记在这台浏览器里。" };
+  function copyLink(url, done) {
+    const finish = () => { if (done) done(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(finish).catch(() => setStatus("链接：" + url));
+      return;
     }
-    if (kind === "threads") return { title: "还没有讨论", body: place + "还没有话题。你可以从上面写一条。" };
-    if (kind === "opportunities") return { title: "还没有机会", body: place + "还没有人写下想一起做的事。" };
-    return { title: "还没有同路人纸条", body: place + "还没有纸条。你可以先留一张。" };
+    setStatus("链接：" + url);
   }
 
-  function noteCard(item, kind) {
-    const card = h("article", { class: "note" }, [
-      badge(Boolean(item.seed)),
-      h("p", { class: "meta", text: universeName(item.universeId) }),
-    ]);
-    if (kind === "people") {
-      card.append(h("h3", { text: item.name || "未署名" }));
-      card.append(h("p", { text: "能做的：" + item.can }));
-      card.append(h("p", { text: "想一起做：" + item.want }));
-    } else {
-      card.append(h("h3", { text: item.title }));
-      card.append(h("p", { text: item.body }));
-    }
-    if (!item.seed) {
-      const button = h("button", { type: "button", class: "text-btn", text: "删除" });
+  function deleteControl(kind, id) {
+    const button = h("button", { type: "button", class: "text-btn", text: "删除" });
+    button.addEventListener("click", () => {
+      if (button.dataset.arm !== "1") {
+        button.dataset.arm = "1";
+        button.textContent = "确认删除";
+        return;
+      }
+      const store = loadStore();
+      if (kind === "posts") {
+        store.posts = store.posts.filter((row) => row.id !== id);
+        store.threads = store.threads.filter((row) => row.id !== id);
+        store.opportunities = store.opportunities.filter((row) => row.id !== id);
+        if (store.replies[id]) delete store.replies[id];
+      } else {
+        store.people = store.people.filter((row) => row.id !== id);
+      }
+      if (!saveStore(store)) return;
+      const next = new URL(location.href);
+      next.searchParams.delete("post");
+      next.searchParams.delete("person");
+      history.replaceState(null, "", next);
+      setStatus("已从这台浏览器删除。");
+      document.dispatchEvent(new CustomEvent("aiming-repaint"));
+    });
+    return h("div", { class: "note-actions" }, button);
+  }
+
+  function actionRow(post, store, inThread) {
+    const replies = allReplies(post, store);
+    const row = h("div", { class: "post-actions" });
+    const replyText = replies.length ? "回复 " + replies.length : "回复";
+    if (inThread) {
+      const button = h("button", { type: "button", class: "action", text: replyText });
       button.addEventListener("click", () => {
-        if (button.dataset.arm !== "1") {
-          button.dataset.arm = "1";
-          button.textContent = "确认删除";
-          return;
-        }
-        const store = loadStore();
-        store[kind] = store[kind].filter((row) => row.id !== item.id);
-        saveStore(store);
-        setStatus("已从这台浏览器删除。");
-        if (kind === "people") paintPeople();
-        else paintDiscussLists();
+        const box = document.getElementById("reply-body");
+        if (box) box.focus();
       });
-      card.append(h("div", { class: "note-actions" }, button));
+      row.append(button);
+    } else {
+      row.append(h("a", { class: "action", href: stateHref({ post: post.id }) + "#reply" }, replyText));
     }
+    const share = h("button", { type: "button", class: "action", text: "转发" });
+    share.addEventListener("click", () => sharePost(post, share));
+    row.append(share);
+    const base = post.likes || 0;
+    const liked = Boolean(store.likes[post.id]);
+    const count = base + (liked ? 1 : 0);
+    const like = h("button", {
+      type: "button",
+      class: "action",
+      "aria-pressed": liked ? "true" : "false",
+      text: count ? "赞 " + count : "赞",
+    });
+    like.addEventListener("click", () => {
+      const next = loadStore();
+      if (next.likes[post.id]) delete next.likes[post.id];
+      else next.likes[post.id] = true;
+      if (!saveStore(next)) return;
+      const on = Boolean(next.likes[post.id]);
+      like.setAttribute("aria-pressed", on ? "true" : "false");
+      const n = base + (on ? 1 : 0);
+      like.textContent = n ? "赞 " + n : "赞";
+    });
+    row.append(like);
+    return row;
+  }
+
+  function postMeta(item, kindText) {
+    const line = h("p", { class: "post-meta" });
+    const uname = universeName(item.universeId);
+    if (uname) {
+      line.append(h("a", { class: "tag", href: "universe.html?id=" + item.universeId + "#community" }, uname));
+    }
+    if (kindText) {
+      line.append(h("span", {
+        class: kindText === "机会" ? "kind kind--opportunity" : "kind",
+        text: kindText,
+      }));
+    }
+    const time = formatTime(item.created);
+    if (time) line.append(h("time", { datetime: item.created || "", text: time }));
+    line.append(h("span", {
+      class: item.seed ? "badge" : "badge badge--local",
+      text: item.seed ? "示例" : "本机",
+    }));
+    return line;
+  }
+
+  function feedCard(post, store) {
+    const card = h("article", { class: "post", id: "item-" + post.id });
+    const head = h("div", { class: "post-head" }, [avatar(post.author), h("div", { class: "post-id" })]);
+    const idcol = head.lastChild;
+    const person = personForAuthor(store, post.author, post.universeId);
+    const name = person
+      ? h("a", { href: stateHref({ person: person.id }) }, post.author)
+      : h("span", { text: post.author || "我" });
+    idcol.append(h("p", { class: "post-name" }, name));
+    const kindText = post.kind === "post" ? "" : (KIND[post.kind] || "");
+    idcol.append(postMeta(post, kindText));
+    card.append(head);
+    const href = stateHref({ post: post.id });
+    if (post.title) card.append(h("a", { class: "title-btn", href }, post.title));
+    card.append(h("a", { class: "body-btn", href }, post.body));
+    card.append(actionRow(post, store, false));
+    if (!post.seed) card.append(deleteControl("posts", post.id));
     return card;
   }
 
-  function threadForm(universe) {
-    const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: "一句话写清问题", autocomplete: "off" });
-    const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: "你卡在哪一句，或哪一处" });
-    const select = universeSelect(universe && universe.id);
-    const t = labeled("标题", title);
-    const b = labeled("内容", body);
-    const s = labeled("宇宙", select);
-    b.wrap.classList.add("field-label--full");
-    const form = h("form", { class: "form-card", novalidate: true });
-    const grid = h("div", { class: "form-grid" }, [s.wrap, t.wrap, b.wrap]);
-    form.append(grid);
-    form.append(h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "写下讨论" })));
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const titleText = clip(title.value, 40);
-      const bodyText = clip(body.value, 600);
-      const universeId = select.value;
-      let ok = true;
-      if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
-      if (!titleText) { showError(title, t.err, "请写一个标题"); ok = false; } else showError(title, t.err, "");
-      if (!bodyText) { showError(body, b.err, "请写内容"); ok = false; } else showError(body, b.err, "");
-      if (!ok) { focusInvalid([select, title, body]); return; }
-      const store = loadStore();
-      store.threads.unshift({ id: uid("t-"), universeId, title: titleText, body: bodyText, created: new Date().toISOString() });
-      store.threads = store.threads.slice(0, 50);
-      saveStore(store);
-      form.reset();
-      if (universe) select.value = universe.id;
-      setStatus(savedWhere("讨论", universeId, universe));
-      paintDiscussLists();
-    });
-    return form;
+  function replyCard(reply) {
+    const card = h("article", { class: "post post--reply" });
+    const idcol = h("div", { class: "post-id" });
+    idcol.append(h("p", { class: "post-name", text: reply.author || "我" }));
+    const meta = h("p", { class: "post-meta" });
+    const time = formatTime(reply.created);
+    if (time) meta.append(h("time", { datetime: reply.created || "", text: time }));
+    if (!reply.seed) meta.append(h("span", { class: "badge badge--local", text: "本机" }));
+    idcol.append(meta);
+    card.append(h("div", { class: "post-head" }, [avatar(reply.author), idcol]));
+    card.append(h("p", { class: "post-body", text: reply.body }));
+    return card;
   }
 
-  function opportunityForm(universe) {
-    const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: "一件想一起做的小事", autocomplete: "off" });
-    const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: "你希望对方做哪一点" });
-    const select = universeSelect(universe && universe.id);
-    const t = labeled("标题", title);
-    const b = labeled("需要怎样的帮助", body);
-    const s = labeled("宇宙", select);
-    b.wrap.classList.add("field-label--full");
-    const form = h("form", { class: "form-card", novalidate: true });
-    form.append(h("div", { class: "form-grid" }, [s.wrap, t.wrap, b.wrap]));
-    form.append(h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "写下机会" })));
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const titleText = clip(title.value, 40);
-      const bodyText = clip(body.value, 600);
-      const universeId = select.value;
-      let ok = true;
-      if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
-      if (!titleText) { showError(title, t.err, "请写一个标题"); ok = false; } else showError(title, t.err, "");
-      if (!bodyText) { showError(body, b.err, "请写你需要的帮助"); ok = false; } else showError(body, b.err, "");
-      if (!ok) { focusInvalid([select, title, body]); return; }
-      const store = loadStore();
-      store.opportunities.unshift({ id: uid("o-"), universeId, title: titleText, body: bodyText, created: new Date().toISOString() });
-      store.opportunities = store.opportunities.slice(0, 50);
-      saveStore(store);
-      form.reset();
-      if (universe) select.value = universe.id;
-      setStatus(savedWhere("机会", universeId, universe));
-      paintDiscussLists();
-    });
-    return form;
+  function personRow(person) {
+    const copy = h("span", { class: "person-copy" });
+    const top = h("span", { class: "person-top" });
+    top.append(h("span", { class: "post-name", text: person.name || "未署名" }));
+    top.append(h("span", {
+      class: person.seed ? "badge" : "badge badge--local",
+      text: person.seed ? "示例" : "本机",
+    }));
+    copy.append(top);
+    const sub = h("span", { class: "person-sub" });
+    const uname = universeName(person.universeId);
+    if (uname) sub.append(h("span", { class: "tag", text: uname }));
+    sub.append(h("span", { class: "person-line", text: person.can }));
+    copy.append(sub);
+    return h("a", { class: "person-row", id: "item-" + person.id, href: stateHref({ person: person.id }) }, [
+      avatar(person.name),
+      copy,
+      h("span", { class: "go" }, ["打开 ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
+    ]);
   }
 
-  function renderPeople() {
-    const root = document.getElementById("people-root");
-    if (!root) return;
-    const { universe, invalid, id } = currentUniverse();
-    const mine = query().get("mine") === "1";
+  function foundLine(people, posts, peopleFirst) {
+    const personBit = people.length ? people.length + " 位同路人" : "";
+    const postBit = posts.length ? posts.length + " 条讨论" : "";
+    const bits = (peopleFirst ? [personBit, postBit] : [postBit, personBit]).filter(Boolean);
+    return bits.length ? "找到 " + bits.join("，") : "";
+  }
+
+  function mountCommunity(root, options) {
+    const lens = options.lens || "feed";
+    const embedded = document.body.dataset.page === "universe";
+    const { invalid, id, universe } = currentUniverse();
+
     root.replaceChildren();
     if (invalid) root.append(missingBanner(id));
-    root.append(filters());
-    root.append(h("div", { class: "toolbar" }, [
-      h("p", { class: "local-note", text: "纸条只记在这台浏览器里，不会同步到别人的屏幕。示例纸条不是真实用户。" }),
-      h("a", { class: "text-btn", href: hrefWith({ mine: mine ? null : "1" }) }, mine ? "也看示例" : "只看我写的"),
-    ]));
-    root.append(h("p", { class: "status", id: "status", role: "status" }));
-    root.append(peopleForm(universe));
-    root.append(h("h2", { class: "block-title", text: "纸条", style: "margin-bottom:0.7rem" }));
-    root.append(h("div", { id: "people-list" }));
-    paintPeople();
-  }
 
-  function paintPeople() {
-    const { universe, invalid } = currentUniverse();
-    const mine = query().get("mine") === "1";
-    const store = loadStore();
-    const items = invalid ? [] : combine(store.people, window.AIMING.seeds.people, universe, mine);
-    fillList(document.getElementById("people-list"), items, "people", universe, mine, invalid);
-    let clearer = document.getElementById("people-clear");
-    if (clearer) clearer.remove();
-    if (store.people.length) {
-      const holder = h("div", { id: "people-clear" });
-      holder.append(clearControl("清除我的同路人纸条", () => {
-        const next = loadStore();
-        next.people = [];
-        saveStore(next);
-        renderPeople();
-        setStatus("同路人纸条已从这台浏览器清除。");
-      }));
-      document.getElementById("people-root").append(holder);
+    const placeholder = universe
+      ? "在" + universe.name + "里搜索"
+      : (lens === "people" ? "搜索同路人、话题、帖子、机会" : "搜索话题、帖子、机会、同路人");
+    const input = h("input", {
+      id: "community-q",
+      class: "search-input",
+      type: "search",
+      name: "q",
+      placeholder,
+      autocomplete: "off",
+      enterkeyhint: "search",
+      "aria-label": placeholder,
+    });
+    const clearBtn = h("button", {
+      type: "button",
+      class: "search-clear",
+      hidden: true,
+      text: "清除",
+      "aria-label": "清除搜索",
+    });
+    const form = h("form", { class: "search-form", role: "search" }, [
+      input,
+      clearBtn,
+      h("button", { class: "btn btn-primary search-go", type: "submit", text: "搜索" }),
+    ]);
+    const searchBlock = h("div", { class: "search-block" }, [
+      form,
+      h("p", { class: "local-note", text: "写下的内容只留在这台浏览器里。标成示例的不是真实的人。" }),
+    ]);
+    const scope = h("nav", { class: "scope", "aria-label": "范围" });
+    const tools = h("div", { class: "community-tools" });
+    const mineLink = h("a", { class: "text-btn", href: pageFile() }, "只看我写的");
+    const postBtn = lens === "people" ? null : h("button", { type: "button", class: "text-btn", text: "写下一条" });
+    const peopleBtn = lens === "feed" ? null : h("button", { type: "button", class: "text-btn", text: "留下纸条" });
+    if (postBtn) tools.append(postBtn);
+    if (peopleBtn) tools.append(peopleBtn);
+    tools.append(mineLink);
+
+    [{ id: "", name: "全部" }].concat(window.AIMING.universes.map((u) => ({ id: u.id, name: u.name }))).forEach((item) => {
+      scope.append(h("a", { class: "chip", href: pageFile(), "data-id": item.id }, item.name));
+    });
+
+    const resultLine = h("p", { class: "result-line", id: "result-status", role: "status" });
+    const results = h("div", { id: "community-results" });
+    const localTools = h("div", { id: "local-tools", class: "community-tools" });
+    const actionStatus = h("p", { class: "status", id: "status", role: "status" });
+
+    let postForm = null;
+    let peopleForm = null;
+
+    function currentQ() {
+      return input.value.trim();
     }
-  }
 
-  function peopleForm(universe) {
-    const name = h("input", { class: "field", maxlength: "20", placeholder: "可以不写真名", autocomplete: "nickname" });
-    const can = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：能指出第一句里缺的信息" });
-    const want = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：想一起把一家小店写成三句" });
-    const select = universeSelect(universe && universe.id);
-    const n = labeled("怎么称呼", name);
-    const s = labeled("宇宙", select);
-    const c = labeled("能做的", can);
-    const w = labeled("想一起做的", want);
-    c.wrap.classList.add("field-label--full");
-    w.wrap.classList.add("field-label--full");
-    const form = h("form", { class: "form-card", novalidate: true });
-    form.append(h("div", { class: "form-grid" }, [n.wrap, s.wrap, c.wrap, w.wrap]));
-    form.append(h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "留下纸条" })));
+    function scopeTarget(universeId) {
+      const q = currentQ();
+      const mine = query().get("mine") || "";
+      if (embedded) {
+        if (!universeId) return withQuery("discuss.html", { q, mine });
+        return withQuery("universe.html", { id: universeId, q, mine });
+      }
+      return withQuery(pageFile(), { id: universeId || "", q, mine });
+    }
+
+    function paintScope() {
+      const state = currentUniverse();
+      scope.querySelectorAll("a").forEach((a) => {
+        const cid = a.getAttribute("data-id") || "";
+        a.setAttribute("href", scopeTarget(cid));
+        const on = !state.invalid && (cid ? state.universe && state.universe.id === cid : !state.universe);
+        a.classList.toggle("is-on", on);
+        if (on) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+      });
+      const onMine = query().get("mine") === "1";
+      mineLink.textContent = onMine ? "也看示例" : "只看我写的";
+      mineLink.setAttribute("href", withQuery(pageFile(), {
+        id: query().get("id") || "",
+        q: currentQ(),
+        mine: onMine ? "" : "1",
+      }));
+    }
+
+    function headingTag() {
+      return embedded ? "h3" : "h2";
+    }
+
+    function syncTitle(post, person) {
+      if (embedded) return;
+      const base = lens === "people" ? "同路人" : "讨论";
+      let name = base;
+      if (person) name = (person.name || "同路人") + " · " + base;
+      else if (post) name = (post.title || clip(post.body, 22)) + " · " + base;
+      document.title = name + " · Aiming";
+    }
+
+    function paintResults() {
+      const store = loadStore();
+      const state = currentUniverse();
+      const q = currentQ();
+      const mine = query().get("mine") === "1";
+      const postId = query().get("post");
+      const personId = query().get("person");
+      results.replaceChildren();
+
+      if (personId) {
+        resultLine.textContent = "";
+        const person = allPeople(store).find((p) => p.id === personId);
+        results.append(person ? personDetail(person) : missingDetail("没有这位同路人", "这条纸条不在了。"));
+        syncTitle(null, person || null);
+        return;
+      }
+      if (postId) {
+        resultLine.textContent = "";
+        const post = allPosts(store).find((p) => p.id === postId);
+        results.append(post ? threadView(post, store) : missingDetail("没有这条讨论", "这条内容不在了。"));
+        syncTitle(post || null, null);
+        return;
+      }
+
+      const posts = allPosts(store).filter((p) => allow(p, state, mine) && matches(postHay(p, store), q));
+      let people = allPeople(store).filter((p) => allow(p, state, mine) && matches(personHay(p), q));
+      if (!q && lens === "feed") people = [];
+      if (!q && lens === "people") posts.splice(0, posts.length);
+
+      if (!posts.length && !people.length) {
+        resultLine.textContent = "";
+        results.append(emptyState(q, mine, state.invalid, state.universe));
+        syncTitle(null, null);
+        return;
+      }
+
+      const peopleFirst = lens === "people" || Boolean(q);
+      resultLine.textContent = q ? foundLine(people, posts, peopleFirst) : (mine ? "只显示你写在这台浏览器里的" : "");
+      const showPeopleHead = people.length && (posts.length || lens === "both");
+      const showPostHead = posts.length && (people.length || lens === "both" || (lens === "people" && q));
+      const order = peopleFirst ? ["people", "posts"] : ["posts", "people"];
+      order.forEach((kind) => {
+        if (kind === "people" && people.length) {
+          const group = h("div", { class: "feed-group", id: "community-people" });
+          if (showPeopleHead) group.append(h(headingTag(), { class: "feed-heading", text: "同路人" }));
+          const list = h("div", { class: "people-list" });
+          people.forEach((person) => list.append(personRow(person)));
+          group.append(list);
+          results.append(group);
+        }
+        if (kind === "posts" && posts.length) {
+          const group = h("div", { class: "feed-group" });
+          if (showPostHead) group.append(h(headingTag(), { class: "feed-heading", text: "讨论" }));
+          posts.forEach((post) => group.append(feedCard(post, store)));
+          results.append(group);
+        }
+      });
+      syncTitle(null, null);
+    }
+
+    function allow(item, state, mine) {
+      if (state.invalid) return false;
+      if (state.universe && item.universeId !== state.universe.id) return false;
+      if (mine && item.seed) return false;
+      return true;
+    }
+
+    function missingDetail(title, body) {
+      const box = emptyBox(title, body);
+      box.append(h("p", {}, h("a", { class: "back", href: stateHref() }, "← 返回")));
+      return box;
+    }
+
+    function emptyState(q, mine, bad, scoped) {
+      let title = "还没有内容";
+      let body = "可以先写一条。";
+      if (bad) {
+        title = "没有内容";
+        body = "这个地址对不上现有的宇宙。可以改选上面的范围。";
+      } else if (q) {
+        title = "没有找到";
+        body = "没有和「" + q + "」有关的话题、帖子、机会或同路人。";
+      } else if (mine) {
+        title = "你还没有写";
+        body = "写下的内容只留在这台浏览器里。";
+      } else if (scoped) {
+        title = "还没有内容";
+        body = scoped.name + "里还没有讨论或同路人。";
+      }
+      const box = emptyBox(title, body);
+      if (q) {
+        const clear = h("button", { type: "button", class: "text-btn", text: "清除搜索" });
+        clear.addEventListener("click", () => {
+          input.value = "";
+          syncUrl();
+          input.focus();
+        });
+        box.append(clear);
+        if (scoped) {
+          box.append(h("p", {}, h("a", { href: withQuery("discuss.html", { q }) }, "在全站里搜「" + q + "」")));
+        }
+      }
+      return box;
+    }
+
+    function personDetail(person) {
+      const card = h("article", { class: "post person-detail", id: "item-" + person.id });
+      card.append(h("a", { class: "back", href: stateHref() }, "← 返回"));
+      const idcol = h("div", { class: "post-id" });
+      idcol.append(h(headingTag(), { class: "who", text: person.name || "未署名" }));
+      idcol.append(postMeta(person, ""));
+      card.append(h("div", { class: "post-head" }, [avatar(person.name), idcol]));
+      card.append(h("h3", { class: "detail-label", text: "能做的" }));
+      card.append(h("p", { class: "post-body", text: person.can }));
+      card.append(h("h3", { class: "detail-label", text: "想一起做的" }));
+      card.append(h("p", { class: "post-body", text: person.want }));
+      if (person.seed) card.append(h("p", { class: "local-note", text: "这是示例纸条，不是真实的人。" }));
+      else card.append(deleteControl("people", person.id));
+      const uname = universeName(person.universeId);
+      if (uname) {
+        card.append(h("p", {}, h("a", { href: "universe.html?id=" + person.universeId + "#community" }, "去" + uname + "里看看")));
+      }
+      return card;
+    }
+
+    function threadView(post, store) {
+      const wrap = h("div", {});
+      wrap.append(h("a", { class: "back", href: stateHref() }, "← 返回"));
+      const card = h("article", { class: "post", id: "item-" + post.id });
+      const person = personForAuthor(store, post.author, post.universeId);
+      const name = person
+        ? h("a", { href: stateHref({ person: person.id }) }, post.author || "我")
+        : h("span", { text: post.author || "我" });
+      const idcol = h("div", { class: "post-id" }, [
+        h("p", { class: "post-name" }, name),
+        postMeta(post, post.kind === "post" ? "" : (KIND[post.kind] || "")),
+      ]);
+      card.append(h("div", { class: "post-head" }, [avatar(post.author), idcol]));
+      if (post.title) card.append(h(headingTag(), { class: "who", text: post.title }));
+      card.append(h("p", { class: "post-body", text: post.body }));
+      if (post.seed) card.append(h("p", { class: "local-note", text: "这是示例讨论，不是真实的人。" }));
+      card.append(actionRow(post, store, true));
+      if (!post.seed) card.append(deleteControl("posts", post.id));
+      wrap.append(card);
+
+      const replies = allReplies(post, store);
+      wrap.append(h(headingTag(), {
+        class: "feed-heading",
+        text: replies.length ? "回复 " + replies.length : "回复",
+      }));
+      const list = h("div", { class: "replies" });
+      if (!replies.length) list.append(h("p", { class: "local-note", text: "还没有回复。写下的回复只留在这台浏览器。" }));
+      else replies.forEach((reply) => list.append(replyCard(reply)));
+      wrap.append(list);
+      wrap.append(replyForm(post));
+      return wrap;
+    }
+
+    function replyForm(post) {
+      const body = h("textarea", {
+        class: "field",
+        id: "reply-body",
+        name: "reply",
+        maxlength: "400",
+        placeholder: "写下回复。只留在这台浏览器。",
+      });
+      const field = labeled("回复", body);
+      const panel = h("form", { class: "form-card reply-form", id: "reply", novalidate: true }, [
+        field.wrap,
+        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "回复" })),
+      ]);
+      panel.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const text = clip(body.value, 400);
+        if (!text) {
+          showError(body, field.err, "请写回复");
+          body.focus();
+          return;
+        }
+        showError(body, field.err, "");
+        const store = loadStore();
+        const list = Array.isArray(store.replies[post.id]) ? store.replies[post.id].slice() : [];
+        list.push({ id: uid("r-"), author: "我", body: text, created: new Date().toISOString() });
+        store.replies[post.id] = list.slice(-50);
+        if (!saveStore(store)) return;
+        paintResults();
+        setStatus("回复已记在这台浏览器里。");
+        const box = document.getElementById("reply-body");
+        if (box) box.focus();
+      });
+      return panel;
+    }
+
+    function wireToggle(button, panel, otherButton, otherPanel) {
+      button.setAttribute("aria-expanded", "false");
+      button.addEventListener("click", () => {
+        const willOpen = panel.hidden;
+        if (otherPanel) otherPanel.hidden = true;
+        if (otherButton) otherButton.setAttribute("aria-expanded", "false");
+        panel.hidden = !willOpen;
+        button.setAttribute("aria-expanded", willOpen ? "true" : "false");
+        if (willOpen) {
+          const node = panel.querySelector("input, textarea, select");
+          if (node) node.focus();
+        }
+      });
+    }
+
+    function closePanel(panel, button) {
+      if (panel) panel.hidden = true;
+      if (button) button.setAttribute("aria-expanded", "false");
+    }
+
+    if (postBtn) {
+      postForm = buildPostForm();
+      postForm.hidden = true;
+    }
+    if (peopleBtn) {
+      peopleForm = buildPeopleForm();
+      peopleForm.hidden = true;
+    }
+
+    root.append(searchBlock, scope, tools);
+    if (postForm) root.append(postForm);
+    if (peopleForm) root.append(peopleForm);
+    root.append(actionStatus, resultLine, results, localTools);
+
+    if (postBtn && postForm) wireToggle(postBtn, postForm, peopleBtn, peopleForm);
+    if (peopleBtn && peopleForm) wireToggle(peopleBtn, peopleForm, postBtn, postForm);
+
+    function toggleClear() {
+      clearBtn.hidden = !input.value;
+    }
+
+    function syncUrl() {
+      const next = new URL(location.href);
+      const value = currentQ();
+      if (value) next.searchParams.set("q", value);
+      else next.searchParams.delete("q");
+      next.searchParams.delete("post");
+      next.searchParams.delete("person");
+      history.replaceState(null, "", next);
+      toggleClear();
+      paintScope();
+      paintResults();
+    }
+
+    let composing = false;
+    input.addEventListener("compositionstart", () => { composing = true; });
+    input.addEventListener("compositionend", () => { composing = false; syncUrl(); });
+    input.addEventListener("input", () => {
+      toggleClear();
+      if (!composing) syncUrl();
+    });
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      syncUrl();
+      input.focus();
+    });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      const canText = clip(can.value, 200);
-      const wantText = clip(want.value, 200);
-      const universeId = select.value;
-      let ok = true;
-      if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
-      if (!canText) { showError(can, c.err, "请写你能做的"); ok = false; } else showError(can, c.err, "");
-      if (!wantText) { showError(want, w.err, "请写想一起做的事"); ok = false; } else showError(want, w.err, "");
-      if (!ok) { focusInvalid([select, can, want]); return; }
-      const store = loadStore();
-      store.people.unshift({
-        id: uid("p-"),
-        universeId,
-        name: clip(name.value, 20) || "未署名",
-        can: canText,
-        want: wantText,
-        created: new Date().toISOString(),
-      });
-      store.people = store.people.slice(0, 50);
-      saveStore(store);
-      form.reset();
-      if (universe) select.value = universe.id;
-      setStatus(savedWhere("纸条", universeId, universe));
-      paintPeople();
+      syncUrl();
     });
-    return form;
+
+    function paintLocalTools() {
+      localTools.replaceChildren();
+      const store = loadStore();
+      const hasPosts = store.posts.length + store.threads.length + store.opportunities.length + Object.keys(store.replies).length > 0;
+      const hasPeople = store.people.length > 0;
+      if (hasPosts && lens !== "people") {
+        localTools.append(clearControl("清除我写下的讨论", () => {
+          const next = loadStore();
+          next.posts = [];
+          next.threads = [];
+          next.opportunities = [];
+          next.replies = {};
+          if (!saveStore(next)) return;
+          paintResults();
+          paintLocalTools();
+          setStatus("讨论已从这台浏览器清除。");
+        }));
+      }
+      if (hasPeople && lens !== "feed") {
+        localTools.append(clearControl("清除我的同路人纸条", () => {
+          const next = loadStore();
+          next.people = [];
+          if (!saveStore(next)) return;
+          paintResults();
+          paintLocalTools();
+          setStatus("同路人纸条已从这台浏览器清除。");
+        }));
+      }
+    }
+
+    function buildPostForm() {
+      const select = universeSelect(universe && universe.id);
+      const kind = h("select", { class: "field", name: "kind" });
+      [["post", "帖子"], ["topic", "话题"], ["opportunity", "机会"]].forEach(([value, text]) => {
+        kind.append(h("option", { value, text }));
+      });
+      const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: "一句话", autocomplete: "off" });
+      const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: "写短一点。一个问题，一句近况，或一件想一起做的事。" });
+      const s = labeled("宇宙", select);
+      const k = labeled("这一条是", kind);
+      const t = labeled("标题", title);
+      const b = labeled("内容", body);
+      t.wrap.classList.add("field-label--full");
+      b.wrap.classList.add("field-label--full");
+      const oppNote = h("p", {
+        class: "local-note",
+        hidden: true,
+        text: "机会是一件想一起做的小事，不是招聘，也不是岗位。",
+      });
+      function syncKind() {
+        const showTitle = kind.value !== "post";
+        t.wrap.hidden = !showTitle;
+        oppNote.hidden = kind.value !== "opportunity";
+        if (!showTitle) showError(title, t.err, "");
+      }
+      kind.addEventListener("change", syncKind);
+      const panel = h("form", { class: "form-card", novalidate: true }, [
+        h("div", { class: "form-grid" }, [s.wrap, k.wrap, t.wrap, b.wrap]),
+        oppNote,
+        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "写下" })),
+      ]);
+      syncKind();
+      panel.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const kindValue = kind.value;
+        const titleText = clip(title.value, 40);
+        const bodyText = clip(body.value, 600);
+        const universeId = select.value;
+        let ok = true;
+        if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
+        if (kindValue !== "post" && !titleText) { showError(title, t.err, "请写一个标题"); ok = false; } else showError(title, t.err, "");
+        if (!bodyText) { showError(body, b.err, "请写内容"); ok = false; } else showError(body, b.err, "");
+        if (!ok) { focusInvalid([select, title, body]); return; }
+        const store = loadStore();
+        const item = {
+          id: uid("post-"),
+          universeId,
+          kind: kindValue,
+          author: "我",
+          title: kindValue === "post" ? "" : titleText,
+          body: bodyText,
+          created: new Date().toISOString(),
+          likes: 0,
+        };
+        store.posts.unshift(item);
+        store.posts = store.posts.slice(0, 50);
+        if (!saveStore(store)) return;
+        panel.reset();
+        if (universe) select.value = universe.id;
+        syncKind();
+        closePanel(panel, postBtn);
+        const state = currentUniverse();
+        setStatus(noticeAfterSave(kindValue === "opportunity" ? "机会" : "讨论", universeId, state.universe));
+        paintResults();
+        paintLocalTools();
+        const node = document.getElementById("item-" + item.id);
+        if (node) node.scrollIntoView({ block: "nearest" });
+      });
+      return panel;
+    }
+
+    function buildPeopleForm() {
+      const name = h("input", { class: "field", maxlength: "20", placeholder: "可以不写真名", autocomplete: "nickname" });
+      const can = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：能指出第一句里缺的信息" });
+      const want = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：想一起把一家小店写成三句" });
+      const select = universeSelect(universe && universe.id);
+      const n = labeled("怎么称呼", name);
+      const s = labeled("宇宙", select);
+      const c = labeled("能做的", can);
+      const w = labeled("想一起做的", want);
+      c.wrap.classList.add("field-label--full");
+      w.wrap.classList.add("field-label--full");
+      const panel = h("form", { class: "form-card", novalidate: true }, [
+        h("div", { class: "form-grid" }, [n.wrap, s.wrap, c.wrap, w.wrap]),
+        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "留下纸条" })),
+      ]);
+      panel.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const canText = clip(can.value, 200);
+        const wantText = clip(want.value, 200);
+        const universeId = select.value;
+        let ok = true;
+        if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
+        if (!canText) { showError(can, c.err, "请写你能做的"); ok = false; } else showError(can, c.err, "");
+        if (!wantText) { showError(want, w.err, "请写想一起做的事"); ok = false; } else showError(want, w.err, "");
+        if (!ok) { focusInvalid([select, can, want]); return; }
+        const store = loadStore();
+        const item = {
+          id: uid("person-"),
+          universeId,
+          name: clip(name.value, 20) || "未署名",
+          can: canText,
+          want: wantText,
+          created: new Date().toISOString(),
+        };
+        store.people.unshift(item);
+        store.people = store.people.slice(0, 50);
+        if (!saveStore(store)) return;
+        panel.reset();
+        if (universe) select.value = universe.id;
+        closePanel(panel, peopleBtn);
+        const state = currentUniverse();
+        setStatus(noticeAfterSave("纸条", universeId, state.universe));
+        paintResults();
+        paintLocalTools();
+        const node = document.getElementById("item-" + item.id);
+        if (node) node.scrollIntoView({ block: "nearest" });
+      });
+      return panel;
+    }
+
+    document.addEventListener("aiming-repaint", () => {
+      paintResults();
+      paintLocalTools();
+    });
+
+    input.value = query().get("q") || "";
+    toggleClear();
+    paintScope();
+    paintResults();
+    paintLocalTools();
+
+    window.addEventListener("popstate", () => {
+      input.value = query().get("q") || "";
+      toggleClear();
+      paintScope();
+      paintResults();
+    });
+
+    const opening = query().get("post") || query().get("person") || location.hash;
+    if (!embedded && !opening && window.matchMedia("(min-width: 841px)").matches) input.focus();
+    if (embedded && (query().get("post") || query().get("person"))) {
+      const target = document.getElementById("community");
+      if (target) target.scrollIntoView();
+    }
+    if (location.hash === "#reply") {
+      const box = document.getElementById("reply-body");
+      if (box) box.focus();
+    }
   }
 
   const page = document.body.dataset.page;
   initNav();
   if (page === "universe") renderUniverse();
   if (page === "learn") renderLearn();
-  if (page === "discuss") renderDiscuss();
-  if (page === "people") renderPeople();
+  if (page === "discuss") {
+    const discussRoot = document.getElementById("discuss-root");
+    if (discussRoot) mountCommunity(discussRoot, { lens: "feed" });
+  }
+  if (page === "people") {
+    const peopleRoot = document.getElementById("people-root");
+    if (peopleRoot) mountCommunity(peopleRoot, { lens: "people" });
+  }
 })();
