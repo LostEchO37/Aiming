@@ -127,7 +127,8 @@ a:hover { text-decoration: underline; }
   margin-left: auto;
 }
 
-.nav a {
+.nav a,
+.nav button.nav-btn {
   color: var(--muted);
   text-decoration: none;
   font-size: 0.94rem;
@@ -138,7 +139,30 @@ a:hover { text-decoration: underline; }
   align-items: center;
 }
 
-.nav a:hover { color: var(--ink); text-decoration: none; background: rgba(26, 31, 40, 0.04); }
+.nav button.nav-btn {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav a:hover,
+.nav button.nav-btn:hover { color: var(--ink); text-decoration: none; background: rgba(26, 31, 40, 0.04); }
+
+.nav-account { display: contents; }
+
+.nav-name {
+  max-width: 8.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+  font-size: 0.94rem;
+  padding: 0.4rem 0.55rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
 
 .nav a[aria-current="page"] {
   color: var(--accent);
@@ -727,7 +751,9 @@ select.field {
     padding-top: 0.15rem;
   }
   .nav.is-open { display: flex; }
-  .nav a { padding: 0.7rem 0.75rem; font-size: 1.05rem; border-radius: 12px; }
+  .nav a,
+  .nav button.nav-btn { padding: 0.7rem 0.75rem; font-size: 1.05rem; border-radius: 12px; }
+  .nav-name { max-width: none; padding: 0.7rem 0.75rem; }
   .mast { grid-template-columns: 1fr; gap: 1.35rem; padding-top: 0.4rem; }
   .room-grid, .u-grid, .form-grid { grid-template-columns: 1fr; }
   .u-row { grid-template-columns: 1fr; }

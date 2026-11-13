@@ -1,6 +1,18 @@
-/* Shared behavior: nav, one universe template, local notes. */
+/* Shared behavior: nav, universe pages, and the community feed. */
 (function () {
-  const STORAGE_KEY = "aiming.notes.v1";
+  const READ_KEY = "aiming.read.v1";
+  const remote = {
+    user: null,
+    posts: [],
+    replies: {},
+    people: [],
+    likeCounts: {},
+    liked: {},
+  };
+
+  document.addEventListener("aiming-session", () => {
+    remote.user = window.AIMING_USER || null;
+  });
 
   function h(tag, attrs, children) {
     const node = document.createElement(tag);
@@ -46,81 +58,107 @@
     return pageFile() + (q ? "?" + q : "");
   }
 
-  function loadStore() {
-    const empty = { threads: [], opportunities: [], people: [], posts: [], replies: {}, likes: {}, read: {} };
+  function loadRead() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return empty;
+      const raw = localStorage.getItem(READ_KEY);
+      if (!raw) return {};
       const data = JSON.parse(raw);
-      if (!data || typeof data !== "object") return empty;
-      return {
-        threads: Array.isArray(data.threads) ? data.threads.filter(validNote) : [],
-        opportunities: Array.isArray(data.opportunities) ? data.opportunities.filter(validNote) : [],
-        people: Array.isArray(data.people) ? data.people.filter(validPerson) : [],
-        posts: Array.isArray(data.posts) ? data.posts.filter(validPost) : [],
-        replies: cleanReplies(data.replies),
-        likes: cleanFlags(data.likes),
-        read: data.read && typeof data.read === "object" ? data.read : {},
-      };
+      return data && typeof data === "object" ? data : {};
     } catch (err) {
-      return empty;
+      return {};
     }
   }
 
-  function knownId(id) {
-    return Boolean(window.AIMING.byId[id]);
-  }
-
-  function validNote(item) {
-    return item && knownId(item.universeId) && typeof item.title === "string" && typeof item.body === "string" && typeof item.id === "string";
-  }
-
-  function validPerson(item) {
-    return item && knownId(item.universeId) && typeof item.can === "string" && typeof item.want === "string" && typeof item.id === "string";
-  }
-
-  function validPost(item) {
-    return item
-      && knownId(item.universeId)
-      && typeof item.id === "string"
-      && typeof item.body === "string"
-      && item.body.trim()
-      && (item.kind === "topic" || item.kind === "post" || item.kind === "opportunity");
-  }
-
-  function cleanReplies(raw) {
-    const out = {};
-    if (!raw || typeof raw !== "object") return out;
-    Object.entries(raw).forEach(([key, list]) => {
-      if (!Array.isArray(list)) return;
-      const rows = list.filter((row) => row && typeof row.id === "string" && typeof row.body === "string" && row.body.trim());
-      if (rows.length) out[key] = rows.slice(0, 50);
-    });
-    return out;
-  }
-
-  function cleanFlags(raw) {
-    const out = {};
-    if (!raw || typeof raw !== "object") return out;
-    Object.entries(raw).forEach(([key, value]) => {
-      if (value && typeof key === "string") out[key] = true;
-    });
-    return out;
-  }
-
-  function saveStore(store) {
+  function saveRead(read) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+      localStorage.setItem(READ_KEY, JSON.stringify(read));
       return true;
     } catch (err) {
-      setStatus("这台浏览器没有记下。可能是存储满了，或停用了本地存储。");
+      setStatus("这台浏览器没有记下看过标记。");
       return false;
     }
   }
 
-  function uid(prefix) {
-    if (window.crypto && crypto.randomUUID) return prefix + crypto.randomUUID();
-    return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  function loadStore() {
+    return {
+      threads: [],
+      opportunities: [],
+      people: remote.people.slice(),
+      posts: remote.posts.slice(),
+      replies: remote.replies,
+      likes: remote.liked,
+      likeCounts: remote.likeCounts,
+      read: loadRead(),
+    };
+  }
+
+  function loginHref() {
+    const next = (location.pathname.split("/").pop() || "index.html") + location.search + location.hash;
+    return "login.html?next=" + encodeURIComponent(next);
+  }
+
+  function api(path, options) {
+    const method = (options && options.method) || "POST";
+    return fetch(path, {
+      method,
+      credentials: "same-origin",
+      headers: options && options.body ? { "content-type": "application/json" } : {},
+      body: options && options.body ? JSON.stringify(options.body) : undefined,
+    }).then(async (res) => {
+      let data = {};
+      try { data = await res.json(); } catch (err) { data = {}; }
+      if (!res.ok) {
+        const error = new Error(data.error || "没有完成");
+        error.status = res.status;
+        throw error;
+      }
+      return data;
+    });
+  }
+
+  function applyFeed(data) {
+    remote.user = data.user || null;
+    window.AIMING_USER = remote.user;
+    remote.likeCounts = data.likeCounts || {};
+    remote.liked = {};
+    (data.liked || []).forEach((id) => { remote.liked[id] = true; });
+    remote.posts = (data.posts || []).map((item) => ({
+      id: item.id,
+      seed: false,
+      kind: item.kind,
+      universeId: item.universeId,
+      author: item.author || "未署名",
+      authorId: item.authorId || "",
+      title: item.title || "",
+      body: item.body,
+      created: item.created || "",
+      likes: remote.likeCounts[item.id] || 0,
+      replies: [],
+    }));
+    const replies = {};
+    (data.replies || []).forEach((item) => {
+      const list = replies[item.postId] || (replies[item.postId] = []);
+      list.push({
+        id: item.id,
+        seed: false,
+        author: item.author || "未署名",
+        authorId: item.authorId || "",
+        body: item.body,
+        created: item.created || "",
+      });
+    });
+    remote.replies = replies;
+    remote.people = (data.people || []).map((item) => ({
+      id: item.id,
+      seed: false,
+      universeId: item.universeId,
+      name: item.name || "未署名",
+      authorId: item.authorId || "",
+      can: item.can,
+      want: item.want,
+      created: item.created || "",
+    }));
+    document.dispatchEvent(new CustomEvent("aiming-session"));
   }
 
   function clip(value, max) {
@@ -335,9 +373,9 @@
     root.append(h("div", { class: "toolbar" }, [
       h("p", { class: "local-note", text: invalid ? "" : "已看过 " + readCount + " / " + pool.length + "。标记只留在这台浏览器。" }),
       readCount ? clearControl("清除看过标记", () => {
-        const next = loadStore();
-        pool.forEach((m) => { delete next.read[m.id]; });
-        saveStore(next);
+        const next = loadRead();
+        pool.forEach((m) => { delete next[m.id]; });
+        saveRead(next);
         renderLearn();
         setStatus("看过标记已从这台浏览器清除。");
       }) : null,
@@ -366,11 +404,11 @@
         text: pressed ? "已看过" : "标记为看过",
       });
       button.addEventListener("click", () => {
-        const next = loadStore();
-        if (next.read[material.id]) delete next.read[material.id];
-        else next.read[material.id] = true;
-        saveStore(next);
-        const message = next.read[material.id] ? "已记成看过。" : "已取消看过。";
+        const next = loadRead();
+        if (next[material.id]) delete next[material.id];
+        else next[material.id] = true;
+        saveRead(next);
+        const message = next[material.id] ? "已记成看过。" : "已取消看过。";
         const keep = document.activeElement && document.activeElement.id;
         renderLearn();
         setStatus(message);
@@ -483,8 +521,8 @@
     const t = then.getTime();
     if (!iso || Number.isNaN(t)) return "";
     const delta = Date.now() - t;
-    if (delta < 45000) return "刚刚";
     const min = Math.floor(delta / 60000);
+    if (min < 1) return "刚刚";
     if (min < 60) return min + " 分钟前";
     const hr = Math.floor(min / 60);
     if (hr < 24) return hr + " 小时前";
@@ -511,7 +549,8 @@
         seed: false,
         kind: p.kind,
         universeId: p.universeId,
-        author: p.author || "我",
+        author: p.author || "未署名",
+        authorId: p.authorId || "",
         title: p.title || "",
         body: p.body,
         created: p.created || "",
@@ -557,7 +596,7 @@
         title: p.title || "",
         body: p.body,
         created: p.created,
-        likes: p.likes || 0,
+        likes: (p.likes || 0) + (store.likeCounts[p.id] || 0),
         replies: p.replies || [],
       });
     });
@@ -571,6 +610,7 @@
       seed: false,
       universeId: p.universeId,
       name: p.name || "未署名",
+      authorId: p.authorId || "",
       can: p.can,
       want: p.want,
       created: p.created || "",
@@ -602,7 +642,8 @@
     const extra = (store.replies[post.id] || []).map((r) => ({
       id: r.id,
       seed: false,
-      author: r.author || "我",
+      author: r.author || "未署名",
+      authorId: r.authorId || "",
       body: r.body,
       created: r.created || "",
     }));
@@ -650,8 +691,11 @@
     return withQuery(pageFile(), params);
   }
 
-  function personForAuthor(store, name, universeId) {
-    return allPeople(store).find((p) => p.name === name && p.universeId === universeId) || null;
+  function personForAuthor(store, post) {
+    if (post.authorId) {
+      return allPeople(store).find((p) => p.authorId === post.authorId && p.universeId === post.universeId) || null;
+    }
+    return allPeople(store).find((p) => p.seed && p.name === post.author && p.universeId === post.universeId) || null;
   }
 
   function noticeAfterSave(kind, universeId, filterUniverse) {
@@ -660,8 +704,8 @@
     if (filterUniverse && filterUniverse.id !== universeId) {
       return "已记在「" + universeName(universeId) + "」。当前只显示" + filterUniverse.name + "。";
     }
-    if (q) return kind + "已记下。如果和搜索对不上，清除搜索就能看见。";
-    return kind + "已记在这台浏览器里。";
+    if (q) return kind + "已写下。如果和搜索对不上，清除搜索就能看见。";
+    return kind + "已写下。";
   }
 
   function sharePost(post, button) {
@@ -691,6 +735,10 @@
     setStatus("链接：" + url);
   }
 
+  function owns(item) {
+    return Boolean(remote.user && item.authorId && item.authorId === remote.user.id);
+  }
+
   function deleteControl(kind, id) {
     const button = h("button", { type: "button", class: "text-btn", text: "删除" });
     button.addEventListener("click", () => {
@@ -699,22 +747,19 @@
         button.textContent = "确认删除";
         return;
       }
-      const store = loadStore();
-      if (kind === "posts") {
-        store.posts = store.posts.filter((row) => row.id !== id);
-        store.threads = store.threads.filter((row) => row.id !== id);
-        store.opportunities = store.opportunities.filter((row) => row.id !== id);
-        if (store.replies[id]) delete store.replies[id];
-      } else {
-        store.people = store.people.filter((row) => row.id !== id);
-      }
-      if (!saveStore(store)) return;
-      const next = new URL(location.href);
-      next.searchParams.delete("post");
-      next.searchParams.delete("person");
-      history.replaceState(null, "", next);
-      setStatus("已从这台浏览器删除。");
-      document.dispatchEvent(new CustomEvent("aiming-repaint"));
+      button.disabled = true;
+      const path = (kind === "posts" ? "/api/posts/" : "/api/people/") + encodeURIComponent(id);
+      api(path, { method: "DELETE" }).then(() => {
+        const next = new URL(location.href);
+        next.searchParams.delete("post");
+        next.searchParams.delete("person");
+        history.replaceState(null, "", next);
+        setStatus("已删除。");
+        document.dispatchEvent(new CustomEvent("aiming-reload"));
+      }).catch((err) => {
+        button.disabled = false;
+        setStatus(err.message || "没有删除");
+      });
     });
     return h("div", { class: "note-actions" }, button);
   }
@@ -736,9 +781,8 @@
     const share = h("button", { type: "button", class: "action", text: "转发" });
     share.addEventListener("click", () => sharePost(post, share));
     row.append(share);
-    const base = post.likes || 0;
     const liked = Boolean(store.likes[post.id]);
-    const count = base + (liked ? 1 : 0);
+    const count = post.likes || 0;
     const like = h("button", {
       type: "button",
       class: "action",
@@ -746,14 +790,17 @@
       text: count ? "赞 " + count : "赞",
     });
     like.addEventListener("click", () => {
-      const next = loadStore();
-      if (next.likes[post.id]) delete next.likes[post.id];
-      else next.likes[post.id] = true;
-      if (!saveStore(next)) return;
-      const on = Boolean(next.likes[post.id]);
-      like.setAttribute("aria-pressed", on ? "true" : "false");
-      const n = base + (on ? 1 : 0);
-      like.textContent = n ? "赞 " + n : "赞";
+      if (!remote.user) {
+        location.href = loginHref();
+        return;
+      }
+      like.disabled = true;
+      api("/api/likes", { method: "POST", body: { postId: post.id } }).then(() => {
+        document.dispatchEvent(new CustomEvent("aiming-reload"));
+      }).catch((err) => {
+        like.disabled = false;
+        setStatus(err.message || "没有记下");
+      });
     });
     row.append(like);
     return row;
@@ -773,10 +820,7 @@
     }
     const time = formatTime(item.created);
     if (time) line.append(h("time", { datetime: item.created || "", text: time }));
-    line.append(h("span", {
-      class: item.seed ? "badge" : "badge badge--local",
-      text: item.seed ? "示例" : "本机",
-    }));
+    if (item.seed) line.append(h("span", { class: "badge", text: "示例" }));
     return line;
   }
 
@@ -784,10 +828,10 @@
     const card = h("article", { class: "post", id: "item-" + post.id });
     const head = h("div", { class: "post-head" }, [avatar(post.author), h("div", { class: "post-id" })]);
     const idcol = head.lastChild;
-    const person = personForAuthor(store, post.author, post.universeId);
+    const person = personForAuthor(store, post);
     const name = person
       ? h("a", { href: stateHref({ person: person.id }) }, post.author)
-      : h("span", { text: post.author || "我" });
+      : h("span", { text: post.author || "未署名" });
     idcol.append(h("p", { class: "post-name" }, name));
     const kindText = post.kind === "post" ? "" : (KIND[post.kind] || "");
     idcol.append(postMeta(post, kindText));
@@ -796,18 +840,17 @@
     if (post.title) card.append(h("a", { class: "title-btn", href }, post.title));
     card.append(h("a", { class: "body-btn", href }, post.body));
     card.append(actionRow(post, store, false));
-    if (!post.seed) card.append(deleteControl("posts", post.id));
+    if (owns(post)) card.append(deleteControl("posts", post.id));
     return card;
   }
 
   function replyCard(reply) {
     const card = h("article", { class: "post post--reply" });
     const idcol = h("div", { class: "post-id" });
-    idcol.append(h("p", { class: "post-name", text: reply.author || "我" }));
+    idcol.append(h("p", { class: "post-name", text: reply.author || "未署名" }));
     const meta = h("p", { class: "post-meta" });
     const time = formatTime(reply.created);
     if (time) meta.append(h("time", { datetime: reply.created || "", text: time }));
-    if (!reply.seed) meta.append(h("span", { class: "badge badge--local", text: "本机" }));
     idcol.append(meta);
     card.append(h("div", { class: "post-head" }, [avatar(reply.author), idcol]));
     card.append(h("p", { class: "post-body", text: reply.body }));
@@ -818,10 +861,7 @@
     const copy = h("span", { class: "person-copy" });
     const top = h("span", { class: "person-top" });
     top.append(h("span", { class: "post-name", text: person.name || "未署名" }));
-    top.append(h("span", {
-      class: person.seed ? "badge" : "badge badge--local",
-      text: person.seed ? "示例" : "本机",
-    }));
+    if (person.seed) top.append(h("span", { class: "badge", text: "示例" }));
     copy.append(top);
     const sub = h("span", { class: "person-sub" });
     const uname = universeName(person.universeId);
@@ -877,7 +917,7 @@
     ]);
     const searchBlock = h("div", { class: "search-block" }, [
       form,
-      h("p", { class: "local-note", text: "写下的内容只留在这台浏览器里。标成示例的不是真实的人。" }),
+      h("p", { class: "local-note", text: "标成示例的不是真实的人。登录之后写下的内容会留下来。" }),
     ]);
     const scope = h("nav", { class: "scope", "aria-label": "范围" });
     const tools = h("div", { class: "community-tools" });
@@ -925,12 +965,17 @@
         else a.removeAttribute("aria-current");
       });
       const onMine = query().get("mine") === "1";
-      mineLink.textContent = onMine ? "也看示例" : "只看我写的";
-      mineLink.setAttribute("href", withQuery(pageFile(), {
-        id: query().get("id") || "",
-        q: currentQ(),
-        mine: onMine ? "" : "1",
-      }));
+      if (!remote.user) {
+        mineLink.textContent = "只看我写的";
+        mineLink.setAttribute("href", loginHref());
+      } else {
+        mineLink.textContent = onMine ? "看全部" : "只看我写的";
+        mineLink.setAttribute("href", withQuery(pageFile(), {
+          id: query().get("id") || "",
+          q: currentQ(),
+          mine: onMine ? "" : "1",
+        }));
+      }
     }
 
     function headingTag() {
@@ -983,7 +1028,7 @@
       }
 
       const peopleFirst = lens === "people" || Boolean(q);
-      resultLine.textContent = q ? foundLine(people, posts, peopleFirst) : (mine ? "只显示你写在这台浏览器里的" : "");
+      resultLine.textContent = q ? foundLine(people, posts, peopleFirst) : (mine ? "只显示你写下的" : "");
       const showPeopleHead = people.length && (posts.length || lens === "both");
       const showPostHead = posts.length && (people.length || lens === "both" || (lens === "people" && q));
       const order = peopleFirst ? ["people", "posts"] : ["posts", "people"];
@@ -1009,7 +1054,7 @@
     function allow(item, state, mine) {
       if (state.invalid) return false;
       if (state.universe && item.universeId !== state.universe.id) return false;
-      if (mine && item.seed) return false;
+      if (mine && !(remote.user && item.authorId === remote.user.id)) return false;
       return true;
     }
 
@@ -1030,7 +1075,7 @@
         body = "没有和「" + q + "」有关的话题、帖子、机会或同路人。";
       } else if (mine) {
         title = "你还没有写";
-        body = "写下的内容只留在这台浏览器里。";
+        body = "登录后写下的内容会留在这里。";
       } else if (scoped) {
         title = "还没有内容";
         body = scoped.name + "里还没有讨论或同路人。";
@@ -1063,7 +1108,7 @@
       card.append(h("h3", { class: "detail-label", text: "想一起做的" }));
       card.append(h("p", { class: "post-body", text: person.want }));
       if (person.seed) card.append(h("p", { class: "local-note", text: "这是示例纸条，不是真实的人。" }));
-      else card.append(deleteControl("people", person.id));
+      else if (owns(person)) card.append(deleteControl("people", person.id));
       const uname = universeName(person.universeId);
       if (uname) {
         card.append(h("p", {}, h("a", { href: "universe.html?id=" + person.universeId + "#community" }, "去" + uname + "里看看")));
@@ -1075,10 +1120,10 @@
       const wrap = h("div", {});
       wrap.append(h("a", { class: "back", href: stateHref() }, "← 返回"));
       const card = h("article", { class: "post", id: "item-" + post.id });
-      const person = personForAuthor(store, post.author, post.universeId);
+      const person = personForAuthor(store, post);
       const name = person
-        ? h("a", { href: stateHref({ person: person.id }) }, post.author || "我")
-        : h("span", { text: post.author || "我" });
+        ? h("a", { href: stateHref({ person: person.id }) }, post.author || "未署名")
+        : h("span", { text: post.author || "未署名" });
       const idcol = h("div", { class: "post-id" }, [
         h("p", { class: "post-name" }, name),
         postMeta(post, post.kind === "post" ? "" : (KIND[post.kind] || "")),
@@ -1088,7 +1133,7 @@
       card.append(h("p", { class: "post-body", text: post.body }));
       if (post.seed) card.append(h("p", { class: "local-note", text: "这是示例讨论，不是真实的人。" }));
       card.append(actionRow(post, store, true));
-      if (!post.seed) card.append(deleteControl("posts", post.id));
+      if (owns(post)) card.append(deleteControl("posts", post.id));
       wrap.append(card);
 
       const replies = allReplies(post, store);
@@ -1097,7 +1142,7 @@
         text: replies.length ? "回复 " + replies.length : "回复",
       }));
       const list = h("div", { class: "replies" });
-      if (!replies.length) list.append(h("p", { class: "local-note", text: "还没有回复。写下的回复只留在这台浏览器。" }));
+      if (!replies.length) list.append(h("p", { class: "local-note", text: "还没有回复。" }));
       else replies.forEach((reply) => list.append(replyCard(reply)));
       wrap.append(list);
       wrap.append(replyForm(post));
@@ -1105,17 +1150,25 @@
     }
 
     function replyForm(post) {
+      if (!remote.user) {
+        return h("p", { class: "local-note" }, [
+          "登录后可以回复。",
+          " ",
+          h("a", { href: loginHref() }, "登录"),
+        ]);
+      }
       const body = h("textarea", {
         class: "field",
         id: "reply-body",
         name: "reply",
         maxlength: "400",
-        placeholder: "写下回复。只留在这台浏览器。",
+        placeholder: "写下回复。",
       });
       const field = labeled("回复", body);
+      const submit = h("button", { class: "btn btn-primary", type: "submit", text: "回复" });
       const panel = h("form", { class: "form-card reply-form", id: "reply", novalidate: true }, [
         field.wrap,
-        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "回复" })),
+        h("div", { class: "form-actions" }, submit),
       ]);
       panel.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -1126,15 +1179,17 @@
           return;
         }
         showError(body, field.err, "");
-        const store = loadStore();
-        const list = Array.isArray(store.replies[post.id]) ? store.replies[post.id].slice() : [];
-        list.push({ id: uid("r-"), author: "我", body: text, created: new Date().toISOString() });
-        store.replies[post.id] = list.slice(-50);
-        if (!saveStore(store)) return;
-        paintResults();
-        setStatus("回复已记在这台浏览器里。");
-        const box = document.getElementById("reply-body");
-        if (box) box.focus();
+        submit.disabled = true;
+        api("/api/replies", { method: "POST", body: { postId: post.id, body: text } }).then(() => {
+          setStatus("回复已写下。");
+          return reloadFeed();
+        }).then(() => {
+          const box = document.getElementById("reply-body");
+          if (box) box.focus();
+        }).catch((err) => {
+          submit.disabled = false;
+          setStatus(err.message || "没有写下");
+        });
       });
       return panel;
     }
@@ -1142,6 +1197,10 @@
     function wireToggle(button, panel, otherButton, otherPanel) {
       button.setAttribute("aria-expanded", "false");
       button.addEventListener("click", () => {
+        if (!remote.user) {
+          location.href = loginHref();
+          return;
+        }
         const willOpen = panel.hidden;
         if (otherPanel) otherPanel.hidden = true;
         if (otherButton) otherButton.setAttribute("aria-expanded", "false");
@@ -1212,32 +1271,20 @@
 
     function paintLocalTools() {
       localTools.replaceChildren();
-      const store = loadStore();
-      const hasPosts = store.posts.length + store.threads.length + store.opportunities.length + Object.keys(store.replies).length > 0;
-      const hasPeople = store.people.length > 0;
-      if (hasPosts && lens !== "people") {
-        localTools.append(clearControl("清除我写下的讨论", () => {
-          const next = loadStore();
-          next.posts = [];
-          next.threads = [];
-          next.opportunities = [];
-          next.replies = {};
-          if (!saveStore(next)) return;
-          paintResults();
-          paintLocalTools();
-          setStatus("讨论已从这台浏览器清除。");
-        }));
-      }
-      if (hasPeople && lens !== "feed") {
-        localTools.append(clearControl("清除我的同路人纸条", () => {
-          const next = loadStore();
-          next.people = [];
-          if (!saveStore(next)) return;
-          paintResults();
-          paintLocalTools();
-          setStatus("同路人纸条已从这台浏览器清除。");
-        }));
-      }
+    }
+
+    function reloadFeed() {
+      return fetch("/api/feed", { credentials: "same-origin" }).then(async (res) => {
+        let data = {};
+        try { data = await res.json(); } catch (err) { data = {}; }
+        if (!res.ok) throw new Error(data.error || "没有完成");
+        applyFeed(data);
+        paintScope();
+        paintResults();
+        paintLocalTools();
+      }).catch((err) => {
+        setStatus(err.message === "数据库还没有接上" ? "数据库还没有接上。示例还在。" : "现在读不到新写下的内容。示例还在。");
+      });
     }
 
     function buildPostForm() {
@@ -1283,47 +1330,49 @@
         if (kindValue !== "post" && !titleText) { showError(title, t.err, "请写一个标题"); ok = false; } else showError(title, t.err, "");
         if (!bodyText) { showError(body, b.err, "请写内容"); ok = false; } else showError(body, b.err, "");
         if (!ok) { focusInvalid([select, title, body]); return; }
-        const store = loadStore();
-        const item = {
-          id: uid("post-"),
-          universeId,
-          kind: kindValue,
-          author: "我",
-          title: kindValue === "post" ? "" : titleText,
-          body: bodyText,
-          created: new Date().toISOString(),
-          likes: 0,
-        };
-        store.posts.unshift(item);
-        store.posts = store.posts.slice(0, 50);
-        if (!saveStore(store)) return;
-        panel.reset();
-        if (universe) select.value = universe.id;
-        syncKind();
-        closePanel(panel, postBtn);
-        const state = currentUniverse();
-        setStatus(noticeAfterSave(kindValue === "opportunity" ? "机会" : "讨论", universeId, state.universe));
-        paintResults();
-        paintLocalTools();
-        const node = document.getElementById("item-" + item.id);
-        if (node) node.scrollIntoView({ block: "nearest" });
+        if (!remote.user) { location.href = loginHref(); return; }
+        const submit = panel.querySelector("button[type=submit]");
+        if (submit) submit.disabled = true;
+        api("/api/posts", {
+          method: "POST",
+          body: {
+            universeId,
+            kind: kindValue,
+            title: kindValue === "post" ? "" : titleText,
+            body: bodyText,
+          },
+        }).then((data) => {
+          panel.reset();
+          if (universe) select.value = universe.id;
+          syncKind();
+          closePanel(panel, postBtn);
+          const state = currentUniverse();
+          setStatus(noticeAfterSave(kindValue === "opportunity" ? "机会" : "讨论", universeId, state.universe));
+          return reloadFeed().then(() => data.id);
+        }).then((id) => {
+          const node = document.getElementById("item-" + id);
+          if (node) node.scrollIntoView({ block: "nearest" });
+        }).catch((err) => {
+          setStatus(err.message || "没有写下");
+        }).finally(() => {
+          if (submit) submit.disabled = false;
+        });
       });
       return panel;
     }
 
     function buildPeopleForm() {
-      const name = h("input", { class: "field", maxlength: "20", placeholder: "可以不写真名", autocomplete: "nickname" });
       const can = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：能指出第一句里缺的信息" });
       const want = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：想一起把一家小店写成三句" });
       const select = universeSelect(universe && universe.id);
-      const n = labeled("怎么称呼", name);
       const s = labeled("宇宙", select);
       const c = labeled("能做的", can);
       const w = labeled("想一起做的", want);
       c.wrap.classList.add("field-label--full");
       w.wrap.classList.add("field-label--full");
       const panel = h("form", { class: "form-card", novalidate: true }, [
-        h("div", { class: "form-grid" }, [n.wrap, s.wrap, c.wrap, w.wrap]),
+        h("p", { class: "local-note", text: "纸条上的称呼用你的账号称呼。" }),
+        h("div", { class: "form-grid" }, [s.wrap, c.wrap, w.wrap]),
         h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "留下纸条" })),
       ]);
       panel.addEventListener("submit", (event) => {
@@ -1336,27 +1385,27 @@
         if (!canText) { showError(can, c.err, "请写你能做的"); ok = false; } else showError(can, c.err, "");
         if (!wantText) { showError(want, w.err, "请写想一起做的事"); ok = false; } else showError(want, w.err, "");
         if (!ok) { focusInvalid([select, can, want]); return; }
-        const store = loadStore();
-        const item = {
-          id: uid("person-"),
-          universeId,
-          name: clip(name.value, 20) || "未署名",
-          can: canText,
-          want: wantText,
-          created: new Date().toISOString(),
-        };
-        store.people.unshift(item);
-        store.people = store.people.slice(0, 50);
-        if (!saveStore(store)) return;
-        panel.reset();
-        if (universe) select.value = universe.id;
-        closePanel(panel, peopleBtn);
-        const state = currentUniverse();
-        setStatus(noticeAfterSave("纸条", universeId, state.universe));
-        paintResults();
-        paintLocalTools();
-        const node = document.getElementById("item-" + item.id);
-        if (node) node.scrollIntoView({ block: "nearest" });
+        if (!remote.user) { location.href = loginHref(); return; }
+        const submit = panel.querySelector("button[type=submit]");
+        if (submit) submit.disabled = true;
+        api("/api/people", {
+          method: "POST",
+          body: { universeId, can: canText, want: wantText },
+        }).then((data) => {
+          panel.reset();
+          if (universe) select.value = universe.id;
+          closePanel(panel, peopleBtn);
+          const state = currentUniverse();
+          setStatus(noticeAfterSave("纸条", universeId, state.universe));
+          return reloadFeed().then(() => data.id);
+        }).then((id) => {
+          const node = document.getElementById("item-" + id);
+          if (node) node.scrollIntoView({ block: "nearest" });
+        }).catch((err) => {
+          setStatus(err.message || "没有写下");
+        }).finally(() => {
+          if (submit) submit.disabled = false;
+        });
       });
       return panel;
     }
@@ -1365,12 +1414,14 @@
       paintResults();
       paintLocalTools();
     });
+    document.addEventListener("aiming-reload", () => { reloadFeed(); });
 
     input.value = query().get("q") || "";
     toggleClear();
     paintScope();
     paintResults();
     paintLocalTools();
+    reloadFeed();
 
     window.addEventListener("popstate", () => {
       input.value = query().get("q") || "";

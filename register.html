@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>注册 · Aiming</title>
+  <meta name="description" content="注册 Aiming。免费。用来在宇宙里写下讨论和同路人纸条。">
+  <meta name="theme-color" content="#f3efe7">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body data-page="register">
+  <a class="skip" href="#content">跳到内容</a>
+  <header class="top">
+    <div class="top__bar">
+      <a class="brand" href="index.html">Aiming</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+    </div>
+    <nav id="site-nav" class="nav" aria-label="站内">
+      <a href="index.html">首页</a>
+      <a href="universes.html">宇宙</a>
+      <a href="learn.html">学习</a>
+      <a href="discuss.html">讨论</a>
+      <a href="people.html">同路人</a>
+      <a href="about.html">关于</a>
+    </nav>
+  </header>
+
+  <main id="content" class="page" tabindex="-1">
+    <p class="page-tag">账号</p>
+    <h1 class="page-title">注册</h1>
+    <p class="page-intro">注册是免费的。用来在宇宙里写下讨论和同路人纸条。</p>
+    <noscript><p class="banner">需要打开浏览器的脚本，才能注册。</p></noscript>
+    <p class="status" id="status" role="status"></p>
+    <form id="account-form" class="form-card" novalidate>
+      <label class="field-label">怎么称呼
+        <input class="field" name="displayName" type="text" autocomplete="nickname" maxlength="20" aria-describedby="err-name" required>
+        <span class="field-error" id="err-name" hidden></span>
+      </label>
+      <label class="field-label">邮箱
+        <input class="field" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" aria-describedby="err-email" required>
+        <span class="field-error" id="err-email" hidden></span>
+      </label>
+      <label class="field-label">密码
+        <input class="field" name="password" type="password" autocomplete="new-password" maxlength="72" aria-describedby="err-password" required>
+        <span class="field-error" id="err-password" hidden></span>
+      </label>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">注册</button>
+      </div>
+    </form>
+    <p>已有账号？<a href="login.html" data-next>登录</a></p>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__inner">
+      <img src="assets/mark.svg" width="22" height="22" alt="">
+      <p>Aiming</p>
+      <p>由香港的一间小公司制作。</p>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>
