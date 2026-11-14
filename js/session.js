@@ -37,6 +37,9 @@
   document.addEventListener("aiming-session", () => {
     draw(window.AIMING_USER || null);
   });
+  document.addEventListener("aiming-i18n", () => {
+    draw(window.AIMING_USER || null);
+  });
 
   fetch("/api/session", { credentials: "same-origin" })
     .then((res) => (res.ok ? res.json() : { user: null }))

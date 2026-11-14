@@ -88,7 +88,7 @@
       lang.append(button);
     });
     sheet.replaceChildren();
-    sheet.append(row(t("settings.language"), lang));
+    sheet.append(row("settings.language", lang));
     const theme = h("div", { class: "segment", role: "radiogroup" });
     [["light", "settings.light"], ["dark", "settings.dark"]].forEach(([value, label]) => {
       const button = h("button", {
@@ -105,12 +105,13 @@
       });
       theme.append(button);
     });
-    sheet.append(row(t("settings.theme"), theme));
+    sheet.append(row("settings.theme", theme));
     const motion = h("button", {
       type: "button",
       class: "switch",
       role: "switch",
       "aria-checked": settings.reduceMotion ? "true" : "false",
+      "data-i18n": "settings.motion",
       text: t("settings.motion"),
     });
     motion.addEventListener("click", () => {
@@ -118,21 +119,21 @@
       motion.setAttribute("aria-checked", on ? "true" : "false");
       save({ reduceMotion: on });
     });
-    sheet.append(row(t("settings.motion"), motion));
-    sheet.append(h("p", { class: "local-note", text: t("settings.motionHelp") }));
+    sheet.append(row("settings.motion", motion));
+    sheet.append(h("p", { class: "local-note", "data-i18n": "settings.motionHelp", text: t("settings.motionHelp") }));
     const select = h("select", { class: "field" });
     select.append(h("option", { value: "", text: t("settings.universeNone") }));
     (window.AIMING.universes || []).forEach((item) => {
       select.append(h("option", { value: item.id, text: item.name, selected: item.id === settings.defaultUniverse ? true : null }));
     });
     select.addEventListener("change", () => save({ defaultUniverse: select.value }));
-    sheet.append(row(t("settings.universe"), select));
+    sheet.append(row("settings.universe", select));
     root.append(sheet, status);
   }
 
-  function row(label, control) {
+  function row(key, control) {
     return h("div", { class: "sheet__row" }, [
-      h("span", { class: "sheet__label", text: label }),
+      h("span", { class: "sheet__label", "data-i18n": key, text: t(key) }),
       control,
     ]);
   }
