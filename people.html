@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
+<script>
+try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=document.documentElement;if(s.theme==="dark")r.setAttribute("data-theme","dark");r.setAttribute("data-lang",s.language||"zh");if(s.language==="en")r.lang="en";else if(s.language==="zhHant")r.lang="zh-Hant";if(s.reduceMotion)r.setAttribute("data-motion","reduce");}catch(e){}
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>同路人 · Aiming</title>
+  <title>同伴 · Aiming</title>
   <meta name="description" content="搜索同路人，也可以搜话题、帖子和机会。登录后可以留下纸条。">
   <meta name="theme-color" content="#f3efe7">
   <meta property="og:title" content="同路人 · Aiming">
@@ -23,21 +26,19 @@
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
     </div>
     <nav id="site-nav" class="nav" aria-label="站内">
-      <a href="index.html">首页</a>
-      <a href="universes.html">宇宙</a>
-      <a href="learn.html">学习</a>
-      <a href="discuss.html">讨论</a>
-      <a href="people.html">同路人</a>
-      <a href="about.html">关于</a>
+      <a href="index.html" data-i18n="nav.home">首页</a>
+      <a href="universes.html" data-i18n="nav.universes">宇宙</a>
+      <a href="learn.html" data-i18n="nav.learn">学习</a>
+      <a href="discuss.html" data-i18n="nav.discuss">讨论</a>
+      <a href="people.html" data-i18n="nav.companions">同伴</a>
+      <a href="settings.html" data-i18n="nav.settings">设置</a>
     </nav>
   </header>
 
   <main id="content" class="page" tabindex="-1">
 
-    <p class="page-tag">同路人</p>
-    <h1 class="page-title">同路人</h1>
-    <noscript><p class="banner">需要打开浏览器的脚本，才能搜索和查看同路人。</p></noscript>
-    <div id="people-root"></div>
+    <noscript><p class="banner">需要打开浏览器的脚本，才能看到同伴。</p></noscript>
+    <div id="companion-root"></div>
 
   </main>
 
@@ -49,7 +50,9 @@
     </div>
   </footer>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/site.js"></script>
   <script src="js/session.js"></script>
+  <script src="js/social.js"></script>
 </body>
 </html>

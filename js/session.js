@@ -11,10 +11,10 @@
     if (!user) {
       const login = document.createElement("a");
       login.href = "login.html";
-      login.textContent = "登录";
+      login.textContent = window.t ? t("nav.login") : "登录";
       const register = document.createElement("a");
       register.href = "register.html";
-      register.textContent = "注册";
+      register.textContent = window.t ? t("nav.register") : "注册";
       slot.append(login, register);
       return;
     }
@@ -24,7 +24,7 @@
     const out = document.createElement("button");
     out.type = "button";
     out.className = "nav-btn";
-    out.textContent = "退出";
+    out.textContent = window.t ? t("nav.logout") : "退出";
     out.addEventListener("click", () => {
       out.disabled = true;
       fetch("/api/logout", { method: "POST", credentials: "same-origin" }).finally(() => {
@@ -42,6 +42,9 @@
     .then((res) => (res.ok ? res.json() : { user: null }))
     .then((data) => {
       window.AIMING_USER = data.user || null;
+      if (data.user && data.user.settings && window.AIMING_APPLY_SETTINGS) {
+        window.AIMING_APPLY_SETTINGS(data.user.settings);
+      }
       document.dispatchEvent(new CustomEvent("aiming-session"));
     })
     .catch(() => draw(null));

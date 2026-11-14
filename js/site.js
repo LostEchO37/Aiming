@@ -133,6 +133,8 @@
       body: item.body,
       created: item.created || "",
       likes: remote.likeCounts[item.id] || 0,
+      hidden: Boolean(item.hidden),
+      media: item.media || [],
       replies: [],
     }));
     const replies = {};
@@ -181,6 +183,7 @@
       learn: "learn.html",
       discuss: "discuss.html",
       people: "people.html",
+      settings: "settings.html",
       about: "about.html",
     }[page];
 
@@ -821,7 +824,31 @@
     const time = formatTime(item.created);
     if (time) line.append(h("time", { datetime: item.created || "", text: time }));
     if (item.seed) line.append(h("span", { class: "badge", text: "示例" }));
+    if (item.hidden) line.append(h("span", { class: "badge badge--hidden", text: window.t ? t("home.hidden") : "已隐藏" }));
     return line;
+  }
+
+  function mediaRow(files) {
+    const row = h("div", { class: "media-row" });
+    files.forEach((file) => {
+      if (file.kind === "video") row.append(h("video", { class: "media", controls: true, src: "/api/files/" + file.id, preload: "metadata" }));
+      else row.append(h("img", { class: "media", alt: "", src: "/api/files/" + file.id }));
+    });
+    return row;
+  }
+
+  function hideControl(post) {
+    const button = h("button", { type: "button", class: "text-btn", text: post.hidden ? (window.t ? t("home.show") : "重新公开") : (window.t ? t("home.hide") : "对别人隐藏") });
+    button.addEventListener("click", () => {
+      button.disabled = true;
+      api("/api/posts/" + encodeURIComponent(post.id) + "/hide", { method: "POST" }).then(() => {
+        document.dispatchEvent(new CustomEvent("aiming-reload"));
+      }).catch((err) => {
+        button.disabled = false;
+        setStatus(err.message || "没有完成");
+      });
+    });
+    return h("div", { class: "note-actions" }, button);
   }
 
   function feedCard(post, store) {
@@ -829,9 +856,11 @@
     const head = h("div", { class: "post-head" }, [avatar(post.author), h("div", { class: "post-id" })]);
     const idcol = head.lastChild;
     const person = personForAuthor(store, post);
-    const name = person
-      ? h("a", { href: stateHref({ person: person.id }) }, post.author)
-      : h("span", { text: post.author || "未署名" });
+    const name = post.authorId
+      ? h("a", { href: "index.html?id=" + encodeURIComponent(post.authorId) }, post.author || "未署名")
+      : person
+        ? h("a", { href: stateHref({ person: person.id }) }, post.author)
+        : h("span", { text: post.author || "未署名" });
     idcol.append(h("p", { class: "post-name" }, name));
     const kindText = post.kind === "post" ? "" : (KIND[post.kind] || "");
     idcol.append(postMeta(post, kindText));
@@ -839,7 +868,9 @@
     const href = stateHref({ post: post.id });
     if (post.title) card.append(h("a", { class: "title-btn", href }, post.title));
     card.append(h("a", { class: "body-btn", href }, post.body));
+    if (post.media && post.media.length) card.append(mediaRow(post.media));
     card.append(actionRow(post, store, false));
+    if (owns(post)) card.append(hideControl(post));
     if (owns(post)) card.append(deleteControl("posts", post.id));
     return card;
   }
@@ -1295,10 +1326,13 @@
       });
       const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: "一句话", autocomplete: "off" });
       const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: "写短一点。一个问题，一句近况，或一件想一起做的事。" });
+      const file = h("input", { class: "field", type: "file", accept: "image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" });
       const s = labeled("宇宙", select);
       const k = labeled("这一条是", kind);
       const t = labeled("标题", title);
       const b = labeled("内容", body);
+      const f = labeled(window.t ? t("discuss.attach") : "图片或视频", file);
+      f.wrap.classList.add("field-label--full");
       t.wrap.classList.add("field-label--full");
       b.wrap.classList.add("field-label--full");
       const oppNote = h("p", {
@@ -1313,8 +1347,10 @@
         if (!showTitle) showError(title, t.err, "");
       }
       kind.addEventListener("change", syncKind);
+      const preferred = window.AIMING_SETTINGS && window.AIMING_SETTINGS.defaultUniverse;
+      if (!select.value && preferred) select.value = preferred;
       const panel = h("form", { class: "form-card", novalidate: true }, [
-        h("div", { class: "form-grid" }, [s.wrap, k.wrap, t.wrap, b.wrap]),
+        h("div", { class: "form-grid" }, [s.wrap, k.wrap, t.wrap, b.wrap, f.wrap]),
         oppNote,
         h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "写下" })),
       ]);
@@ -1341,9 +1377,20 @@
             title: kindValue === "post" ? "" : titleText,
             body: bodyText,
           },
-        }).then((data) => {
+        }).then(async (data) => {
+          const picked = file.files && file.files[0];
+          if (picked) {
+            const encoded = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = () => reject(reader.error);
+              reader.readAsDataURL(picked);
+            });
+            await api("/api/media", { method: "POST", body: { postId: data.id, mime: picked.type, name: picked.name, data: encoded } });
+          }
           panel.reset();
           if (universe) select.value = universe.id;
+          else if (preferred) select.value = preferred;
           syncKind();
           closePanel(panel, postBtn);
           const state = currentUniverse();
@@ -1449,9 +1496,5 @@
   if (page === "discuss") {
     const discussRoot = document.getElementById("discuss-root");
     if (discussRoot) mountCommunity(discussRoot, { lens: "feed" });
-  }
-  if (page === "people") {
-    const peopleRoot = document.getElementById("people-root");
-    if (peopleRoot) mountCommunity(peopleRoot, { lens: "people" });
   }
 })();
