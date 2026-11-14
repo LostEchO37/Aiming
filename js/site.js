@@ -558,6 +558,8 @@
         body: p.body,
         created: p.created || "",
         likes: p.likes || 0,
+        hidden: Boolean(p.hidden),
+        media: p.media || [],
         replies: [],
       });
     });
