@@ -25,8 +25,8 @@
   }
 
   function mediaNode(file) {
-    if (file.kind === "video") return h("video", { class: "media", controls: true, src: "/api/files/" + file.id, preload: "metadata" });
-    return h("img", { class: "media", alt: "", src: "/api/files/" + file.id });
+    if (file.kind === "video") return h("video", { class: "media", controls: true, src: "/api/files?id=" + file.id, preload: "metadata" });
+    return h("img", { class: "media", alt: "", src: "/api/files?id=" + file.id });
   }
 
   function postCard(post, mine) {
@@ -50,7 +50,12 @@
       const button = h("button", { type: "button", class: "text-btn", text: post.hidden ? t("home.show") : t("home.hide") });
       button.addEventListener("click", () => {
         button.disabled = true;
-        fetch("/api/posts/" + post.id + "/hide", { method: "POST", credentials: "same-origin" })
+        fetch("/api/hide", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ postId: post.id }),
+        })
           .then(() => load())
           .catch(() => { button.disabled = false; });
       });
@@ -112,7 +117,7 @@
       const cv = file.files && file.files[0];
       if (cv) {
         const dataUrl = await blobToData(cv);
-        const up = await fetch("/api/profile/cv", {
+        const up = await fetch("/api/cv", {
           method: "POST",
           credentials: "same-origin",
           headers: { "content-type": "application/json" },
@@ -156,7 +161,7 @@
       app.replaceChildren();
       return;
     }
-    const res = await fetch("/api/profile/" + encodeURIComponent(target), { credentials: "same-origin" });
+    const res = await fetch("/api/profile?id=" + encodeURIComponent(target), { credentials: "same-origin" });
     if (!res.ok) {
       guest.hidden = false;
       app.hidden = true;
@@ -184,7 +189,7 @@
       head.append(row);
     }
     if (profile.cvId && (mine || profile.cvPublic)) {
-      head.append(h("p", {}, h("a", { href: "/api/files/" + profile.cvId }, t("home.download"))));
+      head.append(h("p", {}, h("a", { href: "/api/files?id=" + profile.cvId }, t("home.download"))));
     }
     const actions = h("div", { class: "form-actions" });
     if (mine) {

@@ -751,8 +751,7 @@
         return;
       }
       button.disabled = true;
-      const path = (kind === "posts" ? "/api/posts/" : "/api/people/") + encodeURIComponent(id);
-      api(path, { method: "DELETE" }).then(() => {
+      api("/api/remove", { method: "POST", body: { kind, id } }).then(() => {
         const next = new URL(location.href);
         next.searchParams.delete("post");
         next.searchParams.delete("person");
@@ -831,8 +830,8 @@
   function mediaRow(files) {
     const row = h("div", { class: "media-row" });
     files.forEach((file) => {
-      if (file.kind === "video") row.append(h("video", { class: "media", controls: true, src: "/api/files/" + file.id, preload: "metadata" }));
-      else row.append(h("img", { class: "media", alt: "", src: "/api/files/" + file.id }));
+      if (file.kind === "video") row.append(h("video", { class: "media", controls: true, src: "/api/files?id=" + file.id, preload: "metadata" }));
+      else row.append(h("img", { class: "media", alt: "", src: "/api/files?id=" + file.id }));
     });
     return row;
   }
@@ -841,7 +840,7 @@
     const button = h("button", { type: "button", class: "text-btn", text: post.hidden ? (window.t ? t("home.show") : "重新公开") : (window.t ? t("home.hide") : "对别人隐藏") });
     button.addEventListener("click", () => {
       button.disabled = true;
-      api("/api/posts/" + encodeURIComponent(post.id) + "/hide", { method: "POST" }).then(() => {
+      api("/api/hide", { method: "POST", body: { postId: post.id } }).then(() => {
         document.dispatchEvent(new CustomEvent("aiming-reload"));
       }).catch((err) => {
         button.disabled = false;
@@ -1331,7 +1330,7 @@
       const k = labeled("这一条是", kind);
       const t = labeled("标题", title);
       const b = labeled("内容", body);
-      const f = labeled(window.t ? t("discuss.attach") : "图片或视频", file);
+      const f = labeled(window.t ? window.t("discuss.attach") : "图片或视频", file);
       f.wrap.classList.add("field-label--full");
       t.wrap.classList.add("field-label--full");
       b.wrap.classList.add("field-label--full");

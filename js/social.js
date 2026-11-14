@@ -15,8 +15,8 @@
   }
 
   function mediaNode(file) {
-    if (file.kind === "video") return h("video", { class: "media", controls: true, src: "/api/files/" + file.id, preload: "metadata" });
-    return h("img", { class: "media", alt: "", src: "/api/files/" + file.id });
+    if (file.kind === "video") return h("video", { class: "media", controls: true, src: "/api/files?id=" + file.id, preload: "metadata" });
+    return h("img", { class: "media", alt: "", src: "/api/files?id=" + file.id });
   }
 
   function postCard(post) {
@@ -139,7 +139,7 @@
       });
       log.scrollTop = log.scrollHeight;
     }
-    const profile = await fetch("/api/profile/" + encodeURIComponent(otherId), { credentials: "same-origin" }).then((res) => res.json()).catch(() => ({}));
+    const profile = await fetch("/api/profile?id=" + encodeURIComponent(otherId), { credentials: "same-origin" }).then((res) => res.json()).catch(() => ({}));
     other.textContent = (profile.profile && profile.profile.displayName) || t("companions.thread");
     other.append(document.createTextNode(" · "));
     other.append(h("a", { href: "index.html?id=" + encodeURIComponent(otherId) }, t("nav.home")));
