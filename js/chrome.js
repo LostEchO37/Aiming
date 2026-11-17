@@ -70,7 +70,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Aiming 里的短文。可以按宇宙筛选，也可以把看过的标在这台浏览器里。",
     "learn.tag": "学习",
     "learn.title": "学习",
-    "learn.intro": "每个宇宙是一门科目。每一讲先讲清一个概念，再给一个案例，任务只做这一讲。全部任务做完，才有 Aiming 的证书。",
+    "learn.intro": "先找到一门课。可以用搜索，也可以点科目。点进去之后，一页只放一屏：概念、案例、每个任务各自一页。",
     "people.doc": "同伴 · Aiming",
     "people.meta": "互相关注之后可以发消息。也可以从讨论里找到人。",
     "people.needJs": "需要打开浏览器的脚本，才能看到同伴。",
@@ -269,7 +269,14 @@ window.AIMING_CHROME = {
     "path.makeRule": "一门技能至少两节课，每节至少两个任务。审核通过后，别人做完全部任务才有证书。",
     "path.skillName": "这项技能的名字",
     "path.concept": "这一讲",
-    "path.case": "案例"
+    "path.case": "案例",
+    "path.find": "搜索科目或课程",
+    "path.prev": "上一页",
+    "path.next": "下一页",
+    "path.slide": "第 {n} 页 / {total}",
+    "path.backIndex": "← 返回找课",
+    "path.missing": "没有这门课。",
+    "path.none": "没有符合的课。"
   },
   "zhHant": {
     "skip": "跳到內容",
@@ -341,7 +348,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Aiming 裡的短文。可以按宇宙篩選，也可以把看過的標在這台瀏覽器裡。",
     "learn.tag": "學習",
     "learn.title": "學習",
-    "learn.intro": "每個宇宙是一門科目。每一講先講清一個概念，再給一個案例，任務只做這一講。全部任務做完，才有 Aiming 的證書。",
+    "learn.intro": "先找到一門課。可以用搜索，也可以點科目。點進去之後，一頁只放一屏：概念、案例、每個任務各自一頁。",
     "people.doc": "同伴 · Aiming",
     "people.meta": "互相關注之後可以發消息。也可以從討論裡找到人。",
     "people.needJs": "需要打開瀏覽器的腳本，才能看到同伴。",
@@ -576,7 +583,14 @@ window.AIMING_CHROME = {
     "path.makeRule": "一門技能至少兩節課，每節至少兩個任務。審核通過後，別人做完全部任務才有證書。",
     "path.skillName": "這項技能的名字",
     "path.concept": "這一講",
-    "path.case": "案例"
+    "path.case": "案例",
+    "path.find": "搜索科目或課程",
+    "path.prev": "上一頁",
+    "path.next": "下一頁",
+    "path.slide": "第 {n} 頁 / {total}",
+    "path.backIndex": "← 返回找課",
+    "path.missing": "沒有這門課。",
+    "path.none": "沒有符合的課。"
   },
   "en": {
     "skip": "Skip to content",
@@ -648,7 +662,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Short pieces in Aiming. Filter by universe. Read marks stay in this browser.",
     "learn.tag": "Learn",
     "learn.title": "Learn",
-    "learn.intro": "Each universe is one subject. A lecture explains one concept, then one case. The tasks belong only to that lecture. Aiming’s certificate comes after every task.",
+    "learn.intro": "Find a course first. Search, or choose a subject. Inside a course, one slide at a time: the concept, the case, and each task on its own slide.",
     "people.doc": "Companions · Aiming",
     "people.meta": "After you follow each other, you can send a message. You can also find people from a post.",
     "people.needJs": "The browser needs scripts on to see companions.",
@@ -883,6 +897,13 @@ window.AIMING_CHROME = {
     "path.makeRule": "A skill needs at least two lessons, and each lesson needs at least two tasks. After review, a certificate appears only when every task is done.",
     "path.skillName": "Name of this skill",
     "path.concept": "This lecture",
-    "path.case": "Case"
+    "path.case": "Case",
+    "path.find": "Search subjects or courses",
+    "path.prev": "Previous",
+    "path.next": "Next",
+    "path.slide": "Slide {n} / {total}",
+    "path.backIndex": "← Back to courses",
+    "path.missing": "That course is not here.",
+    "path.none": "No course matches."
   }
 };

@@ -1024,6 +1024,11 @@ h3.feed-heading {
 }
 
 .tag:hover { text-decoration: none; color: var(--accent-deep); }
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.8rem 0 1.2rem; }
+.tag-row .tag { min-height: 36px; padding: 0.35rem 0.8rem; }
+.tag.is-on { background: #ff6b35; color: #fff; }
+.deck-controls { display: flex; justify-content: space-between; gap: 0.8rem; margin-top: 1rem; }
+.deck-slide { min-height: 18rem; }
 
 .kind--opportunity { color: #6e3224; }
 

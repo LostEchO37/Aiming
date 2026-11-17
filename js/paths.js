@@ -185,50 +185,116 @@
     return block;
   }
 
-  function seriesCard(universe) {
-    const skill = skillOf(universe.id);
-    if (!skill) return null;
-    const tasks = tasksOf(skill, universe.id);
-    const done = count(tasks);
-    return h("a", { class: "path-card", href: "learn.html?id=" + universe.id + "#series" }, [
-      h("p", { class: "page-tag", text: universe.name }),
-      h("h2", { text: line(skill.title) }),
-      h("p", { class: "local-note", text: progressLine(done, tasks.length) }),
-      bar(done, tasks.length),
-    ]);
+  function courseHref(id) {
+    return "learn.html?course=" + encodeURIComponent(id);
   }
 
-  function seriesDetail(universe) {
+  function skillSlides(universe) {
     const skill = skillOf(universe.id);
-    if (!skill) return null;
-    const tasks = tasksOf(skill, universe.id);
-    const done = count(tasks);
-    const wrap = h("section", { class: "path-card", id: "series" });
-    wrap.append(h("p", { class: "page-tag", text: universe.name }));
-    wrap.append(h("h2", { text: line(skill.title) }));
-    wrap.append(h("p", { class: "local-note", text: progressLine(done, tasks.length) }));
-    wrap.append(bar(done, tasks.length));
-    wrap.append(h("p", { text: tr("path.notYet") }));
+    if (!skill) return [];
+    const slides = [];
     (skill.lessons || []).forEach((lesson, lessonIndex) => {
-      const block = h("article", { class: "lesson" });
-      block.append(h("p", { class: "kicker", text: trf("path.lesson", { n: lessonIndex + 1 }) }));
-      block.append(h("h3", { text: line(lesson.title) }));
-      block.append(h("p", { class: "kicker", text: tr("path.concept") }));
-      const concept = lesson.concept || lesson.reading || { zh: [] };
-      (concept[lang()] || concept.zh || []).forEach((paragraph) => block.append(h("p", { class: "lecture-prose", text: paragraph })));
-      if (lesson.case) {
-        const caseBox = h("div", { class: "lecture-case" });
-        caseBox.append(h("p", { class: "kicker", text: tr("path.case") }));
-        (lesson.case[lang()] || lesson.case.zh || []).forEach((paragraph) => caseBox.append(h("p", { text: paragraph })));
-        block.append(caseBox);
-      }
-      tasks.filter((item) => item.lessonIndex === lessonIndex).forEach((item) => block.append(taskBlock(item, universe.id)));
-      wrap.append(block);
+      slides.push({ type: "concept", lesson, lessonIndex, skillId: universe.id });
+      if (lesson.case) slides.push({ type: "case", lesson, lessonIndex, skillId: universe.id });
+      tasksOf(skill, universe.id).filter((item) => item.lessonIndex === lessonIndex).forEach((item) => {
+        slides.push({ type: "task", item, skillId: universe.id });
+      });
     });
-    if (tasks.length && done === tasks.length) {
-      wrap.append(certificate(line(skill.title), viewer && viewer.displayName));
+    const tasks = tasksOf(skill, universe.id);
+    if (tasks.length && count(tasks) === tasks.length) {
+      slides.push({ type: "certificate", name: line(skill.title), skillId: universe.id });
     }
+    return slides;
+  }
+
+  function extraSlides(course) {
+    const slides = [];
+    const groups = [];
+    courseTasks(course).forEach((item) => {
+      const index = item.step.lessonIndex || 1;
+      let group = groups.find((entry) => entry.index === index);
+      if (!group) {
+        group = { index, title: item.step.lessonTitle, reading: item.step.lessonReading, items: [] };
+        groups.push(group);
+      }
+      group.items.push(item);
+    });
+    groups.forEach((group) => {
+      slides.push({ type: "reading", title: group.title, reading: group.reading, course });
+      group.items.forEach((item) => slides.push({ type: "extra-task", item, course }));
+    });
+    const tasks = courseTasks(course);
+    if (course.status === "approved" && tasks.length && count(tasks) === tasks.length) {
+      slides.push({ type: "certificate", name: course.title, course });
+    }
+    return slides;
+  }
+
+  function deck(slides, index, label) {
+    const safe = Math.max(0, Math.min(index, Math.max(slides.length - 1, 0)));
+    const slide = slides[safe];
+    const wrap = h("section", { class: "deck", id: "deck" });
+    wrap.append(h("p", { class: "page-tag", text: label }));
+    wrap.append(h("p", { class: "local-note", text: trf("path.slide", { n: safe + 1, total: slides.length }) }));
+    const frame = h("div", { class: "deck-slide" });
+    if (slide) frame.append(renderSlide(slide));
+    wrap.append(frame);
+    const controls = h("div", { class: "deck-controls" });
+    const prev = h("button", { type: "button", class: "btn btn-ghost", text: tr("path.prev"), disabled: safe === 0 ? true : null });
+    const next = h("button", { type: "button", class: "btn btn-primary", text: tr("path.next"), disabled: safe >= slides.length - 1 ? true : null });
+    prev.addEventListener("click", () => goSlide(safe - 1));
+    next.addEventListener("click", () => goSlide(safe + 1));
+    controls.append(prev, next);
+    wrap.append(controls);
     return wrap;
+  }
+
+  function renderSlide(slide) {
+    if (slide.type === "certificate") return certificate(slide.name, viewer && viewer.displayName);
+    if (slide.type === "concept" || slide.type === "case") {
+      const lesson = slide.lesson;
+      const pack = slide.type === "case" ? lesson.case : (lesson.concept || lesson.reading || { zh: [] });
+      const block = h("article", { class: "path-card" });
+      block.append(h("p", { class: "kicker", text: trf("path.lesson", { n: slide.lessonIndex + 1 }) + " · " + tr(slide.type === "case" ? "path.case" : "path.concept") }));
+      block.append(h("h2", { text: line(lesson.title) }));
+      (pack[lang()] || pack.zh || []).forEach((paragraph) => block.append(h("p", { class: "lecture-prose", text: paragraph })));
+      return block;
+    }
+    if (slide.type === "task") return h("article", { class: "path-card" }, taskBlock(slide.item, slide.skillId));
+    if (slide.type === "reading") {
+      const block = h("article", { class: "path-card" });
+      block.append(h("p", { class: "kicker", text: tr("path.concept") }));
+      block.append(h("h2", { text: slide.title || "" }));
+      if (slide.reading) block.append(h("p", { class: "lecture-prose", text: slide.reading }));
+      return block;
+    }
+    if (slide.type === "extra-task") {
+      const item = slide.item;
+      const block = h("article", { class: "path-card task" + (isDone(item.key) ? " is-done" : "") });
+      block.append(h("p", { class: "kicker", text: tr("path.task") }));
+      block.append(h("h2", { text: item.step.title }));
+      if (slide.course.status === "approved" && viewer) {
+        if (isDone(item.key)) block.append(h("p", { class: "local-note", text: tr("path.taskDone") }));
+        else {
+          const field = h("textarea", { class: "field", maxlength: "400" });
+          const button = h("button", { type: "button", class: "btn btn-primary", text: tr("path.saveTask") });
+          button.addEventListener("click", () => {
+            if (field.value.trim().length < 8) return;
+            mark(item.key, "");
+          });
+          block.append(field, button);
+        }
+      }
+      return block;
+    }
+    return h("p", { text: "" });
+  }
+
+  function goSlide(index) {
+    const url = new URL(location.href);
+    url.searchParams.set("n", String(index));
+    history.pushState({}, "", url);
+    draw();
   }
 
   function courseTasks(course) {
@@ -379,35 +445,129 @@
     return form;
   }
 
+  function skillCard(universe) {
+    const skill = skillOf(universe.id);
+    if (!skill) return null;
+    const tasks = tasksOf(skill, universe.id);
+    const done = count(tasks);
+    return h("a", { class: "path-card", href: courseHref(universe.id) }, [
+      h("p", { class: "page-tag", text: universe.name }),
+      h("h2", { text: line(skill.title) }),
+      h("p", { class: "local-note", text: progressLine(done, tasks.length) }),
+      bar(done, tasks.length),
+    ]);
+  }
+
+  function extraCard(course) {
+    const tasks = courseTasks(course);
+    return h("a", { class: "path-card", href: courseHref("x:" + course.id) }, [
+      h("p", { class: "page-tag", text: tr("path.extend") }),
+      h("h2", { text: course.title }),
+      h("p", { class: "local-note", text: progressLine(count(tasks), tasks.length) }),
+    ]);
+  }
+
   async function draw() {
     const params = new URLSearchParams(location.search);
-    const id = params.get("id");
+    const opened = params.get("course") || "";
+    const tag = params.get("tag") || "";
+    const q = (params.get("q") || "").trim().toLowerCase();
     const universes = (window.AIMING && window.AIMING.universes) || [];
+    const payload = await fetch("/api/courses", { credentials: "same-origin" }).then((res) => res.json()).catch(() => ({ courses: [] }));
+    const rows = payload.courses || [];
+    const approved = rows.filter((course) => course.status === "approved");
     root.replaceChildren();
-    root.append(h("h2", { class: "block-title", text: tr("path.series") }));
-    root.append(h("p", { class: "page-intro", text: tr("path.intro") }));
-    if (id && window.AIMING.byId[id]) {
-      const detail = seriesDetail(window.AIMING.byId[id]);
-      if (detail) root.append(detail);
+
+    if (opened) {
+      root.append(h("p", {}, h("a", { class: "back", href: "learn.html" }, tr("path.backIndex"))));
+      if (opened.indexOf("x:") === 0) {
+        const course = rows.find((item) => item.id === opened.slice(2));
+        if (!course) {
+          root.append(h("p", { text: tr("path.missing") }));
+          return;
+        }
+        const slides = extraSlides(course);
+        const index = Number(params.get("n") || "0") || 0;
+        const tasks = courseTasks(course);
+        root.append(h("p", { class: "local-note", text: progressLine(count(tasks), tasks.length) }));
+        root.append(deck(slides, index, course.title));
+        return;
+      }
+      const universe = window.AIMING.byId[opened];
+      const skill = universe && skillOf(opened);
+      if (!skill) {
+        root.append(h("p", { text: tr("path.missing") }));
+        return;
+      }
+      const slides = skillSlides(universe);
+      const tasks = tasksOf(skill, opened);
+      const index = Number(params.get("n") || "0") || 0;
+      root.append(h("p", { class: "local-note", text: progressLine(count(tasks), tasks.length) }));
+      root.append(h("p", { text: tr("path.notYet") }));
+      root.append(deck(slides, index, line(skill.title)));
+      return;
     }
+
+    const search = h("input", {
+      class: "search-input",
+      type: "search",
+      value: params.get("q") || "",
+      placeholder: tr("path.find"),
+      "aria-label": tr("path.find"),
+    });
+    search.addEventListener("change", () => {
+      const url = new URL(location.href);
+      const value = search.value.trim();
+      if (value) url.searchParams.set("q", value);
+      else url.searchParams.delete("q");
+      history.pushState({}, "", url);
+      draw();
+    });
+    root.append(h("form", { class: "search-form", role: "search" }, search));
+
+    const tags = h("div", { class: "tag-row" });
+    const all = h("a", { class: "tag" + (tag ? "" : " is-on"), href: q ? "learn.html?q=" + encodeURIComponent(q) : "learn.html" }, tr("feed.all"));
+    tags.append(all);
+    universes.forEach((universe) => {
+      tags.append(h("a", {
+        class: "tag" + (tag === universe.id ? " is-on" : ""),
+        href: "learn.html?tag=" + universe.id,
+      }, universe.name));
+    });
+    approved.forEach((course) => {
+      tags.append(h("a", {
+        class: "tag" + (tag === "x:" + course.id ? " is-on" : ""),
+        href: "learn.html?tag=" + encodeURIComponent("x:" + course.id),
+      }, course.title));
+    });
+    root.append(tags);
+
     const list = h("div", { class: "path-list" });
     universes.forEach((universe) => {
-      const card = seriesCard(universe);
+      const skill = skillOf(universe.id);
+      const title = skill ? line(skill.title) : universe.name;
+      const hay = (universe.name + " " + title).toLowerCase();
+      if (tag && tag !== universe.id) return;
+      if (q && !hay.includes(q)) return;
+      const card = skillCard(universe);
       if (card) list.append(card);
     });
+    approved.forEach((course) => {
+      const hay = (course.title + " " + (course.summary || "")).toLowerCase();
+      if (tag && tag !== "x:" + course.id && tag !== course.universeId) return;
+      if (q && !hay.includes(q)) return;
+      list.append(extraCard(course));
+    });
+    if (!list.childNodes.length) list.append(h("p", { class: "local-note", text: tr("path.none") }));
     root.append(list);
-    root.append(h("h2", { class: "block-title", text: tr("path.extend") }));
-    root.append(h("p", { class: "page-intro", text: tr("path.extendIntro") }));
-    const courses = await fetch("/api/courses" + (id ? "?universe=" + encodeURIComponent(id) : ""), { credentials: "same-origin" })
-      .then((res) => res.json())
-      .catch(() => ({ courses: [] }));
-    const extend = h("div", { class: "extend-list" });
-    const rows = courses.courses || [];
-    if (!rows.length) extend.append(h("p", { class: "local-note", text: tr("path.empty") }));
-    rows.forEach((course) => extend.append(extendCard(course)));
-    root.append(extend, maker());
+    const offer = h("details", { class: "extend-card" });
+    offer.append(h("summary", { text: tr("path.make") }));
+    offer.append(h("p", { class: "local-note", text: tr("path.extendIntro") }));
+    offer.append(maker());
+    root.append(offer);
   }
 
   document.addEventListener("aiming-i18n", () => { draw(); });
+  window.addEventListener("popstate", () => { draw(); });
   loadRemote().then(draw);
 })();

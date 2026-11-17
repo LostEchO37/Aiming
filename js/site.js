@@ -318,7 +318,7 @@
     rooms.append(h("h2", { class: "block-title", text: tr("u.three") }));
     const grid = h("div", { class: "room-grid", style: "margin-top:0.8rem" });
     [
-      ["01", tr("u.learn"), universe.rooms.learn, "learn.html?id=" + universe.id, tr("u.goIn")],
+      ["01", tr("u.learn"), universe.rooms.learn, "learn.html?course=" + universe.id, tr("u.goIn")],
       ["02", tr("u.discussRoom"), universe.rooms.discuss, "#community", tr("u.goSearch")],
       ["03", tr("u.peopleRoom"), universe.rooms.people, "#community", tr("u.goSearch")],
     ].forEach(([index, title, copy, href, go]) => {
@@ -332,7 +332,7 @@
     rooms.append(grid);
     stack.append(rooms);
 
-    const practice = h("a", { class: "practice practice--block", href: "learn.html?id=" + universe.id + "#mat-" + universe.materials[0].id }, [
+    const practice = h("a", { class: "practice practice--block", href: "learn.html?course=" + universe.id }, [
       h("p", { class: "kicker", text: tr("home.kicker") }),
       h("h2", { text: universe.practice.title }),
       h("p", { text: universe.practice.body }),
@@ -346,7 +346,7 @@
     universe.materials.forEach((material) => {
       links.append(h("a", {
         class: "material-link",
-        href: "learn.html?id=" + universe.id + "#mat-" + material.id,
+        href: "learn.html?course=" + universe.id,
       }, [
         h("strong", { text: material.title }),
         h("span", { class: "meta", text: trf("u.minutes", { n: material.minutes }) }),
@@ -1525,7 +1525,10 @@
     const page = document.body.dataset.page;
     initNav();
     if (page === "universe") renderUniverse();
-    if (page === "learn") renderLearn();
+    if (page === "learn") {
+      const learnRoot = document.getElementById("learn-root");
+      if (learnRoot) learnRoot.replaceChildren();
+    }
     if (page === "discuss") {
       const discussRoot = document.getElementById("discuss-root");
       if (discussRoot) mountCommunity(discussRoot, { lens: "feed" });
