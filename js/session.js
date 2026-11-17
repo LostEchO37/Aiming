@@ -18,8 +18,9 @@
       slot.append(login, register);
       return;
     }
-    const name = document.createElement("span");
+    const name = document.createElement("a");
     name.className = "nav-name";
+    name.href = "index.html?id=" + encodeURIComponent(user.id);
     name.textContent = user.displayName || "";
     const out = document.createElement("button");
     out.type = "button";

@@ -140,9 +140,8 @@
       log.scrollTop = log.scrollHeight;
     }
     const profile = await fetch("/api/profile?id=" + encodeURIComponent(otherId), { credentials: "same-origin" }).then((res) => res.json()).catch(() => ({}));
-    other.textContent = (profile.profile && profile.profile.displayName) || t("companions.thread");
-    other.append(document.createTextNode(" · "));
-    other.append(h("a", { href: "index.html?id=" + encodeURIComponent(otherId) }, t("nav.home")));
+    const personName = (profile.profile && profile.profile.displayName) || t("companions.thread");
+    other.replaceChildren(h("a", { href: "index.html?id=" + encodeURIComponent(otherId) }, personName));
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const text = box.value.trim();

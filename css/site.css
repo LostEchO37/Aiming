@@ -187,12 +187,13 @@ a:hover { text-decoration: underline; }
 
 .nav-account { display: contents; }
 
-.nav-name {
+.nav a.nav-name {
   max-width: 8.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--ink);
+  font-weight: 600;
   font-size: 0.94rem;
   padding: 0.4rem 0.55rem;
   min-height: 44px;
@@ -816,7 +817,7 @@ select.field {
   .nav.is-open { display: flex; }
   .nav a,
   .nav button.nav-btn { padding: 0.7rem 0.75rem; font-size: 1.05rem; border-radius: 12px; }
-  .nav-name { max-width: none; padding: 0.7rem 0.75rem; }
+  .nav a.nav-name { max-width: none; padding: 0.7rem 0.75rem; }
   .mast { grid-template-columns: 1fr; gap: 1.35rem; padding-top: 0.4rem; }
   .room-grid, .u-grid, .form-grid { grid-template-columns: 1fr; }
   .u-row { grid-template-columns: 1fr; }

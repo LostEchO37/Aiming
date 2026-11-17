@@ -187,8 +187,9 @@
       about: "about.html",
     }[page];
 
+    const viewingProfile = page === "home" && new URLSearchParams(location.search).has("id");
     document.querySelectorAll(".nav a").forEach((link) => {
-      if (link.getAttribute("href") === current) link.setAttribute("aria-current", "page");
+      if (!viewingProfile && link.getAttribute("href") === current) link.setAttribute("aria-current", "page");
     });
 
     if (!toggle || !nav) return;

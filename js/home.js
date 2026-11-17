@@ -154,13 +154,13 @@
     const session = await fetch("/api/session", { credentials: "same-origin" }).then((res) => res.json()).catch(() => ({}));
     const me = session.user || null;
     if (me && me.settings) window.AIMING_APPLY_SETTINGS(me.settings);
-    const target = asked || (me && me.id);
-    if (!target) {
+    if (!asked) {
       guest.hidden = false;
       app.hidden = true;
       app.replaceChildren();
       return;
     }
+    const target = asked;
     const res = await fetch("/api/profile?id=" + encodeURIComponent(target), { credentials: "same-origin" });
     if (!res.ok) {
       guest.hidden = false;
@@ -178,7 +178,7 @@
     const mine = Boolean(me && me.id === profile.id);
     app.replaceChildren();
     const head = h("header", { class: "profile-head" });
-    head.append(h("p", { class: "page-tag", text: mine ? t("nav.home") : profile.displayName }));
+    head.append(h("p", { class: "page-tag", text: profile.displayName }));
     head.append(h("h1", { class: "page-title", text: profile.displayName }));
     if (profile.signature) head.append(h("p", { class: "signature", text: profile.signature }));
     if (profile.place) head.append(h("p", { class: "local-note", text: profile.place }));
