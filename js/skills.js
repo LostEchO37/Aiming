@@ -1,358 +1,2056 @@
-/* One subject per universe. A lesson is a lecture: concept, one case, then tasks for that case. */
+/* One subject per universe. A lesson is a lecture: the concept, one case that uses it, then questions that need the concept. */
 window.AIMING_SKILLS = {
-  yingxiao: {
-    title: { zh: "把一件事写成一句邀请", zhHant: "把一件事寫成一句邀請", en: "Turn one offer into an invitation" },
-    lessons: [
+  "yingxiao": {
+    "title": {
+      "zh": "用细分、定位和漏斗做一次可衡量的推广",
+      "zhHant": "用細分、定位和漏斗做一次可衡量的推廣",
+      "en": "Run one measurable campaign with STP and a funnel"
+    },
+    "minutes": 50,
+    "lessons": [
       {
-        title: { zh: "邀请里只有一件事", zhHant: "邀請裡只有一件事", en: "An invitation offers one thing" },
-        concept: {
-          zh: ["营销这一讲只处理一件事：你要别人做什么。不是介绍你有多好，也不是把所有优点排完。一则短消息里，只留一个可以去做的事，并且说给一个具体的人。", "顺序是固定的。先写这件事是什么，句子里要有名字和地点。再写谁会在什么时候用到它，写一个人，不写所有人。最后只留一个差别，让这个人知道为什么是这一件，而不是旁边的那一件。"],
-          zhHant: ["營銷這一講只處理一件事：你要別人做什麼。不是介紹你有多好，也不是把所有優點排完。一則短消息裡，只留一個可以去做的事，並且說給一個具體的人。", "順序是固定的。先寫這件事是什麼，句子裡要有名字和地點。再寫誰會在什麼時候用到它，寫一個人，不寫所有人。最後只留一個差別，讓這個人知道為什麼是這一件，而不是旁邊的那一件。"],
-          en: ["This lecture is only about what you want someone to do. It is not a list of virtues. A short message keeps one action, said to one person.", "The order stays fixed. What it is, with a name and a place. Who uses it, and when: one person, not everyone. Then one difference, so they know why this and not the thing next to it."],
+        "title": {
+          "zh": "细分、选择目标、定位",
+          "zhHant": "細分、選擇目標、定位",
+          "en": "Segment, target, then position"
         },
-        case: {
-          zh: ["深水埗福华街有一家叫「北窗」的面包店。午饭时间，对面两栋写字楼的人常在门口排队。店主想让他们在工作日上午十点前，订一份带汤的午饭盒，而不是中午再来挤。", "她原来的句子是：「北窗是最好的面包店，适合所有人，新鲜又优质。」这句话没有店在哪，没有谁在十点前订，也没有午饭盒。"],
-          zhHant: ["深水埗福華街有一家叫「北窗」的麵包店。午飯時間，對面兩棟寫字樓的人常在門口排隊。店主想讓他們在工作日上午十點前，訂一份帶湯的午飯盒，而不是中午再來擠。", "她原來的句子是：「北窗是最好的麵包店，適合所有人，新鮮又優質。」這句話沒有店在哪，沒有誰在十點前訂，也沒有午飯盒。"],
-          en: ["Bakery North Window sits on Fuk Wa Street in Sham Shui Po. At lunch, people from the two office blocks across the street queue at the door. The owner wants them to order a lunch box with soup before ten on a weekday, instead of crowding in at noon.", "Her old line was: “North Window is the best bakery, for everyone, fresh and premium.” It has no street, no person ordering before ten, and no lunch box."],
+        "concept": {
+          "zh": [
+            "营销先决定卖给谁，再决定说什么。细分不是把人按年龄切开就结束。一个能用的细分，是一群人有同一件要完成的事、同一个限制。人口、购买行为和所处情境都可以用来切；切完如果组里的人需要的好处并不一样，就不能拿这组人去写同一句话。",
+            "选择目标要过四道检查：这一组够不够大，值得单独做一套做法；它和旁边那组是不是真的不同；你现有的渠道能不能碰到他们；多做这一套之后，利润还盖不盖得住成本。有一道不过，它就还是一份名单，不是目标。",
+            "定位是你在购买者已经在用的替代方案旁边占的位置。一句话里要有三样：给谁、替代的是什么、差别只有哪一个。「最好」和「适合所有人」没有替代方案，也没有差别，所以不是定位。"
+          ],
+          "zhHant": [
+            "營銷先決定賣給誰，再決定說什麼。細分不是把人按年齡切開就結束。一個能用的細分，是一群人有同一件要完成的事、同一個限制。人口、購買行為和所處情境都可以用來切；切完如果組裡的人需要的好處並不一樣，就不能拿這組人去寫同一句話。",
+            "選擇目標要過四道檢查：這一組夠不夠大，值得單獨做一套做法；它和旁邊那組是不是真的不同；你現有的渠道能不能碰到他們；多做這一套之後，利潤還蓋不蓋得住成本。有一道不過，它就還是一份名單，不是目標。",
+            "定位是你在購買者已經在用的替代方案旁邊佔的位置。一句話裡要有三樣：給誰、替代的是什麼、差別只有哪一個。「最好」和「適合所有人」沒有替代方案，也沒有差別，所以不是定位。"
+          ],
+          "en": [
+            "Marketing decides who you serve before it decides what you say. A usable segment is a group that shares one job and one constraint. Age, buying behavior, or situation can be the cut. If the people inside still need different benefits, they are not one segment, and they cannot share one message.",
+            "A target has to pass four tests: it is large enough to deserve its own plan; it is genuinely different from the next group; a channel you already have can reach it; and the margin still covers the extra plan. Fail one test and the group is still a list, not a target.",
+            "A position is the place you occupy next to the alternative the buyer already uses. The sentence names who it is for, what it replaces, and the one difference. “Best” and “for everyone” name no alternative and no difference, so they are not a position."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 12, prompt: { zh: "替北窗写下第一句：它是什么。句中要有「北窗」和福华街。", zhHant: "替北窗寫下第一句：它是什麼。句中要有「北窗」和福華街。", en: "Write North Window’s first sentence: what it is. Include the name and Fuk Wa Street." } },
-          { kind: "write", min: 12, prompt: { zh: "写下第二句：谁会在工作日上午十点前订那份带汤的午饭盒。写一种人，不要写所有人。", zhHant: "寫下第二句：誰會在工作日上午十點前訂那份帶湯的午飯盒。寫一種人，不要寫所有人。", en: "Write the second sentence: who orders the lunch box with soup before ten on a weekday. One kind of person, not everyone." } },
-          { kind: "check", answer: 1, prompt: { zh: "北窗这则邀请里，不该留下哪一句？", zhHant: "北窗這則邀請裡，不該留下哪一句？", en: "Which line does not belong in North Window’s invitation?" }, options: [
-            { zh: "工作日上午十点前订一份带汤的午饭盒", zhHant: "工作日上午十點前訂一份帶湯的午飯盒", en: "Order a lunch box with soup before ten on a weekday" },
-            { zh: "北窗是最好的面包店，适合所有人", zhHant: "北窗是最好的麵包店，適合所有人", en: "North Window is the best bakery, for everyone" },
-            { zh: "店在深水埗福华街", zhHant: "店在深水埗福華街", en: "The shop is on Fuk Wa Street in Sham Shui Po" },
-          ] },
-        ],
+        "case": {
+          "zh": [
+            "岸线是香港一家两人公司，卖一套报销审批。创办人说目标是「全香港的中小企」。桌上有三组。甲：八人以下的餐厅，现金进出，很少有人专门追收据。乙：十到五十人的贸易公司，星期五由一名财务文员在群聊里追收据。丙：已经用着大型系统的上市公司。",
+            "甲要完成的事不是审批，单独为他们做一套说法，利润也盖不住。丙的系统已经在，两人团队也进不去那种采购。乙过得了大小、差异、接触和利润。替代方案不是另一家软件，而是星期五那条群聊，外加一份没有人看的表格。"
+          ],
+          "zhHant": [
+            "岸線是香港一家兩人公司，賣一套報銷審批。創辦人說目標是「全香港的中小企」。桌上有三組。甲：八人以下的餐廳，現金進出，很少有人專門追收據。乙：十到五十人的貿易公司，星期五由一名財務文員在群聊裡追收據。丙：已經用著大型系統的上市公司。",
+            "甲要完成的事不是審批，單獨為他們做一套說法，利潤也蓋不住。丙的系統已經在，兩人團隊也進不去那種採購。乙過得了大小、差異、接觸和利潤。替代方案不是另一家軟件，而是星期五那條群聊，外加一份沒有人看的表格。"
+          ],
+          "en": [
+            "Anxian is a two-person Hong Kong company selling expense approval. The founder says the target is “every SME in Hong Kong.” Three groups are on the table. A: restaurants with fewer than eight staff, mostly cash, almost nobody chasing receipts. B: trading firms of ten to fifty people, where a finance clerk chases receipts in a chat group every Friday. C: listed companies that already run a large system.",
+            "A is not doing approvals, and a plan just for them would not pay for itself. C already has a system, and a two-person team cannot get into that kind of purchase. B passes size, difference, access, and margin. The alternative is not another product. It is Friday’s chat thread, plus a spreadsheet nobody opens."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 80,
+            "prompt": {
+              "zh": "岸线该选哪一组做目标？另外两组各没过哪一道检查？写出检查的名字：大小、差异、接触或利润。",
+              "zhHant": "岸線該選哪一組做目標？另外兩組各沒過哪一道檢查？寫出檢查的名字：大小、差異、接觸或利潤。",
+              "en": "Which group should Anxian target? Which test does each of the other two fail? Name the test: size, difference, access, or margin."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一句才是定位？",
+              "zhHant": "哪一句才是定位？",
+              "en": "Which sentence is a position?"
+            },
+            "options": [
+              {
+                "zh": "岸线是最好的报销工具，适合所有人。",
+                "zhHant": "岸線是最好的報銷工具，適合所有人。",
+                "en": "Anxian is the best expense tool, for everyone."
+              },
+              {
+                "zh": "给仍在群聊里追收据的十到五十人贸易公司：岸线用按在用人头计费的审批，换掉星期五的群聊，而不是换掉一份没人看的表格。",
+                "zhHant": "給仍在群聊裡追收據的十到五十人貿易公司：岸線用按在用人頭計費的審批，換掉星期五的群聊，而不是換掉一份沒人看的表格。",
+                "en": "For a trading firm of ten to fifty still chasing receipts in chat: Anxian replaces Friday’s thread with approval priced per active person, instead of replacing a spreadsheet nobody opens."
+              },
+              {
+                "zh": "面向未来的数字化转型。",
+                "zhHant": "面向未來的數字化轉型。",
+                "en": "Digital transformation for the future."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 70,
+            "prompt": {
+              "zh": "创办人说餐厅的店铺数量更多。用四道检查里的一道说明，为什么数量更大还不等于目标。",
+              "zhHant": "創辦人說餐廳的店鋪數量更多。用四道檢查裡的一道說明，為什麼數量更大還不等於目標。",
+              "en": "The founder says there are more restaurants. Use one of the four tests to explain why a larger count is not yet a target."
+            }
+          }
+        ]
       },
       {
-        title: { zh: "用一个看得见的事实代替形容词", zhHant: "用一個看得見的事實代替形容詞", en: "Replace a compliment with one fact" },
-        concept: {
-          zh: ["形容词让人点头，但不让人行动。「新鲜」「优质」「首选」可以安在任何店上。营销里，一个事实只证明这一件邀请：别人能核对的时间、地点、数量或做法。", "一则短消息里只留一个事实。事实多了，邀请又散了。读的人只要能用这个事实判断：这是不是我要的那一件。"],
-          zhHant: ["形容詞讓人點頭，但不讓人行動。「新鮮」「優質」「首選」可以安在任何店上。營銷裡，一個事實只證明這一件邀請：別人能核對的時間、地點、數量或做法。", "一則短消息裡只留一個事實。事實多了，邀請又散了。讀的人只要能用這個事實判斷：這是不是我要的那一件。"],
-          en: ["Adjectives get a nod, not an action. Fresh, premium, and first choice can sit on any shop. In this subject, one fact proves this invitation: a time, a place, a number, or a method someone can check.", "Keep one fact. More facts scatter the offer. The reader only needs enough to decide whether this is the thing they wanted."],
+        "title": {
+          "zh": "营销组合要和定位是同一件事",
+          "zhHant": "營銷組合要和定位是同一件事",
+          "en": "The marketing mix has to agree with the position"
         },
-        case: {
-          zh: ["北窗把新传单印出来，开头仍是「新鲜、优质、首选」。店主其实知道一件别人能核对的事：午饭盒在十二点前送到福华街对面那两栋写字楼，每份有汤，汤是单独一盒。", "排队的人看不见「优质」。他们看得见汤盒，也知道十二点前电梯口有没有人送上来。"],
-          zhHant: ["北窗把新傳單印出來，開頭仍是「新鮮、優質、首選」。店主其實知道一件別人能核對的事：午飯盒在十二點前送到福華街對面那兩棟寫字樓，每份有湯，湯是單獨一盒。", "排隊的人看不見「優質」。他們看得見湯盒，也知道十二點前電梯口有沒有人送上來。"],
-          en: ["The new flyer still opens with “fresh, premium, first choice.” The owner does know one checkable fact: the lunch box reaches the two office blocks across Fuk Wa Street before noon, and the soup is in its own box.", "The queue cannot see “premium.” They can see the soup box, and they know whether anyone comes up to the lift lobby before noon."],
+        "concept": {
+          "zh": [
+            "产品、价格、渠道、推广是四个决定，不是四句形容词。产品是它替目标完成的那件工作。价格会告诉人你站在哪一档。渠道是目标真的能在哪里拿到它。推广是一件能核对的证明，加上一个动作，不是把优点堆完。",
+            "四个决定必须指向同一定位。定位说的是换掉星期五的追收据，价格却做成一次性买断，渠道却放在目标从不去的地方，组合就在反对定位。购买者会相信组合，不相信口号。",
+            "降价修不好一个目标到不了的渠道。先让渠道和证明对准那个人，再谈价格是不是那一档。价格自己不能把人带到他不去的地方。"
+          ],
+          "zhHant": [
+            "產品、價格、渠道、推廣是四個決定，不是四句形容詞。產品是它替目標完成的那件工作。價格會告訴人你站在哪一檔。渠道是目標真的能在哪裡拿到它。推廣是一件能核對的證明，加上一個動作，不是把優點堆完。",
+            "四個決定必須指向同一定位。定位說的是換掉星期五的追收據，價格卻做成一次性買斷，渠道卻放在目標從不去的地方，組合就在反對定位。購買者會相信組合，不相信口號。",
+            "降價修不好一個目標到不了的渠道。先讓渠道和證明對準那個人，再談價格是不是那一檔。價格自己不能把人帶到他不去的地方。"
+          ],
+          "en": [
+            "Product, price, place, and promotion are four decisions, not four adjectives. Product is the job it does for the target. Price tells them which tier you occupy. Place is where that person can actually get it. Promotion is one checkable proof plus one action, not a pile of virtues.",
+            "The four decisions have to point at the same position. If the position is “replace Friday’s receipt chase” but the price is a one-time toy and the place is somewhere the target never goes, the mix is arguing with the position. Buyers believe the mix, not the slogan.",
+            "A lower price does not repair a place the target never visits. Match the place and the proof to that person first. Then ask whether the price is the right tier. Price alone cannot carry the offer to a room they do not enter."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 12, prompt: { zh: "把「新鲜、优质、首选」换成北窗这一个事实：十二点前送到对面两栋写字楼，汤单独一盒。写成一句。", zhHant: "把「新鮮、優質、首選」換成北窗這一個事實：十二點前送到對面兩棟寫字樓，湯單獨一盒。寫成一句。", en: "Replace “fresh, premium, first choice” with North Window’s one fact: delivered to the two office blocks before noon, soup in its own box. One sentence." } },
-          { kind: "check", answer: 0, prompt: { zh: "哪一个才是北窗这则邀请的事实？", zhHant: "哪一個才是北窗這則邀請的事實？", en: "Which is the fact in North Window’s invitation?" }, options: [
-            { zh: "汤单独一盒，十二点前送到对面写字楼", zhHant: "湯單獨一盒，十二點前送到對面寫字樓", en: "Soup in its own box, delivered to the office blocks before noon" },
-            { zh: "新鲜、优质、首选", zhHant: "新鮮、優質、首選", en: "Fresh, premium, first choice" },
-            { zh: "全港最好的午饭", zhHant: "全港最好的午飯", en: "The best lunch in the city" },
-          ] },
-          { kind: "write", min: 8, prompt: { zh: "如果还要加第二个事实，写一句说明你为什么不加。只针对北窗这份午饭盒。", zhHant: "如果還要加第二個事實，寫一句說明你為什麼不加。只針對北窗這份午飯盒。", en: "If you were tempted to add a second fact, write one sentence on why you will not. Only about this lunch box." } },
-        ],
+        "case": {
+          "zh": [
+            "岸线现在的页面写着「智能、高效、一站式」。售价是港币九十九元，一次买断。二维码贴在共享办公的大堂。财务文员星期五在自己的座位上追收据，不去那栋大堂。",
+            "一次买断的价格，在财务经理眼里像一个不会被认真用的小工具。定位要的是另一套决定：按实际在用的人数计费，文员在座位上就能打开页面，证明是星期五的收据从群聊变成一份审批清单，动作是预约一次二十分钟的演示。"
+          ],
+          "zhHant": [
+            "岸線現在的頁面寫著「智能、高效、一站式」。售價是港幣九十九元，一次買斷。二維碼貼在共享辦公的大堂。財務文員星期五在自己的座位上追收據，不去那棟大堂。",
+            "一次買斷的價格，在財務經理眼裡像一個不會被認真用的小工具。定位要的是另一套決定：按實際在用的人數計費，文員在座位上就能打開頁面，證明是星期五的收據從群聊變成一份審批清單，動作是預約一次二十分鐘的演示。"
+          ],
+          "en": [
+            "Anxian’s page currently says “smart, efficient, one-stop.” The price is HK$99, paid once. The QR code is in a co-working lobby. On Friday the finance clerk chases receipts from their own desk. They do not go to that lobby.",
+            "A one-time price looks, to a finance manager, like a toy that will not be used seriously. The position wants a different set of decisions: price by the people actually using it, a page the clerk can open at the desk, proof that Friday’s receipts move from a chat thread to one approval list, and one action, which is booking a twenty-minute demo."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 110,
+            "prompt": {
+              "zh": "按这一定位重写四个决定：产品、价格、渠道、推广。每一个都要和「换掉星期五的群聊」是同一件事。",
+              "zhHant": "按這一定位重寫四個決定：產品、價格、渠道、推廣。每一個都要和「換掉星期五的群聊」是同一件事。",
+              "en": "Rewrite the four decisions for this position: product, price, place, and promotion. Each one has to be the same job as replacing Friday’s chat thread."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "哪一套组合在拆这一定位？",
+              "zhHant": "哪一套組合在拆這一定位？",
+              "en": "Which mix breaks this position?"
+            },
+            "options": [
+              {
+                "zh": "港币九十九元一次买断，二维码在共享办公大堂，口号是适合所有人。",
+                "zhHant": "港幣九十九元一次買斷，二維碼在共享辦公大堂，口號是適合所有人。",
+                "en": "HK$99 paid once, a QR code in a co-working lobby, and a slogan that says it is for everyone."
+              },
+              {
+                "zh": "按在用的人数按月计费，文员在座位上打开页面预约二十分钟演示，证明是收据从群聊变成一份审批清单。",
+                "zhHant": "按在用的人數按月計費，文員在座位上打開頁面預約二十分鐘演示，證明是收據從群聊變成一份審批清單。",
+                "en": "A monthly price per person in use, a page the clerk opens at the desk to book a twenty-minute demo, and proof that receipts move from chat to one approval list."
+              },
+              {
+                "zh": "直接找那个追收据的文员谈，价格跟着实际在用的人数走。",
+                "zhHant": "直接找那個追收據的文員談，價格跟著實際在用的人數走。",
+                "en": "Talk to the clerk who chases the receipts, and let the price follow the number of people actually using it."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "为什么先降价不能修岸线现在的组合？",
+              "zhHant": "為什麼先降價不能修岸線現在的組合？",
+              "en": "Why does cutting the price first not repair Anxian’s current mix?"
+            },
+            "options": [
+              {
+                "zh": "因为九十九元已经太贵，再降才有人要。",
+                "zhHant": "因為九十九元已經太貴，再降才有人要。",
+                "en": "Because HK$99 is already too expensive, and only a lower price will be wanted."
+              },
+              {
+                "zh": "因为目标从不经过那个大堂，更低的价格仍然递不到那个人手里。",
+                "zhHant": "因為目標從不經過那個大堂，更低的價格仍然遞不到那個人手裡。",
+                "en": "Because the target never passes through that lobby, so a lower price still never reaches them."
+              },
+              {
+                "zh": "因为推广不该提到价格。",
+                "zhHant": "因為推廣不該提到價格。",
+                "en": "Because promotion should never mention price."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "结尾只请人做一步", zhHant: "結尾只請人做一步", en: "The ending asks for one step" },
-        concept: {
-          zh: ["邀请的最后一行不是气氛，是一步。人要知道在哪里、在什么时限前、留下什么。步子多于一步，这则消息就又变成介绍。", "这一步要和前面的那一件事是同一件。前面说的是订午饭盒，结尾就不能改口请人来店里随便坐。"],
-          zhHant: ["邀請的最後一行不是氣氛，是一步。人要知道在哪裡、在什麼時限前、留下什麼。步子多於一步，這則消息就又變成介紹。", "這一步要和前面的那一件事是同一件。前面說的是訂午飯盒，結尾就不能改口請人來店裡隨便坐。"],
-          en: ["The last line is not a mood. It is one step: where, by when, and what to leave. More than one step turns the message back into a brochure.", "The step has to be the same offer. If the front is a lunch-box order, the ending cannot switch to “drop in and sit.”"],
+        "title": {
+          "zh": "漏斗里只先修最紧的那一层",
+          "zhHant": "漏斗裡只先修最緊的那一層",
+          "en": "Repair the tightest stage of the funnel first"
         },
-        case: {
-          zh: ["北窗传单的结尾现在是：「欢迎光临，环境舒适。」写字楼的人看完，仍然不知道十点前要留下名字和份数，也不知道是在柜台说，还是打电话。", "店主真正要的一步只有这个：工作日上午十点前，在福华街店里的柜台，或打店里的电话，留下名字和午饭盒份数。"],
-          zhHant: ["北窗傳單的結尾現在是：「歡迎光臨，環境舒適。」寫字樓的人看完，仍然不知道十點前要留下名字和份數，也不知道是在櫃檯說，還是打電話。", "店主真正要的一步只有這個：工作日上午十點前，在福華街店裡的櫃檯，或打店裡的電話，留下名字和午飯盒份數。"],
-          en: ["The flyer now ends: “You are welcome, the room is comfortable.” Office people still do not know to leave a name and a number of boxes before ten, or whether that happens at the counter or by phone.", "The only step the owner wants: before ten on a weekday, at the Fuk Wa Street counter or by the shop phone, leave a name and how many lunch boxes."],
+        "concept": {
+          "zh": [
+            "一条推广至少分三层：知道、考虑、转化。知道层看触及或曝光。考虑层看点击，以及点进来的是不是目标里的人。转化层看你真正要的那个动作。岸线要的动作是预约演示，不是再看一眼页面。",
+            "每一层只盯一个数。数会告诉你紧的是哪一层。在紧的那一层上面加预算，是在放大一个还没接住的步骤。曝光可以很大，演示仍然很少。",
+            "约束在转化时，要改的是三件事里真正松的那件：信息有没有对准这一组人，证明是否能被核对，请求的动作是否过重。不是先去买更多曝光。"
+          ],
+          "zhHant": [
+            "一條推廣至少分三層：知道、考慮、轉化。知道層看觸及或曝光。考慮層看點擊，以及點進來的是不是目標裡的人。轉化層看你真正要的那個動作。岸線要的動作是預約演示，不是再看一眼頁面。",
+            "每一層只盯一個數。數會告訴你緊的是哪一層。在緊的那一層上面加預算，是在放大一個還沒接住的步驟。曝光可以很大，演示仍然很少。",
+            "約束在轉化時，要改的是三件事裡真正松的那件：信息有沒有對準這一組人，證明是否能被核對，請求的動作是否過重。不是先去買更多曝光。"
+          ],
+          "en": [
+            "A campaign has at least three stages: awareness, consideration, and conversion. Awareness is reach or impressions. Consideration is the click, and whether the person who clicked is in the target. Conversion is the action you actually want. For Anxian that action is a booked demo, not another look at the page.",
+            "Watch one number per stage. The numbers tell you which stage is tight. Spending more above a tight stage multiplies a step that is not holding. Impressions can be large while demos stay scarce.",
+            "When conversion is the constraint, change whichever of these is actually loose: whether the message matches this group, whether the proof can be checked, and whether the action you ask for is too heavy. Do not start by buying more impressions."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 16, prompt: { zh: "替北窗写结尾那一行：十点前、在柜台或电话、留下名字和份数。不要写欢迎光临。", zhHant: "替北窗寫結尾那一行：十點前、在櫃檯或電話、留下名字和份數。不要寫歡迎光臨。", en: "Write North Window’s last line: before ten, at the counter or by phone, leave a name and a number of boxes. Do not write “you are welcome.”" } },
-          { kind: "check", answer: 2, prompt: { zh: "北窗这则邀请的结尾应该请人做什么？", zhHant: "北窗這則邀請的結尾應該請人做什麼？", en: "What should North Window’s last line ask for?" }, options: [
-            { zh: "来店里感受环境", zhHant: "來店裡感受環境", en: "Come in and enjoy the room" },
-            { zh: "告诉朋友这是最好的店", zhHant: "告訴朋友這是最好的店", en: "Tell a friend it is the best shop" },
-            { zh: "十点前留下名字和午饭盒份数", zhHant: "十點前留下名字和午飯盒份數", en: "Leave a name and a number of lunch boxes before ten" },
-          ] },
-          { kind: "write", min: 24, prompt: { zh: "把北窗的三句连成一则完整邀请：它是什么、给谁、最后那一步。", zhHant: "把北窗的三句連成一則完整邀請：它是什麼、給誰、最後那一步。", en: "Join North Window’s three sentences into one invitation: what it is, who it is for, and the last step." } },
-        ],
+        "case": {
+          "zh": [
+            "岸线这个月的数是：曝光四万，点击一千六百，点击率百分之四；演示预约十二次，大约是点击的百分之零点七五。负责人说再买曝光。",
+            "百分之四的点击说明考虑层并不差。四万曝光也已经够看。十二次演示才是紧的地方。再买曝光，是把同一个很弱的转化再乘一遍。"
+          ],
+          "zhHant": [
+            "岸線這個月的數是：曝光四萬，點擊一千六百，點擊率百分之四；演示預約十二次，大約是點擊的百分之零點七五。負責人說再買曝光。",
+            "百分之四的點擊說明考慮層並不差。四萬曝光也已經夠看。十二次演示才是緊的地方。再買曝光，是把同一個很弱的轉化再乘一遍。"
+          ],
+          "en": [
+            "Anxian’s numbers this month: 40,000 impressions, 1,600 clicks, a four percent click rate, and 12 booked demos, about 0.75 percent of the clicks. The lead says to buy more impressions.",
+            "A four percent click rate says consideration is not the weak stage. Forty thousand impressions are already enough to see the pattern. Twelve demos are the tight stage. Buying impressions multiplies the same weak conversion."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "以这组数来看，约束在哪一层？",
+              "zhHant": "以這組數來看，約束在哪一層？",
+              "en": "Given these numbers, where is the constraint?"
+            },
+            "options": [
+              {
+                "zh": "知道层，因为四万曝光还不够大。",
+                "zhHant": "知道層，因為四萬曝光還不夠大。",
+                "en": "Awareness, because 40,000 impressions are still not large enough."
+              },
+              {
+                "zh": "考虑层，因为百分之四的点击率才是问题。",
+                "zhHant": "考慮層，因為百分之四的點擊率才是問題。",
+                "en": "Consideration, because a four percent click rate is the problem."
+              },
+              {
+                "zh": "转化层，从点击到预约演示。",
+                "zhHant": "轉化層，從點擊到預約演示。",
+                "en": "Conversion, from the click to a booked demo."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "用四万、一千六百和十二这三个数，说明你要改组合里的哪一项，以及你不买更多的是什么。",
+              "zhHant": "用四萬、一千六百和十二這三個數，說明你要改組合裡的哪一項，以及你不買更多的是什麼。",
+              "en": "Using 40,000, 1,600, and 12, say which mix decision you would change, and what you would not buy more of."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "下周只汇报一个数。该是哪一个？",
+              "zhHant": "下週只彙報一個數。該是哪一個？",
+              "en": "You may report one number next week. Which one?"
+            },
+            "options": [
+              {
+                "zh": "预约演示的次数，因为这是现在紧的那一层。",
+                "zhHant": "預約演示的次數，因為這是現在緊的那一層。",
+                "en": "Booked demos, because that is the stage that is tight now."
+              },
+              {
+                "zh": "曝光，因为曝光这个数最大。",
+                "zhHant": "曝光，因為曝光這個數最大。",
+                "en": "Impressions, because that number is the largest."
+              },
+              {
+                "zh": "点击率，因为百分之四最好看。",
+                "zhHant": "點擊率，因為百分之四最好看。",
+                "en": "Click rate, because four percent looks the best."
+              }
+            ]
+          }
+        ]
       },
-    ],
+      {
+        "title": {
+          "zh": "简报要能在某一天对上",
+          "zhHant": "簡報要能在某一天對上",
+          "en": "A brief has to be checkable on a date"
+        },
+        "concept": {
+          "zh": [
+            "初级要交的简报不是气氛。它有六样：目标，是一个数加一个日期；受众，是那一个细分，不是所有人；一句信息，就是定位；一件证明，是别人能核对的事；一个动作；以及用来结束争论的那个指标。",
+            "「提升知名度」和「有创意一点」不能在某一天被对上。能对上的目标长这样：在某个日期前，从某一群人那里拿到多少次你要的动作。指标必须是漏斗里现在紧的那一层，否则简报在奖励一个不紧的数。",
+            "简报里只留一个信息。第二个信息会让人不知道动作是哪一个，指标也不再只量这一层。创意是在这一句里面做，不是另起一件事。"
+          ],
+          "zhHant": [
+            "初級要交的簡報不是氣氛。它有六樣：目標，是一個數加一個日期；受衆，是那一個細分，不是所有人；一句信息，就是定位；一件證明，是別人能核對的事；一個動作；以及用來結束爭論的那個指標。",
+            "「提升知名度」和「有創意一點」不能在某一天被對上。能對上的目標長這樣：在某個日期前，從某一群人那裡拿到多少次你要的動作。指標必須是漏斗裡現在緊的那一層，否則簡報在獎勵一個不緊的數。",
+            "簡報裡只留一個信息。第二個信息會讓人不知道動作是哪一個，指標也不再只量這一層。創意是在這一句裡面做，不是另起一件事。"
+          ],
+          "en": [
+            "A junior’s brief is not a mood. It has six parts: an objective, which is a number and a date; an audience, which is that one segment, not everyone; one message, which is the position; one proof someone else can check; one action; and the metric that ends the argument.",
+            "“Raise awareness” and “be creative” cannot be checked on a date. An objective that can be checked looks like this: by a date, this many of the action you want, from this group. The metric has to be the funnel stage that is tight now. Otherwise the brief rewards a number that is not the constraint.",
+            "The brief keeps one message. A second message makes the action ambiguous, and the metric no longer measures one stage. The creative work happens inside that one sentence. It does not start a second job."
+          ]
+        },
+        "case": {
+          "zh": [
+            "负责人写下的简报是：「这个月提升岸线的品牌知名度，有创意一点，面向所有中小企。」预算港币二万。没有动作，没有证明，没有数。",
+            "上一讲的数已经说明，紧的是演示，不是曝光。这份简报如果拿去给设计和投放的人，他们只能去买更多人看见，因为简报奖励的就是知名度。"
+          ],
+          "zhHant": [
+            "負責人寫下的簡報是：「這個月提升岸線的品牌知名度，有創意一點，面向所有中小企。」預算港幣二萬。沒有動作，沒有證明，沒有數。",
+            "上一講的數已經說明，緊的是演示，不是曝光。這份簡報如果拿去給設計和投放的人，他們只能去買更多人看見，因為簡報獎勵的就是知名度。"
+          ],
+          "en": [
+            "The lead’s brief says: “This month, raise awareness of Anxian, be creative, for all SMEs.” The budget is HK$20,000. There is no action, no proof, and no number.",
+            "Last lecture’s numbers already say demos are tight, not impressions. Hand this brief to design and to the person buying media, and they can only buy more people seeing it, because the brief rewards awareness."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 130,
+            "prompt": {
+              "zh": "把这份简报换成六样：目标、受众、信息、证明、动作、指标。指标要用上一讲里紧的那一层，并写上一个日期。",
+              "zhHant": "把這份簡報換成六樣：目標、受衆、信息、證明、動作、指標。指標要用上一講裡緊的那一層，並寫上一個日期。",
+              "en": "Replace the brief with the six parts: objective, audience, message, proof, action, and metric. The metric has to be last lecture’s tight stage, and it needs a date."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一个目标能在日期上对上？",
+              "zhHant": "哪一個目標能在日期上對上？",
+              "en": "Which objective can be checked on a date?"
+            },
+            "options": [
+              {
+                "zh": "提升知名度，并且有创意一点。",
+                "zhHant": "提升知名度，並且有創意一點。",
+                "en": "Raise awareness, and be creative."
+              },
+              {
+                "zh": "六月三十日前，从贸易公司的财务文员那里约到四十次演示。",
+                "zhHant": "六月三十日前，從貿易公司的財務文員那裡約到四十次演示。",
+                "en": "By 30 June, forty booked demos from finance clerks at trading firms."
+              },
+              {
+                "zh": "成为最受信赖的品牌。",
+                "zhHant": "成為最受信賴的品牌。",
+                "en": "Become the most trusted brand."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "设计师想在同一页加上手机应用的第二句信息。为什么这份简报拒绝？",
+              "zhHant": "設計師想在同一頁加上手機應用的第二句信息。為什麼這份簡報拒絕？",
+              "en": "A designer wants a second message on the same page, about a mobile app. Why does this brief refuse it?"
+            },
+            "options": [
+              {
+                "zh": "第二句信息会让人不知道动作是预约演示，指标也不再只量这一层。",
+                "zhHant": "第二句信息會讓人不知道動作是預約演示，指標也不再只量這一層。",
+                "en": "A second message makes it unclear that the action is booking a demo, and the metric no longer measures one stage."
+              },
+              {
+                "zh": "因为手机应用不该存在。",
+                "zhHant": "因為手機應用不該存在。",
+                "en": "Because a mobile app should not exist."
+              },
+              {
+                "zh": "因为简报越长越专业，所以不该拒绝。",
+                "zhHant": "因為簡報越長越專業，所以不該拒絕。",
+                "en": "Because a longer brief is more professional, so it should not be refused."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
-  renshi: {
-    title: { zh: "把一件工作交到不用猜", zhHant: "把一件工作交到不用猜", en: "Hand over work that needs no guess" },
-    lessons: [
+  "renshi": {
+    "title": {
+      "zh": "用职务分析、结构化面试和 SBI 完成一次聘用",
+      "zhHant": "用職務分析、結構化面試和 SBI 完成一次聘用",
+      "en": "Hire with job analysis, a structured interview, and SBI"
+    },
+    "minutes": 45,
+    "lessons": [
       {
-        title: { zh: "交接是四行，不是一句拜托", zhHant: "交接是四行，不是一句拜託", en: "A handover is four lines, not a favor" },
-        concept: {
-          zh: ["人事这一讲把工作从一个人交到另一个人。交出去的不是态度，是四行：做什么，谁做，做到什么样算完成，什么时候看一眼。少一行，对方就要来猜。", "性格词帮不上这四行。「积极」「细心」「尽快」都不能拿去印、拿去对。时间要能指到钟点，完成要能看见。"],
-          zhHant: ["人事這一講把工作從一個人交到另一個人。交出去的不是態度，是四行：做什麼，誰做，做到什麼樣算完成，什麼時候看一眼。少一行，對方就要來猜。", "性格詞幫不上這四行。「積極」「細心」「盡快」都不能拿去印、拿去對。時間要能指到鐘點，完成要能看見。"],
-          en: ["This lecture moves a piece of work from one person to another. What you hand over is not an attitude. It is four lines: the task, who does it, what done looks like, and when you will look. Drop a line and the other person has to guess.", "Character words do not help. Proactive, careful, and soon cannot be printed or checked. The time has to point at a clock. Done has to be visible."],
+        "title": {
+          "zh": "标准必须看得见",
+          "zhHant": "標準必須看得見",
+          "en": "A criterion has to be visible"
         },
-        case: {
-          zh: ["迎新摊位要在周四下午三点前，备好 200 张姓名牌。牌上要有中文名和英文名，英文名不能被切到第二行以外。这件事交给同学阿 May，不是交给「大家」。", "有人在群里写：「阿 May 尽快把姓名牌搞定，认真一点。」阿 May 不知道三点是不是截止，也不知道切边算不算没完成。"],
-          zhHant: ["迎新攤位要在週四下午三點前，備好 200 張姓名牌。牌上要有中文名和英文名，英文名不能被切到第二行以外。這件事交給同學阿 May，不是交給「大家」。", "有人在群裡寫：「阿 May 盡快把姓名牌搞定，認真一點。」阿 May 不知道三點是不是截止，也不知道切邊算不算沒完成。"],
-          en: ["The orientation booth needs 200 name cards before Thursday at three. Each card needs a Chinese name and an English name, and the English name must not be cut off past the second line. The work goes to May, not to “everyone.”", "Someone wrote in the group: “May, finish the cards soon, and be serious.” May does not know whether three o’clock is the deadline, or whether a cut-off name counts as unfinished."],
+        "concept": {
+          "zh": [
+            "聘用从工作出发，不从性格词出发。职务分析把岗位拆开：实际要做的任务，以及做好它需要的知识、技能和可观察的行为。知识、技能和行为要能被第三人核对。「积极」「细心」「合拍」可以安在任何人身上，不能当标准。",
+            "标准分必须有和可以有。必须有的，是缺了就做不了这件工作的行为。可以有的，是有了更好，但没有也能在入职后教。把可以有写成必须有，你会在一大叠申请里找不到人，或为了一个无关的习惯刷掉做得了工作的人。",
+            "一条必须有的标准要写到时间和留下的东西：在什么时点前，留下一份别人能对上的记录。留下的是数量、表格或成品，不是「感觉不错」。"
+          ],
+          "zhHant": [
+            "聘用從工作出發，不從性格詞出發。職務分析把崗位拆開：實際要做的任務，以及做好它需要的知識、技能和可觀察的行為。知識、技能和行為要能被第三人核對。「積極」「細心」「合拍」可以安在任何人身上，不能當標準。",
+            "標準分必須有和可以有。必須有的，是缺了就做不了這件工作的行為。可以有的，是有了更好，但沒有也能在入職後教。把可以有寫成必須有，你會在一大疊申請裡找不到人，或為了一個無關的習慣刷掉做得了工作的人。",
+            "一條必須有的標準要寫到時間和留下的東西：在什麼時點前，留下一份別人能對上的記錄。留下的是數量、表格或成品，不是「感覺不錯」。"
+          ],
+          "en": [
+            "Hiring starts from the work, not from a personality word. Job analysis splits the role into the tasks actually done, and the knowledge, skills, and observable behavior the work needs. A third person has to be able to check those. “Proactive,” “careful,” and “one of us” can be pinned on anyone, so they are not criteria.",
+            "Split criteria into must-have and nice-to-have. A must-have is a behavior without which the work cannot be done. A nice-to-have is better if present, and teachable after the person starts. Writing a nice-to-have as a must-have either finds nobody in the pile, or rejects someone who can do the work because of an unrelated habit.",
+            "A must-have names a time and a thing left behind: by this point, a record someone else can match. The record is a count, a form, or a finished piece. It is not “a good feeling.”"
+          ]
         },
-        tasks: [
-          { kind: "write", min: 16, prompt: { zh: "把姓名牌写成四行：做什么、谁做、怎样算完成、周四几点看一眼。不要写尽快。", zhHant: "把姓名牌寫成四行：做什麼、誰做、怎樣算完成、週四幾點看一眼。不要寫盡快。", en: "Write the name cards in four lines: the task, who does it, what done looks like, and when on Thursday you will look. Do not write “soon.”" } },
-          { kind: "check", answer: 0, prompt: { zh: "阿 May 的四行里，完成应该怎么写？", zhHant: "阿 May 的四行裡，完成應該怎麼寫？", en: "How should “done” be written for May?" }, options: [
-            { zh: "200 张牌上有中文名和英文名，英文名不被切掉", zhHant: "200 張牌上有中文名和英文名，英文名不被切掉", en: "200 cards with both names, English name not cut off" },
-            { zh: "认真一点就好", zhHant: "認真一點就好", en: "Just be more serious" },
-            { zh: "大家一起看着办", zhHant: "大家一起看著辦", en: "Everyone will see to it" },
-          ] },
-          { kind: "write", min: 8, prompt: { zh: "群里那句「尽快、认真一点」会让阿 May 猜哪一行？只写那一行缺了什么。", zhHant: "群裡那句「盡快、認真一點」會讓阿 May 猜哪一行？只寫那一行缺了什麼。", en: "Which of May’s four lines does “soon, be serious” force her to guess? Write only what that line is missing." } },
-        ],
+        "case": {
+          "zh": [
+            "澄湾有四十人，要在观塘开第二个场地，聘一名营运协调。招聘的人说「找像我们的、积极的，尽快」。申请已经有八十六份。",
+            "这件工作实际是：工作日九点半前收进场的货，当天上午把异常记进同一份表，十点前向场地负责人交上数量。交上去的是数量，不是一句形容词。第二语言是可以有：没有它，收货和异常表仍然做得到。"
+          ],
+          "zhHant": [
+            "澄灣有四十人，要在觀塘開第二個場地，聘一名營運協調。招聘的人說「找像我們的、積極的，儘快」。申請已經有八十六份。",
+            "這件工作實際是：工作日九點半前收進場的貨，當天上午把異常記進同一份表，十點前向場地負責人交上數量。交上去的是數量，不是一句形容詞。第二語言是可以有：沒有它，收貨和異常表仍然做得到。"
+          ],
+          "en": [
+            "Chengwan has forty people and is opening a second site in Kwun Tong. They are hiring one operations coordinator. The hiring manager says “someone like us, proactive, as soon as possible.” Eighty-six applications are already in.",
+            "The work is: on a weekday, receive the inbound deliveries before 9:30, log exceptions on the same form that morning, and hand the site lead the counts by 10:00. What gets handed over is counts, not an adjective. A second language is nice-to-have: without it, the deliveries and the exception form can still be done."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "把「积极」写成澄湾这份工作的一条必须有标准。要有时点，要有留下的东西。",
+              "zhHant": "把「積極」寫成澄灣這份工作的一條必須有標準。要有時點，要有留下的東西。",
+              "en": "Turn “proactive” into one must-have for this Chengwan job. It needs a time, and something left behind."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一条才是必须有，不是性格？",
+              "zhHant": "哪一條才是必須有，不是性格？",
+              "en": "Which line is a must-have, not a personality?"
+            },
+            "options": [
+              {
+                "zh": "性格开朗，和我们合拍。",
+                "zhHant": "性格開朗，和我們合拍。",
+                "en": "Cheerful, and one of us."
+              },
+              {
+                "zh": "工作日九点半前完成收货，并在十点前交出异常数量。",
+                "zhHant": "工作日九點半前完成收貨，並在十點前交出異常數量。",
+                "en": "On a weekday, finish receiving before 9:30 and hand over the exception counts by 10:00."
+              },
+              {
+                "zh": "最好会一种第二语言。",
+                "zhHant": "最好會一種第二語言。",
+                "en": "It would be nice if they spoke a second language."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "「会第二语言」在这份工作里该怎么放？",
+              "zhHant": "「會第二語言」在這份工作裡該怎麼放？",
+              "en": "Where does “speaks a second language” belong in this job?"
+            },
+            "options": [
+              {
+                "zh": "写成必须有，否则这份申请不看。",
+                "zhHant": "寫成必須有，否則這份申請不看。",
+                "en": "As a must-have, or the application is not read."
+              },
+              {
+                "zh": "写成性格，面试时凭感觉。",
+                "zhHant": "寫成性格，面試時憑感覺。",
+                "en": "As personality, judged by feel in the interview."
+              },
+              {
+                "zh": "写成可以有：没有它，收货和异常表仍然做得到。",
+                "zhHant": "寫成可以有：沒有它，收貨和異常表仍然做得到。",
+                "en": "As a nice-to-have: without it, receiving and the exception form can still be done."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "反馈是事实加一处修改", zhHant: "反饋是事實加一處修改", en: "Feedback is a fact plus one change" },
-        concept: {
-          zh: ["工作交出去之后，反馈不是评这个人。第一句只说你看见的，带数字或位置。第二句只改一处。改两处，对方不知道先动哪一处。", "不要加「另外」，也不要顺便写态度。态度留到下一次。这一讲的反馈只服务于已经写下的那件工作。"],
-          zhHant: ["工作交出去之後，反饋不是評這個人。第一句只說你看見的，帶數字或位置。第二句只改一處。改兩處，對方不知道先動哪一處。", "不要加「另外」，也不要順便寫態度。態度留到下一次。這一講的反饋只服務於已經寫下的那件工作。"],
-          en: ["After the work is handed over, feedback is not a review of the person. The first sentence is what you saw, with a number or a place. The second changes one thing. Two changes leave them unsure which to move.", "Do not add “also,” and do not attach an attitude. Attitude waits. This feedback only serves the job already written down."],
+        "title": {
+          "zh": "结构化面试问的是行为",
+          "zhHant": "結構化面試問的是行為",
+          "en": "A structured interview asks for behavior"
         },
-        case: {
-          zh: ["周四中午，200 张姓名牌送回来了。中文名都在。抽看的 20 张里，有 14 张的英文名在第二行被切掉，只剩前四个字母。", "阿 May 在等你说话。你可以写她粗心，也可以只写：第二行字号改小一号，英文名要完整。"],
-          zhHant: ["週四中午，200 張姓名牌送回來了。中文名都在。抽看的 20 張裡，有 14 張的英文名在第二行被切掉，只剩前四個字母。", "阿 May 在等你說話。你可以寫她粗心，也可以只寫：第二行字號改小一號，英文名要完整。"],
-          en: ["The 200 cards came back at noon on Thursday. Every Chinese name is there. Of the 20 you checked, 14 have the English name cut on the second line, with only the first four letters left.", "May is waiting. You could call her careless, or you could write only this: make the second line one size smaller so the English name is complete."],
+        "concept": {
+          "zh": [
+            "结构化面试是：问题从必须有的标准来，每个候选人被问同一组问题，记录的是行为不是好感。闲聊兴趣，或者每人问不同的题，都不是结构。问题相同、却在问感受，也不是。问题要指向工作里发生过的行为。",
+            "STAR 把一次经历问完整：当时的情境，这个人被交给的任务，这个人自己做的行动，以及一个能核对的结果。候选人说「我们」，你要追问哪一步是他做的。没有结果，这段经历还不能当证据。",
+            "「我喜欢他」不是证据。证据是他哪一条标准和哪一次行为对上了。好感会让你少追问。结构的作用，就是在好感作主之前把行为记下来。"
+          ],
+          "zhHant": [
+            "結構化面試是：問題從必須有的標準來，每個候選人被問同一組問題，記錄的是行為不是好感。閒聊興趣，或者每人問不同的題，都不是結構。問題相同、卻在問感受，也不是。問題要指向工作裡發生過的行為。",
+            "STAR 把一次經歷問完整：當時的情境，這個人被交給的任務，這個人自己做的行動，以及一個能核對的結果。候選人說「我們」，你要追問哪一步是他做的。沒有結果，這段經歷還不能當證據。",
+            "「我喜歡他」不是證據。證據是他哪一條標準和哪一次行為對上了。好感會讓你少追問。結構的作用，就是在好感作主之前把行為記下來。"
+          ],
+          "en": [
+            "A structured interview means the questions come from the must-haves, every candidate is asked the same set, and what you record is behavior, not liking. Chatting about hobbies, or asking each person different questions, is not structure. Asking the same questions about feelings is not structure either. The questions point at behavior that happened in the work.",
+            "STAR fills in one episode: the situation, the task this person was given, the action this person took, and a result someone can check. When a candidate says “we,” you ask which step they did. Without a result, the episode is not evidence yet.",
+            "“I liked them” is not evidence. Evidence is which criterion matched which behavior. Liking makes you probe less. The point of structure is to write the behavior down before liking decides."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 12, prompt: { zh: "写给阿 May 的第一句，只写你看见的：20 张里 14 张英文名被切。", zhHant: "寫給阿 May 的第一句，只寫你看見的：20 張裡 14 張英文名被切。", en: "Write May’s first sentence: only what you saw, 14 of 20 English names cut off." } },
-          { kind: "write", min: 8, prompt: { zh: "写第二句，只改第二行字号这一处。", zhHant: "寫第二句，只改第二行字號這一處。", en: "Write the second sentence. Change only the type size on the second line." } },
-          { kind: "check", answer: 1, prompt: { zh: "这张姓名牌的反馈，不该出现哪一句？", zhHant: "這張姓名牌的反饋，不該出現哪一句？", en: "Which sentence does not belong in the feedback on these cards?" }, options: [
-            { zh: "第二行改小一号，英文名要完整", zhHant: "第二行改小一號，英文名要完整", en: "Make the second line one size smaller so the English name is complete" },
-            { zh: "另外你下次细心一点", zhHant: "另外你下次細心一點", en: "Also, be more careful next time" },
-            { zh: "抽看的 20 张里有 14 张被切", zhHant: "抽看的 20 張裡有 14 張被切", en: "14 of the 20 cards you checked were cut off" },
-          ] },
-        ],
+        "case": {
+          "zh": [
+            "一位候选人说：「我们团队总是把货处理得很好，大家都觉得我很积极。」面试官准备因此通过，因为聊得来。",
+            "另一位说了一个清晨：货晚到二十分钟，他本人改了收货顺序，九点半前把缺的两箱记进异常表，十点的数量和仓库事后的单对得上。面试官觉得这位没那么聊得来。"
+          ],
+          "zhHant": [
+            "一位候選人說：「我們團隊總是把貨處理得很好，大家都覺得我很積極。」面試官準備因此通過，因為聊得來。",
+            "另一位說了一個清晨：貨晚到二十分鐘，他本人改了收貨順序，九點半前把缺的兩箱記進異常表，十點的數量和倉庫事後的單對得上。面試官覺得這位沒那麼聊得來。"
+          ],
+          "en": [
+            "One candidate says: “Our team always handles the deliveries well, and everyone thinks I am proactive.” The interviewer is ready to pass them because the chat felt easy.",
+            "Another describes one morning: the delivery was twenty minutes late, they changed the receiving order themselves, logged the two missing cartons on the exception form before 9:30, and the 10:00 counts matched the warehouse slip later. The interviewer finds this person less easy to chat with."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "哪一段能当这条标准的证据？",
+              "zhHant": "哪一段能當這條標準的證據？",
+              "en": "Which account can be evidence for this criterion?"
+            },
+            "options": [
+              {
+                "zh": "第二位：晚到、他自己改了顺序、异常表和仓库的单对得上。",
+                "zhHant": "第二位：晚到、他自己改了順序、異常表和倉庫的單對得上。",
+                "en": "The second: it was late, they changed the order themselves, and the exception form matched the warehouse slip."
+              },
+              {
+                "zh": "第一位：我们团队总是很好，大家觉得他积极。",
+                "zhHant": "第一位：我們團隊總是很好，大家覺得他積極。",
+                "en": "The first: our team is always good, and everyone thinks they are proactive."
+              },
+              {
+                "zh": "面试官觉得第一位更聊得来，所以第一位更好。",
+                "zhHant": "面試官覺得第一位更聊得來，所以第一位更好。",
+                "en": "The interviewer enjoyed the first conversation more, so the first candidate is better."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "第一位说「我们」。写两个追问，把缺掉的个人行动和能核对的结果问出来。追问要指着收货，不是问性格。",
+              "zhHant": "第一位說「我們」。寫兩個追問，把缺掉的個人行動和能核對的結果問出來。追問要指著收貨，不是問性格。",
+              "en": "The first candidate said “we.” Write two follow-up questions that ask for the missing personal action and a result someone can check. Point them at receiving, not at personality."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "为什么不能因为聊得来就停？",
+              "zhHant": "為什麼不能因為聊得來就停？",
+              "en": "Why is “easy to chat with” not a place to stop?"
+            },
+            "options": [
+              {
+                "zh": "因为聊得来说明他合拍，合拍就是这条标准。",
+                "zhHant": "因為聊得來說明他合拍，合拍就是這條標準。",
+                "en": "Because an easy chat shows they fit, and fit is the criterion."
+              },
+              {
+                "zh": "因为好感会让你少追问「我们」后面到底是谁做的，标准还没有被行为对上。",
+                "zhHant": "因為好感會讓你少追問「我們」後面到底是誰做的，標準還沒有被行為對上。",
+                "en": "Because liking makes you less likely to ask who actually did the work behind “we,” so the criterion has not been matched to a behavior."
+              },
+              {
+                "zh": "因为结构化面试禁止任何交谈。",
+                "zhHant": "因為結構化面試禁止任何交談。",
+                "en": "Because a structured interview forbids any conversation."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "对谈只解开还要猜的那一行", zhHant: "對談只解開還要猜的那一行", en: "The conversation unlocks only the line that still needs a guess" },
-        concept: {
-          zh: ["短对谈不是复盘人格。你把四行放在两人中间，只问：哪一行还要猜？对方指出一行，你就改那一行，不扩大成对这个人的评价。", "问完如果对方反问一个词，例如「尽快」，你用钟点回答，不解释你其实是信任她。信任不写进这一行。"],
-          zhHant: ["短對談不是複盤人格。你把四行放在兩人中間，只問：哪一行還要猜？對方指出一行，你就改那一行，不擴大成對這個人的評價。", "問完如果對方反問一個詞，例如「盡快」，你用鐘點回答，不解釋你其實是信任她。信任不寫進這一行。"],
-          en: ["A short conversation is not a review of character. You put the four lines between you and ask which line still needs a guess. They name a line. You rewrite that line. You do not widen it into a judgment of them.", "If they ask what a word means, answer with a clock time. Do not explain that you trust them. Trust does not go in the line."],
+        "title": {
+          "zh": "入职是把聘用时说的话做成第一月",
+          "zhHant": "入職是把聘用時說的話做成第一月",
+          "en": "Onboarding is the promise, made into the first month"
         },
-        case: {
-          zh: ["阿 May 看着四行，只问了一句：「尽快是周四三点，还是做完就可以？」她没有问你觉不觉得她认真。", "你如果回答「我相信你」，姓名牌的截止时间仍然空着。这一行要写成：周四下午三点前送到摊位，三点你来看英文名有没有被切。"],
-          zhHant: ["阿 May 看著四行，只問了一句：「盡快是週四三點，還是做完就可以？」她沒有問你覺不覺得她認真。", "你如果回答「我相信你」，姓名牌的截止時間仍然空著。這一行要寫成：週四下午三點前送到攤位，三點你來看英文名有沒有被切。"],
-          en: ["May looks at the four lines and asks only: “Does soon mean Thursday at three, or whenever it is finished?” She does not ask whether you think she is serious.", "If you answer “I trust you,” the deadline is still empty. The line has to say: at the booth before Thursday at three, and at three you will check whether the English names are cut."],
+        "concept": {
+          "zh": [
+            "录用时说出的工作，就是对方同意进来的条件。这常被叫作心理契约：对方相信的那一套交换。入职不是欢迎午餐。第一月要让他做职务分析里的那件工作，有一个指名的人可以问，并在大约第三十天用同一条标准看一次。",
+            "如果说的是参与场地策略，第一月却只有九点半的收货表，而你等到人想走才解释，条件在入职前就已经破了。做不到的部分在开工前说，并写明第一月真正交什么。",
+            "第三十天的检查只对照必须有的标准：货、异常表、十点的数量。不在这里补评性格，也不把午餐当成完成。"
+          ],
+          "zhHant": [
+            "錄用時說出的工作，就是對方同意進來的條件。這常被叫作心理契約：對方相信的那一套交換。入職不是歡迎午餐。第一月要讓他做職務分析裡的那件工作，有一個指名的人可以問，並在大約第三十天用同一條標準看一次。",
+            "如果說的是參與場地策略，第一月卻只有九點半的收貨表，而你等到人想走才解釋，條件在入職前就已經破了。做不到的部分在開工前說，並寫明第一月真正交什麼。",
+            "第三十天的檢查只對照必須有的標準：貨、異常表、十點的數量。不在這裡補評性格，也不把午餐當成完成。"
+          ],
+          "en": [
+            "The work described at offer is the exchange the person agreed to. That belief about the exchange is the psychological contract. Onboarding is not a welcome lunch. The first month has them do the work from the job analysis, names one person they can ask, and looks again at about day thirty against the same criterion.",
+            "If you said they would join site strategy, and the first month is only the 9:30 receiving form, explaining that only when they want to leave means the contract was already broken before they started. Say the part you cannot offer before day one, and write down what the first month actually delivers.",
+            "The day-thirty check matches the must-have only: deliveries, the exception form, the 10:00 counts. It does not add a verdict on personality, and a lunch does not count as done."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 12, prompt: { zh: "用钟点回答阿 May：尽快指到周四几点，三点你来看什么。", zhHant: "用鐘點回答阿 May：盡快指到週四幾點，三點你來看什麼。", en: "Answer May with a clock time: what soon means on Thursday, and what you will check at three." } },
-          { kind: "check", answer: 2, prompt: { zh: "阿 May 问尽快时，你不该回答哪一句？", zhHant: "阿 May 問盡快時，你不該回答哪一句？", en: "Which answer should you not give when May asks what soon means?" }, options: [
-            { zh: "周四下午三点前送到摊位", zhHant: "週四下午三點前送到攤位", en: "At the booth before Thursday at three" },
-            { zh: "三点看英文名有没有被切", zhHant: "三點看英文名有沒有被切", en: "At three, check whether the English names are cut" },
-            { zh: "我相信你，你看着办", zhHant: "我相信你，你看著辦", en: "I trust you, use your judgment" },
-          ] },
-          { kind: "write", min: 20, prompt: { zh: "把改完的四行再写一遍，专门给阿 May 的姓名牌。每一行都能核对。", zhHant: "把改完的四行再寫一遍，專門給阿 May 的姓名牌。每一行都能核對。", en: "Write the four revised lines again, only for May’s name cards. Each line can be checked." } },
-        ],
+        "case": {
+          "zh": [
+            "澄湾口头说：「你会参与观塘场地的整体策略。」入职第一周的安排只有欢迎午餐，和一套没有截止日期的旧手册。九点半的收货没有人告诉他。",
+            "第十天，表是空的，他第一次被骂。他以为自己漏掉的是策略会议。条件在开工前没有被说成第一月真正要交的东西。"
+          ],
+          "zhHant": [
+            "澄灣口頭說：「你會參與觀塘場地的整體策略。」入職第一週的安排只有歡迎午餐，和一套沒有截止日期的舊手冊。九點半的收貨沒有人告訴他。",
+            "第十天，表是空的，他第一次被罵。他以為自己漏掉的是策略會議。條件在開工前沒有被說成第一月真正要交的東西。"
+          ],
+          "en": [
+            "Chengwan said, verbally: “You will take part in the overall strategy for the Kwun Tong site.” Week one is a welcome lunch and an old handbook with no dates. Nobody tells him about the 9:30 receiving.",
+            "On day ten the form is empty, and he is told off for the first time. He thought he had missed a strategy meeting. Before day one, the offer was never restated as what the first month actually delivers."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 110,
+            "prompt": {
+              "zh": "写一份第一月安排：开工前要说清的那件工作、指名的提问人，以及第三十天对照哪一条标准。不要写欢迎午餐。",
+              "zhHant": "寫一份第一月安排：開工前要說清的那件工作、指名的提問人，以及第三十天對照哪一條標準。不要寫歡迎午餐。",
+              "en": "Write the first-month plan: the work you will state before day one, the named person they can ask, and which criterion day thirty checks. Do not write a welcome lunch."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "哪一件事是在修补已经说出的条件？",
+              "zhHant": "哪一件事是在修補已經說出的條件？",
+              "en": "Which action repairs the promise that was already made?"
+            },
+            "options": [
+              {
+                "zh": "把欢迎午餐订在更好的餐厅。",
+                "zhHant": "把歡迎午餐訂在更好的餐廳。",
+                "en": "Book the welcome lunch at a better restaurant."
+              },
+              {
+                "zh": "等他犯错，再解释这工作其实是收货。",
+                "zhHant": "等他犯錯，再解釋這工作其實是收貨。",
+                "en": "Wait until he makes a mistake, then explain that the job is receiving."
+              },
+              {
+                "zh": "开工前写明第一月交的是九点半的货和十点的数量，策略不在这三十天里。",
+                "zhHant": "開工前寫明第一月交的是九點半的貨和十點的數量，策略不在這三十天裡。",
+                "en": "Before day one, write that the first month delivers the 9:30 deliveries and the 10:00 counts, and that strategy is not in these thirty days."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "第三十天该看什么？",
+              "zhHant": "第三十天該看什麼？",
+              "en": "What does day thirty look at?"
+            },
+            "options": [
+              {
+                "zh": "异常表是否在十点前交出，数量能否对上。",
+                "zhHant": "異常表是否在十點前交出，數量能否對上。",
+                "en": "Whether the exception form was handed over by 10:00, and whether the counts match."
+              },
+              {
+                "zh": "他是否还像我们。",
+                "zhHant": "他是否還像我們。",
+                "en": "Whether he is still one of us."
+              },
+              {
+                "zh": "欢迎午餐有没有出席。",
+                "zhHant": "歡迎午餐有沒有出席。",
+                "en": "Whether he attended the welcome lunch."
+              }
+            ]
+          }
+        ]
       },
-    ],
+      {
+        "title": {
+          "zh": "反馈记行为和作用，不记人品",
+          "zhHant": "反饋記行為和作用，不記人品",
+          "en": "Feedback records behavior and impact, not character"
+        },
+        "concept": {
+          "zh": [
+            "能让人改的反馈有四段里的前三段，再加一个改法。情境是何时何地。行为是对方做了什么，不是他是什么样的人。作用是这件事让工作变成了什么样。改法只有一个，而且下一次能被看见。",
+            "这四段常被收成情境、行为、作用。少了情境，对方不知道你在说哪一次。少了行为，只剩一个形容词。少了作用，他不知道为什么要改。「你很粗心」三样都没有。",
+            "记录里不写传闻，不写与这条工作无关的身份。那些既不能核对，也不能当标准。不能核对的句子，下一次无法用来看他有没有改。"
+          ],
+          "zhHant": [
+            "能讓人改的反饋有四段裡的前三段，再加一個改法。情境是何時何地。行為是對方做了什麼，不是他是什麼樣的人。作用是這件事讓工作變成了什麼樣。改法只有一個，而且下一次能被看見。",
+            "這四段常被收成情境、行為、作用。少了情境，對方不知道你在說哪一次。少了行為，只剩一個形容詞。少了作用，他不知道為什麼要改。「你很粗心」三樣都沒有。",
+            "記錄裡不寫傳聞，不寫與這條工作無關的身份。那些既不能核對，也不能當標準。不能核對的句子，下一次無法用來看他有沒有改。"
+          ],
+          "en": [
+            "Feedback a person can act on has the situation, the behavior, the impact, and one change. Situation is when and where. Behavior is what they did, not what kind of person they are. Impact is what the work became because of it. The change is one thing, and visible the next time.",
+            "Those pieces are situation, behavior, and impact. Without the situation, they do not know which time you mean. Without the behavior, only an adjective is left. Without the impact, they do not know why to change. “You are careless” has none of the three.",
+            "The record does not include rumor, and it does not include an identity that has nothing to do with this work. Those cannot be checked, and they cannot be criteria. A sentence that cannot be checked cannot be used next time to see whether they changed."
+          ]
+        },
+        "case": {
+          "zh": [
+            "场地负责人想写：「阿朗很粗心，大家都不喜欢和他交接。」",
+            "能核对的事实是：星期四货晚到，阿朗没有把缺的两箱写进异常表，十点的数量少了两箱，仓库下午才发现。下一次能看见的改法，是晚到的货在九点半前把缺的箱数写进同一份表。"
+          ],
+          "zhHant": [
+            "場地負責人想寫：「阿朗很粗心，大家都不喜歡和他交接。」",
+            "能核對的事實是：星期四貨晚到，阿朗沒有把缺的兩箱寫進異常表，十點的數量少了兩箱，倉庫下午才發現。下一次能看見的改法，是晚到的貨在九點半前把缺的箱數寫進同一份表。"
+          ],
+          "en": [
+            "The site lead wants to write: “Ah Long is careless, and nobody likes handing work to him.”",
+            "The checkable facts are: on Thursday the delivery was late, Ah Long did not write the two missing cartons on the exception form, the 10:00 counts were short by two, and the warehouse found out in the afternoon. The change that can be seen next time is: when a delivery is late, the missing count is on that same form before 9:30."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 110,
+            "prompt": {
+              "zh": "用情境、行为、作用写给阿朗的一段反馈，并给一个下一次能看见的改法。不要写「粗心」，也不要写「大家不喜欢」。",
+              "zhHant": "用情境、行為、作用寫給阿朗的一段反饋，並給一個下一次能看見的改法。不要寫「粗心」，也不要寫「大家不喜歡」。",
+              "en": "Write Ah Long’s feedback with situation, behavior, and impact, plus one change that can be seen next time. Do not write “careless,” and do not write “nobody likes.”"
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一句不能进记录？",
+              "zhHant": "哪一句不能進記錄？",
+              "en": "Which sentence does not belong in the record?"
+            },
+            "options": [
+              {
+                "zh": "星期四十点的数量少了两箱，因为异常表里没有那两箱。",
+                "zhHant": "星期四十點的數量少了兩箱，因為異常表裡沒有那兩箱。",
+                "en": "Thursday’s 10:00 counts were short by two cartons, because those two were not on the exception form."
+              },
+              {
+                "zh": "大家都不喜欢和他交接。",
+                "zhHant": "大家都不喜歡和他交接。",
+                "en": "Nobody likes handing work to him."
+              },
+              {
+                "zh": "下一次晚到时，九点半前把缺的箱数写进同一份表。",
+                "zhHant": "下一次晚到時，九點半前把缺的箱數寫進同一份表。",
+                "en": "Next time a delivery is late, write the missing count on the same form before 9:30."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "「你很粗心」差在哪里？",
+              "zhHant": "「你很粗心」差在哪裡？",
+              "en": "What is missing from “you are careless”?"
+            },
+            "options": [
+              {
+                "zh": "它没有情境和行为，对方不能照着改下一次的表。",
+                "zhHant": "它沒有情境和行為，對方不能照著改下一次的表。",
+                "en": "It has no situation and no behavior, so he cannot change the next form from it."
+              },
+              {
+                "zh": "它已经太具体，具体到无法执行。",
+                "zhHant": "它已經太具體，具體到無法執行。",
+                "en": "It is already too specific to act on."
+              },
+              {
+                "zh": "它已经包含了作用和改法。",
+                "zhHant": "它已經包含了作用和改法。",
+                "en": "It already includes the impact and the change."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
-  kaifa: {
-    title: { zh: "做一页陌生人打得开的页面", zhHant: "做一頁陌生人打得開的頁面", en: "A page a stranger can open" },
-    lessons: [
+  "kaifa": {
+    "title": {
+      "zh": "交一页能读、能提交、也能拒绝坏数据的页面",
+      "zhHant": "交一頁能讀、能提交、也能拒絕壞數據的頁面",
+      "en": "Ship a page that can be read, submitted, and that refuses bad data"
+    },
+    "minutes": 50,
+    "lessons": [
       {
-        title: { zh: "一页只放标题、说明、列表", zhHant: "一頁只放標題、說明、列表", en: "A page holds a title, a note, and a list" },
-        concept: {
-          zh: ["数字开发这一讲不从框架开始。陌生人打开的第一页，只要能在没有你讲解的情况下知道：这是什么、现在有什么。结构就是标题、一段说明、一个列表。", "列表里的每一条都是文字。不要把三条事项画成一张图。图打开失败的时候，页面上就什么都不剩。登录也先不做。这一页还没有需要守住的身份。"],
-          zhHant: ["數字開發這一講不從框架開始。陌生人打開的第一頁，只要能在沒有你講解的情況下知道：這是什麼、現在有什麼。結構就是標題、一段說明、一個列表。", "列表裡的每一條都是文字。不要把三條事項畫成一張圖。圖打開失敗的時候，頁面上就什麼都不剩。登入也先不做。這一頁還沒有需要守住的身份。"],
-          en: ["This lecture does not start with a framework. The first page a stranger opens has to say what it is, and what is there now, without you narrating. The structure is a title, one paragraph, and a list.", "Each list item is text. Do not draw three items into one picture. If the picture fails, the page is empty. Login waits. This page does not yet have an identity to protect."],
+        "title": {
+          "zh": "语义，和可访问性的四项",
+          "zhHant": "語義，和可訪問性的四項",
+          "en": "Semantics, and the four accessibility duties"
         },
-        case: {
-          zh: ["宿舍六楼本周丢了三样东西：一把黑伞、一张蓝色校园卡、一副有线耳机。楼长想要一页，让不在宿舍的人也能看见。页名就叫「六楼失物」。", "有人建议先做登录，再把三样东西画成一张海报图。楼长要的是现在就能打开的一页，不是一套账号系统。"],
-          zhHant: ["宿舍六樓本週丟了三樣東西：一把黑傘、一張藍色校園卡、一副有線耳機。樓長想要一頁，讓不在宿舍的人也能看見。頁名就叫「六樓失物」。", "有人建議先做登入，再把三樣東西畫成一張海報圖。樓長要的是現在就能打開的一頁，不是一套帳號系統。"],
-          en: ["Three things went missing on dorm floor six this week: a black umbrella, a blue campus card, and wired earphones. The floor lead wants one page so someone who is not in the dorm can still see them. The page is called Floor Six Lost Property.", "Someone suggested login first, and a poster image of the three things. The floor lead wants a page that opens now, not an account system."],
+        "concept": {
+          "zh": [
+            "页面先是一份有结构的文档，然后才是样子。标题按层级排，只读标题就知道大纲。按钮是一个动作。链接是去另一个地方。用一个只有点击的 div 冒充按钮，键盘到不了，辅助技术也不知道那是一个控件，焦点也没有浏览器本来就会给的行为。",
+            "可访问性常被收成四项。可感知：信息不能只靠一种看得到的方式存在。可操作：键盘和焦点到得了控件。可理解：标签和标题说的是这件工作，单独念出来也成立。足够稳固：用浏览器本来就懂的元素，而不是临时拼一个看起来像的东西。",
+            "标签要和输入框连上：label 的 for 等于输入框的 id。没有这条线，只听不看的人听到的是「编辑文字」，不知道该填电话还是地点。「点击这里」在一列控件里没有意义，因为它没有说出会提交什么。"
+          ],
+          "zhHant": [
+            "頁面先是一份有結構的文檔，然後才是樣子。標題按層級排，只讀標題就知道大綱。按鈕是一個動作。鏈接是去另一個地方。用一個只有點擊的 div 冒充按鈕，鍵盤到不了，輔助技術也不知道那是一個控件，焦點也沒有瀏覽器本來就會給的行為。",
+            "可訪問性常被收成四項。可感知：信息不能只靠一種看得到的方式存在。可操作：鍵盤和焦點到得了控件。可理解：標籤和標題說的是這件工作，單獨念出來也成立。足夠穩固：用瀏覽器本來就懂的元素，而不是臨時拼一個看起來像的東西。",
+            "標籤要和輸入框連上：label 的 for 等於輸入框的 id。沒有這條線，只聽不看的人聽到的是「編輯文字」，不知道該填電話還是地點。「點擊這裡」在一列控件裡沒有意義，因為它沒有說出會提交什麼。"
+          ],
+          "en": [
+            "A page is a document with a structure before it is a look. Headings run in order, and the headings alone are the outline. A button is an action. A link goes somewhere. A div that only listens for a click is not a button: the keyboard cannot reach it, assistive technology is not told it is a control, and it has none of the focus behavior the browser would have given a button.",
+            "Accessibility is often gathered into four duties. Perceivable: the information does not exist only as something a person can see. Operable: keyboard and focus can reach the control. Understandable: the label and the heading name the job, and still make sense read alone. Robust: use an element the browser already understands, rather than assembling something that only looks like one.",
+            "A label is tied to its field: the label’s for matches the input’s id. Without that tie, a person who hears the page hears “edit text” and does not know whether to type a phone number or a place. “Click here,” read in a list of controls, says nothing about what will be submitted."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 8, prompt: { zh: "写下「六楼失物」这页的标题，和一段说明：这一页给谁看、上面是本周丢的东西。", zhHant: "寫下「六樓失物」這頁的標題，和一段說明：這一頁給誰看、上面是本週丟的東西。", en: "Write the title of Floor Six Lost Property, and one paragraph: who it is for, and that these are this week’s lost things." } },
-          { kind: "write", min: 12, prompt: { zh: "把黑伞、蓝色校园卡、有线耳机写成三条，一条一行。不要写成一张图的说明。", zhHant: "把黑傘、藍色校園卡、有線耳機寫成三條，一條一行。不要寫成一張圖的說明。", en: "Write the umbrella, the blue card, and the earphones as three lines. Not a caption for one picture." } },
-          { kind: "check", answer: 0, prompt: { zh: "六楼失物这第一页，现在不该先做哪个？", zhHant: "六樓失物這第一頁，現在不該先做哪個？", en: "What should this first page not do yet?" }, options: [
-            { zh: "先做登录", zhHant: "先做登入", en: "Login first" },
-            { zh: "标题写六楼失物", zhHant: "標題寫六樓失物", en: "Title it Floor Six Lost Property" },
-            { zh: "用文字列出三样东西", zhHant: "用文字列出三樣東西", en: "List the three things as text" },
-          ] },
-        ],
+        "case": {
+          "zh": [
+            "宿舍六楼要交一页失物页。每条记录有三样：物品名称、拾到的地点、联系电话，再加上一个告诉宿舍办公处的提交。",
+            "现在的页面用三个没有标签的框。提交是一个 div，写着「点击这里」。标题从很大的字直接跳进正文，中间缺了层级。办公处的人用键盘走这页时，停不到那个 div 上。"
+          ],
+          "zhHant": [
+            "宿舍六樓要交一頁失物頁。每條記錄有三樣：物品名稱、拾到的地點、聯繫電話，再加上一個告訴宿舍辦公處的提交。",
+            "現在的頁面用三個沒有標籤的框。提交是一個 div，寫著「點擊這裡」。標題從很大的字直接跳進正文，中間缺了層級。辦公處的人用鍵盤走這頁時，停不到那個 div 上。"
+          ],
+          "en": [
+            "The sixth-floor residence needs a lost-and-found page. Each record has three fields: the item’s name, where it was found, and a phone number, plus a submit that tells the residence office.",
+            "The page now has three unlabeled boxes. Submit is a div that says “click here.” The headings jump from a very large line straight into body text, so a level is missing. When the office walks the page by keyboard, they cannot stop on that div."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "提交为什么不能用 div？",
+              "zhHant": "提交為什麼不能用 div？",
+              "en": "Why can submit not be a div?"
+            },
+            "options": [
+              {
+                "zh": "因为 div 比较新，浏览器不支持。",
+                "zhHant": "因為 div 比較新，瀏覽器不支持。",
+                "en": "Because a div is newer, and browsers do not support it."
+              },
+              {
+                "zh": "因为键盘和辅助技术得不到按钮这个控件，焦点也没有按钮默认的行为。",
+                "zhHant": "因為鍵盤和輔助技術得不到按鈕這個控件，焦點也沒有按鈕默認的行為。",
+                "en": "Because the keyboard and assistive technology never get a button, and focus has none of a button’s default behavior."
+              },
+              {
+                "zh": "因为 div 不能有文字。",
+                "zhHant": "因為 div 不能有文字。",
+                "en": "Because a div cannot contain text."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "给三个框各写一个单独念出来也成立的标签，并说明标签怎样和框连上。不要写「点击这里」。",
+              "zhHant": "給三個框各寫一個單獨念出來也成立的標籤，並說明標籤怎樣和框連上。不要寫「點擊這裡」。",
+              "en": "Write a label for each of the three fields that still makes sense read alone, and say how the label is tied to the field. Do not write “click here.”"
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "「点击这里」主要违背四项里的哪一项？",
+              "zhHant": "「點擊這裡」主要違背四項裡的哪一項？",
+              "en": "Which of the four duties does “click here” mainly fail?"
+            },
+            "options": [
+              {
+                "zh": "可理解：单独念出来不知道会提交什么。",
+                "zhHant": "可理解：單獨念出來不知道會提交什麼。",
+                "en": "Understandable: read alone, it does not say what will be submitted."
+              },
+              {
+                "zh": "可感知：因为这四个字太小。",
+                "zhHant": "可感知：因為這四個字太小。",
+                "en": "Perceivable: because the four words are too small."
+              },
+              {
+                "zh": "足够稳固：因为服务器会拒绝这个词。",
+                "zhHant": "足夠穩固：因為服務器會拒絕這個詞。",
+                "en": "Robust: because the server will reject those words."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "用手机看字、按钮和横滑", zhHant: "用手機看字、按鈕和橫滑", en: "On a phone: type, buttons, sideways scroll" },
-        concept: {
-          zh: ["电脑上能开，只说明你的窗口够宽。这一讲要看的是一只真的手机：字能不能读完，两个按钮会不会挤在一行，页面要不要横着滑。", "横着滑通常不是内容多，是左右没有边距，或两个动作被放进了同一行。改法是加大边距，把那一行改成上下。缩小桌面窗口不能代替这一步。"],
-          zhHant: ["電腦上能開，只說明你的窗口夠寬。這一講要看的是一隻真的手機：字能不能讀完，兩個按鈕會不會擠在一行，頁面要不要橫著滑。", "橫著滑通常不是內容多，是左右沒有邊距，或兩個動作被放進了同一行。改法是加大邊距，把那一行改成上下。縮小桌面窗口不能代替這一步。"],
-          en: ["Opening on your computer only shows that your window is wide. This lecture looks at a real phone: can the words be read, do two buttons share one row, and does the page scroll sideways?", "Sideways scrolling is usually missing side space, or two actions forced onto one row. Add space and stack them. A narrowed desktop window is not this step."],
+        "title": {
+          "zh": "方法和状态码才是结果",
+          "zhHant": "方法和狀態碼才是結果",
+          "en": "The method and the status code are the result"
         },
-        case: {
-          zh: ["六楼失物页在楼长的笔记本上很宽。「我捡到了」和「返回」并排，字也完整。楼长用自己的手机打开公开地址，两个按钮挤成一行，黑伞那一条要横着滑才看得见「黑」。", "她把浏览器窗口拖窄再看，按钮又分开了。这不能算用手机看过。"],
-          zhHant: ["六樓失物頁在樓長的筆記本上很寬。「我撿到了」和「返回」並排，字也完整。樓長用自己的手機打開公開地址，兩個按鈕擠成一行，黑傘那一條要橫著滑才看得見「黑」。", "她把瀏覽器窗口拖窄再看，按鈕又分開了。這不能算用手機看過。"],
-          en: ["On the floor lead’s laptop the page is wide. “I found it” and “Back” sit side by side, and the words are whole. On her own phone, the buttons share one row, and the umbrella line has to scroll sideways before “black” is visible.", "She drags the desktop window narrower and the buttons separate again. That is not looking on a phone."],
+        "concept": {
+          "zh": [
+            "浏览器发出的是一次请求：方法加上路径。常见的读取是 GET。提交一份新记录常用 POST。服务器回的是状态码和正文。正文可能是一份文档，也可能是一段数据。两种正文不要当成同一种成功。",
+            "状态码是结果，不是装饰。200 是读到了。201 是新记录建成了。400 是你交上的内容不能用。401 是还没有证明你是谁。403 是已经证明了你是谁，但这件事你不被允许做。500 是服务器自己失败了。页面在 500 时仍显示「已保存」，是在谎报。",
+            "先看状态，再改页面上的句子。慢可以再试。400 要指出是哪一项不能用。401 要去证明身份。403 不要装成没登录。500 不要让人以为记录已经在。"
+          ],
+          "zhHant": [
+            "瀏覽器發出的是一次請求：方法加上路徑。常見的讀取是 GET。提交一份新記錄常用 POST。服務器回的是狀態碼和正文。正文可能是一份文檔，也可能是一段數據。兩種正文不要當成同一種成功。",
+            "狀態碼是結果，不是裝飾。200 是讀到了。201 是新記錄建成了。400 是你交上的內容不能用。401 是還沒有證明你是誰。403 是已經證明了你是誰，但這件事你不被允許做。500 是服務器自己失敗了。頁面在 500 時仍顯示「已保存」，是在謊報。",
+            "先看狀態，再改頁面上的句子。慢可以再試。400 要指出是哪一項不能用。401 要去證明身份。403 不要裝成沒登入。500 不要讓人以為記錄已經在。"
+          ],
+          "en": [
+            "The browser sends a request: a method and a path. A common read is GET. Creating a record is often POST. The server answers with a status code and a body. The body may be a document or a piece of data. Do not treat those two bodies as the same kind of success.",
+            "The status code is the result, not decoration. 200 means the read succeeded. 201 means a new record was created. 400 means what you sent cannot be used. 401 means you have not yet shown who you are. 403 means you have shown who you are, and you are not allowed to do this. 500 means the server itself failed. A page that shows “saved” on a 500 is reporting a lie.",
+            "Read the status before you change the sentence on the page. Slow can be tried again. A 400 should say which field cannot be used. A 401 should go and prove identity. A 403 should not be dressed up as “not signed in.” A 500 should not leave the person thinking the record exists."
+          ]
         },
-        tasks: [
-          { kind: "check", answer: 1, prompt: { zh: "六楼失物怎样才算用手机看过？", zhHant: "六樓失物怎樣才算用手機看過？", en: "What counts as checking Floor Six on a phone?" }, options: [
-            { zh: "把笔记本窗口拖窄", zhHant: "把筆記本窗口拖窄", en: "Drag the laptop window narrower" },
-            { zh: "用自己的手机打开那个公开地址", zhHant: "用自己的手機打開那個公開地址", en: "Open the public address on your own phone" },
-            { zh: "先确认桌面上两个按钮是并排的", zhHant: "先確認桌面上兩個按鈕是並排的", en: "First confirm the buttons sit side by side on the desktop" },
-          ] },
-          { kind: "write", min: 12, prompt: { zh: "写下这只手机上的两处：按钮怎样挤，「黑伞」怎样被切。", zhHant: "寫下這隻手機上的兩處：按鈕怎樣擠，「黑傘」怎樣被切。", en: "Write the two problems on this phone: how the buttons collide, and how “black umbrella” is cut." } },
-          { kind: "write", min: 8, prompt: { zh: "只写你要改的一处：边距，或把「我捡到了」和「返回」改成上下。", zhHant: "只寫你要改的一處：邊距，或把「我撿到了」和「返回」改成上下。", en: "Write the one change: side space, or stacking “I found it” and “Back.”" } },
-        ],
+        "case": {
+          "zh": [
+            "同学填了电话，按下提交。服务器回了 500，页面仍变绿，写着「已保存」。办公处的表里没有这条。",
+            "另一次，地点空着，服务器回 400。页面只写「出错了」，不说是地点。还有一次，一名没有登录的同学提交，服务器回 401；一名已经登录的同学想导出全部电话，服务器回了 403。"
+          ],
+          "zhHant": [
+            "同學填了電話，按下提交。服務器回了 500，頁面仍變綠，寫著「已保存」。辦公處的表裡沒有這條。",
+            "另一次，地點空著，服務器回 400。頁面只寫「出錯了」，不說是地點。還有一次，一名沒有登入的同學提交，服務器回 401；一名已經登入的同學想導出全部電話，服務器回了 403。"
+          ],
+          "en": [
+            "A student fills in the phone number and submits. The server answers 500. The page still turns green and says “saved.” The office’s list does not have the record.",
+            "Another time the place is empty and the server answers 400. The page only says “something went wrong,” and does not say it was the place. Another time a student who is not signed in submits and the server answers 401. A student who is signed in tries to export every phone number, and the server answers 403."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "状态是 500 时，页面不该做什么？",
+              "zhHant": "狀態是 500 時，頁面不該做什麼？",
+              "en": "When the status is 500, what should the page not do?"
+            },
+            "options": [
+              {
+                "zh": "告诉人服务器没有建成记录，可以再试。",
+                "zhHant": "告訴人服務器沒有建成記錄，可以再試。",
+                "en": "Tell them the server did not create the record, and that they can try again."
+              },
+              {
+                "zh": "把已经填的内容留在表单里，不要清掉。",
+                "zhHant": "把已經填的內容留在表單裡，不要清掉。",
+                "en": "Leave what they typed in the form, and do not clear it."
+              },
+              {
+                "zh": "显示绿色的「已保存」。",
+                "zhHant": "顯示綠色的「已保存」。",
+                "en": "Show a green “saved.”"
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "地点空着，服务器回了 400。页面该说什么？",
+              "zhHant": "地點空著，服務器回了 400。頁面該說什麼？",
+              "en": "The place is empty and the server answered 400. What should the page say?"
+            },
+            "options": [
+              {
+                "zh": "地点没有填，记录没有建成。",
+                "zhHant": "地點沒有填，記錄沒有建成。",
+                "en": "The place is empty, and the record was not created."
+              },
+              {
+                "zh": "已保存。",
+                "zhHant": "已保存。",
+                "en": "Saved."
+              },
+              {
+                "zh": "你没有登录。",
+                "zhHant": "你沒有登入。",
+                "en": "You are not signed in."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "用自己的话写出 401 和 403 的差别，并各给失物页一个例子：谁会遇到 401，谁会遇到 403。",
+              "zhHant": "用自己的話寫出 401 和 403 的差別，並各給失物頁一個例子：誰會遇到 401，誰會遇到 403。",
+              "en": "In your own words, write the difference between 401 and 403, and give the lost-and-found one example of each: who gets a 401, and who gets a 403."
+            }
+          }
+        ]
       },
       {
-        title: { zh: "地址给一个不在现场的人", zhHant: "地址給一個不在現場的人", en: "Give the address to someone who is not there" },
-        concept: {
-          zh: ["页面的最后一关不是你自己再看一遍，是一个没听过你讲解的人。你把地址给出去，只附这一页上有什么，不多解释。", "对方打开之后，你只问一个和这一讲有关的问题：要不要横着滑。不问好不好看。好看不告诉你按钮有没有挤在一起。"],
-          zhHant: ["頁面的最後一關不是你自己再看一遍，是一個沒聽過你講解的人。你把地址給出去，只附這一頁上有什麼，不多解釋。", "對方打開之後，你只問一個和這一講有關的問題：要不要橫著滑。不問好不好看。好看不告訴你按鈕有沒有擠在一起。"],
-          en: ["The last gate is not you looking again. It is someone who never heard you explain. You send the address and only what is on the page.", "After they open it, you ask one question from this lecture: did you have to scroll sideways? Not whether it looks nice. Nice does not tell you if the buttons collided."],
+        "title": {
+          "zh": "浏览器里的检查不是记录",
+          "zhHant": "瀏覽器裡的檢查不是記錄",
+          "en": "A check in the browser is not the record"
         },
-        case: {
-          zh: ["楼长把六楼失物的地址发给正在地铁上的室友。室友没参加过楼会。消息里如果写一大段背景，他不会看。他需要的是：这一页有黑伞、蓝色校园卡、有线耳机。", "他用手机点开。楼长只准备问他一句：列表要不要横着滑。"],
-          zhHant: ["樓長把六樓失物的地址發給正在地鐵上的室友。室友沒參加過樓會。消息裡如果寫一大段背景，他不會看。他需要的是：這一頁有黑傘、藍色校園卡、有線耳機。", "他用手機點開。樓長只準備問他一句：列表要不要橫著滑。"],
-          en: ["The floor lead sends the address to a roommate on the MTR. He was not at the floor meeting. A long background will not be read. He needs this: the page lists a black umbrella, a blue campus card, and wired earphones.", "He opens it on his phone. She is ready to ask only whether the list scrolls sideways."],
+        "concept": {
+          "zh": [
+            "浏览器里的检查是给正在打字的人：少走一次来回。服务器上的检查才是记录。任何人都可以绕过页面，自己发一次请求。只在页面上禁止字母，挡不住一次直接发来的请求。",
+            "把失物描述当成 HTML 插进页面，是把下一位读者的浏览器交给写描述的人。描述里如果有一段脚本，下一位打开列表的人就会执行它。描述要作为文字放进去，不作为 HTML。文字里的脚本只是字，不会跑。",
+            "电话是否像一个电话，两边都可以提示。但「像」不能代替服务器拒绝空的地点、过长的描述，以及一段被当成 HTML 的内容。页面上的检查可能根本没有运行。"
+          ],
+          "zhHant": [
+            "瀏覽器裡的檢查是給正在打字的人：少走一次來回。服務器上的檢查才是記錄。任何人都可以繞過頁面，自己發一次請求。只在頁面上禁止字母，擋不住一次直接發來的請求。",
+            "把失物描述當成 HTML 插進頁面，是把下一位讀者的瀏覽器交給寫描述的人。描述裡如果有一段腳本，下一位打開列表的人就會執行它。描述要作為文字放進去，不作為 HTML。文字裡的腳本只是字，不會跑。",
+            "電話是否像一個電話，兩邊都可以提示。但「像」不能代替服務器拒絕空的地點、過長的描述，以及一段被當成 HTML 的內容。頁面上的檢查可能根本沒有運行。"
+          ],
+          "en": [
+            "A check in the browser is for the person who is typing: it saves a round trip. The check on the server is the record. Anyone can skip the page and send the request themselves. Blocking letters only on the page does not block a request that never went through the page.",
+            "Inserting a found-item description as HTML hands the next reader’s browser to the person who wrote the description. If the description contains a script, the next person who opens the list runs it. Put the description in as text, not as HTML. A script that is text is only characters. It does not run.",
+            "Both sides can hint that a phone number does not look like one. Looking like one does not replace the server refusing an empty place, an over-long description, or content that was treated as HTML. The check on the page may never have run."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 16, prompt: { zh: "写给地铁上那位室友的两三句：地址是六楼失物，页上有哪三样。不要写楼会背景。", zhHant: "寫給地鐵上那位室友的兩三句：地址是六樓失物，頁上有哪三樣。不要寫樓會背景。", en: "Write two or three sentences for the roommate on the train: the page is Floor Six Lost Property, and name the three things. No floor-meeting background." } },
-          { kind: "check", answer: 0, prompt: { zh: "他打开之后，楼长只问哪一句？", zhHant: "他打開之後，樓長只問哪一句？", en: "After he opens it, what does she ask?" }, options: [
-            { zh: "列表要不要横着滑", zhHant: "列表要不要橫著滑", en: "Does the list scroll sideways" },
-            { zh: "这一页好不好看", zhHant: "這一頁好不好看", en: "Does the page look nice" },
-            { zh: "要不要先注册再看", zhHant: "要不要先註冊再看", en: "Should he register before looking" },
-          ] },
-          { kind: "write", min: 12, prompt: { zh: "假设他回答要横着滑。写下你回到六楼失物页会改的那一处。", zhHant: "假設他回答要橫著滑。寫下你回到六樓失物頁會改的那一處。", en: "Suppose he says it scrolls sideways. Write the one change you would make on Floor Six." } },
-        ],
+        "case": {
+          "zh": [
+            "页面用一段脚本禁止电话栏出现字母。同学以为这样就安全了。有人没有打开这页，直接向提交地址发了一条请求：地点是空的，描述里夹着一段脚本。",
+            "列表页把描述按 HTML 插入。下一位同学打开列表时，那段脚本在他自己的浏览器里跑了。服务器没有拒绝空的地点，也没有把描述当成文字。"
+          ],
+          "zhHant": [
+            "頁面用一段腳本禁止電話欄出現字母。同學以為這樣就安全了。有人沒有打開這頁，直接向提交地址發了一條請求：地點是空的，描述裡夾著一段腳本。",
+            "列表頁把描述按 HTML 插入。下一位同學打開列表時，那段腳本在他自己的瀏覽器裡跑了。服務器沒有拒絕空的地點，也沒有把描述當成文字。"
+          ],
+          "en": [
+            "A script on the page stops letters in the phone field. The students think that makes it safe. Someone never opens the page and sends a request straight to the submit address: the place is empty, and the description contains a script.",
+            "The list inserts the description as HTML. When the next student opens the list, that script runs in their browser. The server did not refuse the empty place, and it did not treat the description as text."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "页面上的电话检查挡得住哪一种情况？",
+              "zhHant": "頁面上的電話檢查擋得住哪一種情況？",
+              "en": "Which case does the phone check on the page actually stop?"
+            },
+            "options": [
+              {
+                "zh": "任何请求，包括绕过页面直接发送的。",
+                "zhHant": "任何請求，包括繞過頁面直接發送的。",
+                "en": "Any request, including one sent past the page."
+              },
+              {
+                "zh": "只挡得住在这个页面里打字的人，挡不住自己发出的请求。",
+                "zhHant": "只擋得住在這個頁面裡打字的人，擋不住自己發出的請求。",
+                "en": "Only a person typing on this page. It does not stop a request they send themselves."
+              },
+              {
+                "zh": "挡得住服务器的 500。",
+                "zhHant": "擋得住服務器的 500。",
+                "en": "It stops a 500 from the server."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "说明失物描述应该怎样放进列表，以及为什么按 HTML 插入会害到下一位读者。答案里要有「文字」，也要有脚本会在谁的浏览器里跑。",
+              "zhHant": "說明失物描述應該怎樣放進列表，以及為什麼按 HTML 插入會害到下一位讀者。答案裡要有「文字」，也要有腳本會在誰的瀏覽器裡跑。",
+              "en": "Say how a found-item description should be placed in the list, and why inserting it as HTML harms the next reader. Include “text,” and whose browser the script runs in."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "地点为空的那次直接请求，谁必须拒绝？",
+              "zhHant": "地點為空的那次直接請求，誰必須拒絕？",
+              "en": "Who has to refuse the direct request with an empty place?"
+            },
+            "options": [
+              {
+                "zh": "只靠页面上的脚本，因为用户看得到它。",
+                "zhHant": "只靠頁面上的腳本，因為用戶看得到它。",
+                "en": "Only the script on the page, because the user can see it."
+              },
+              {
+                "zh": "谁都不用拒绝，400 只是建议。",
+                "zhHant": "誰都不用拒絕，400 只是建議。",
+                "en": "Nobody has to refuse it. A 400 is only a suggestion."
+              },
+              {
+                "zh": "服务器。页面上的检查可能根本没有运行。",
+                "zhHant": "服務器。頁面上的檢查可能根本沒有運行。",
+                "en": "The server. The check on the page may never have run."
+              }
+            ]
+          }
+        ]
       },
-    ],
+      {
+        "title": {
+          "zh": "窄屏和键盘也是完成标准",
+          "zhHant": "窄屏和鍵盤也是完成標準",
+          "en": "A narrow screen and a keyboard are part of done"
+        },
+        "concept": {
+          "zh": [
+            "一页只在作者的宽屏上成立，就还没做完。窄的屏幕上应该是一列，不能靠横向滚动才看见提交。输入的字不要小到系统被迫放大整个页面。焦点移动时，人要看得见现在在哪一项。",
+            "正文大小的字，和它背后的颜色，对比大约要到 4.5 比 1。浅灰字放在米色上，常常达不到。这不是气质，是这一项读不读得清。颜色不能成为唯一信号：错误不能只变成红色或浅红，还要有文字说是哪一项。",
+            "提交要有足够的可点区域，并且能用键盘到达。这和第一节是同一件事：控件首先得是一个真的按钮，然后在窄屏上仍碰得到，焦点仍看得见。"
+          ],
+          "zhHant": [
+            "一頁只在作者的寬屏上成立，就還沒做完。窄的屏幕上應該是一列，不能靠橫向滾動才看見提交。輸入的字不要小到系統被迫放大整個頁面。焦點移動時，人要看得見現在在哪一項。",
+            "正文大小的字，和它背後的顏色，對比大約要到 4.5 比 1。淺灰字放在米色上，常常達不到。這不是氣質，是這一項讀不讀得清。顏色不能成為唯一信號：錯誤不能只變成紅色或淺紅，還要有文字說是哪一項。",
+            "提交要有足夠的可點區域，並且能用鍵盤到達。這和第一節是同一件事：控件首先得是一個真的按鈕，然後在窄屏上仍碰得到，焦點仍看得見。"
+          ],
+          "en": [
+            "A page that only works on the author’s wide screen is not done. On a narrow screen it should be one column. The person should not have to scroll sideways to find submit. The type in a field should not be so small that the system is forced to zoom the whole page. When focus moves, the person can see which field they are on.",
+            "Body-sized text against its background wants a contrast of about 4.5 to 1. Light gray on cream often fails that. That is not a mood. It is whether the line can be read. Color cannot be the only signal: an error cannot only turn red or pale red. It also needs words that say which field.",
+            "Submit needs a large enough target, and the keyboard has to be able to reach it. This is the same point as the first lecture: the control has to be a real button, then still reachable on a narrow screen, with a focus the person can see."
+          ]
+        },
+        "case": {
+          "zh": [
+            "失物页在作者的宽屏上看起来整齐。手机上三个框挤出屏幕右边，要横着滑才找得到那个 div。电话栏的字很小。",
+            "地点空着时，只有框的边变成浅红，浅灰的说明写在米色底上。键盘按到那个 div 时没有焦点。宽屏上的整齐没有回答这三件事。"
+          ],
+          "zhHant": [
+            "失物頁在作者的寬屏上看起來整齊。手機上三個框擠出屏幕右邊，要橫著滑才找得到那個 div。電話欄的字很小。",
+            "地點空著時，只有框的邊變成淺紅，淺灰的說明寫在米色底上。鍵盤按到那個 div 時沒有焦點。寬屏上的整齊沒有回答這三件事。"
+          ],
+          "en": [
+            "On the author’s wide screen the lost-and-found looks tidy. On a phone the three fields run off the right edge, and the person has to scroll sideways to find the div. The type in the phone field is very small.",
+            "When the place is empty, only the border turns pale red, and a light-gray note sits on a cream background. The keyboard reaches the div with no visible focus. Tidiness on a wide screen answers none of these three."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "列出这页在手机上还没完成的三件事。每件对应一个概念：横向滚动、对比，或焦点。",
+              "zhHant": "列出這頁在手機上還沒完成的三件事。每件對應一個概念：橫向滾動、對比，或焦點。",
+              "en": "List three ways this page is not done on a phone. Tie each one to a concept: sideways scrolling, contrast, or focus."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "错误只把边框变成浅红，缺了什么？",
+              "zhHant": "錯誤只把邊框變成淺紅，缺了什麼？",
+              "en": "An error that only turns the border pale red is missing what?"
+            },
+            "options": [
+              {
+                "zh": "文字说明。颜色不能是唯一信号，浅色边在米色上也未必达得到对比。",
+                "zhHant": "文字說明。顏色不能是唯一信號，淺色邊在米色上也未必達得到對比。",
+                "en": "Words. Color cannot be the only signal, and a pale border on cream may not reach the contrast either."
+              },
+              {
+                "zh": "更亮的红色。红色够亮就够了。",
+                "zhHant": "更亮的紅色。紅色夠亮就夠了。",
+                "en": "A brighter red. A bright enough red is enough."
+              },
+              {
+                "zh": "一段脚本，用来禁止再次提交。",
+                "zhHant": "一段腳本，用來禁止再次提交。",
+                "en": "A script that blocks another submit."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一个才算这页在窄屏上完成？",
+              "zhHant": "哪一個才算這頁在窄屏上完成？",
+              "en": "Which one counts as done on a narrow screen?"
+            },
+            "options": [
+              {
+                "zh": "宽屏上对齐了，手机可以横着滑。",
+                "zhHant": "寬屏上對齊了，手機可以橫著滑。",
+                "en": "It lines up on a wide screen, and a phone can scroll sideways."
+              },
+              {
+                "zh": "一列排下去，提交不用横向滚动就能到，而且键盘看得见焦点。",
+                "zhHant": "一列排下去，提交不用橫向滾動就能到，而且鍵盤看得見焦點。",
+                "en": "One column, submit reachable without sideways scrolling, and a focus the keyboard can see."
+              },
+              {
+                "zh": "把字缩到更小，以便塞进屏幕。",
+                "zhHant": "把字縮到更小，以便塞進屏幕。",
+                "en": "Shrink the type further so it fits on the screen."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
-  meishu: {
-    title: { zh: "一张海报只说一件事", zhHant: "一張海報只說一件事", en: "A poster says one thing" },
-    lessons: [
+  "meishu": {
+    "title": {
+      "zh": "用层级、字体、对比和网格做一次站得住的版面",
+      "zhHant": "用層級、字體、對比和網格做一次站得住的版面",
+      "en": "Hold a layout with hierarchy, type, contrast, and a grid"
+    },
+    "minutes": 40,
+    "lessons": [
       {
-        title: { zh: "先决定大字", zhHant: "先決定大字", en: "Decide the large type first" },
-        concept: {
-          zh: ["美术这一讲把一张海报收成一件事。做图之前先用一句话写下它唯一要说的，然后只有这句话里的词可以做成大字。其余都小一档。", "大字一多，海报就在说两件事。看的人远看只能抓住最大的那一组。所以大字不是装饰，是你允许别人只记住的那一件。"],
-          zhHant: ["美術這一講把一張海報收成一件事。做圖之前先用一句話寫下它唯一要說的，然後只有這句話裡的詞可以做成大字。其餘都小一檔。", "大字一多，海報就在說兩件事。看的人遠看只能抓住最大的那一組。所以大字不是裝飾，是你允許別人只記住的那一件。"],
-          en: ["This lecture reduces a poster to one thing. Before you design, write that thing in a sentence. Only words from that sentence may become the large type. Everything else is a step smaller.", "Too much large type means the poster says two things. From far away, people catch only the largest group. Large type is not decoration. It is the one thing you allow them to remember."],
+        "title": {
+          "zh": "先决定第一眼停在哪",
+          "zhHant": "先決定第一眼停在哪",
+          "en": "Decide where the eye stops first"
         },
-        case: {
-          zh: ["大学会堂周六下午两点有一场说明会。海报要让走廊里走过的人知道时间和地点，而不是感到被欢迎。", "现在的稿子把「欢迎」做成最大的字，时间和「大学会堂」都缩在下面。人走过只读到欢迎，不知道两点要去哪里。"],
-          zhHant: ["大學會堂週六下午兩點有一場說明會。海報要讓走廊裡走過的人知道時間和地點，而不是感到被歡迎。", "現在的稿子把「歡迎」做成最大的字，時間和「大學會堂」都縮在下面。人走過只讀到歡迎，不知道兩點要去哪裡。"],
-          en: ["There is a briefing in the University Hall on Saturday at two. The poster has to tell someone walking the corridor the time and the place, not that they are welcome.", "The current draft makes “Welcome” the largest word. The time and “University Hall” sit small underneath. People walking past only read welcome, and do not know where to be at two."],
+        "concept": {
+          "zh": [
+            "层级是你规定的阅读顺序。大小、字重和位置是工具。最大、最重、最靠阅读起点的那一项，就是你要人先知道的那一件。每一项都同样大声，等于没有第一眼。",
+            "眯起眼看。如果剩下的是一块平均的灰，层级就没有建立。第一眼应该只剩下那一个信息。其他信息还在，但它们让路。",
+            "一张要人做决定的版面，第一眼通常只能有一件事：这个决定需要的那件事实。标志、口号和装饰同时最大，观众无法开始做决定。"
+          ],
+          "zhHant": [
+            "層級是你規定的閱讀順序。大小、字重和位置是工具。最大、最重、最靠閱讀起點的那一項，就是你要人先知道的那一件。每一項都同樣大聲，等於沒有第一眼。",
+            "眯起眼看。如果剩下的是一塊平均的灰，層級就沒有建立。第一眼應該只剩下那一個信息。其他信息還在，但它們讓路。",
+            "一張要人做決定的版面，第一眼通常只能有一件事：這個決定需要的那件事實。標誌、口號和裝飾同時最大，觀衆無法開始做決定。"
+          ],
+          "en": [
+            "Hierarchy is the reading order you set. Size, weight, and position are the tools. The largest, heaviest thing nearest the start of reading is what you want known first. When every item is equally loud, there is no first glance.",
+            "Squint. If what remains is an even gray, hierarchy was not built. The first glance should leave one message. The other information is still there. It yields.",
+            "On a layout that asks for a decision, the first glance usually holds one thing: the fact that decision needs. A logo, a slogan, and decoration all at the largest size means the viewer cannot start the decision."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 8, prompt: { zh: "用一句话写下这张会堂海报唯一要说的事：周六几点、在哪里。", zhHant: "用一句話寫下這張會堂海報唯一要說的事：週六幾點、在哪裡。", en: "In one sentence, write the one thing this hall poster says: what time on Saturday, and where." } },
-          { kind: "write", min: 4, prompt: { zh: "写下可以做成大字的词。只能来自上一句，不要写欢迎。", zhHant: "寫下可以做成大字的詞。只能來自上一句，不要寫歡迎。", en: "Write the words allowed to be large. Only from that sentence. Do not write welcome." } },
-          { kind: "check", answer: 0, prompt: { zh: "这张会堂海报的大字不该是哪个？", zhHant: "這張會堂海報的大字不該是哪個？", en: "Which should not be the large type on this hall poster?" }, options: [
-            { zh: "欢迎", zhHant: "歡迎", en: "Welcome" },
-            { zh: "周六下午两点", zhHant: "週六下午兩點", en: "Saturday at two" },
-            { zh: "大学会堂", zhHant: "大學會堂", en: "University Hall" },
-          ] },
-        ],
+        "case": {
+          "zh": [
+            "大学会堂星期六下午两点有一场讲座。学生要决定的只有一件：去不去。去的话，要在两秒内看见时间和课室。",
+            "海报上赞助商标志最大。标题、讲者姓名、一句口号和二维码差不多大。时间「星期六 14:00」和课室「会堂 L2」是浅灰小字，放在角落。眯起眼，剩下的是标志和一块平均的灰。"
+          ],
+          "zhHant": [
+            "大學會堂星期六下午兩點有一場講座。學生要決定的只有一件：去不去。去的話，要在兩秒內看見時間和課室。",
+            "海報上贊助商標誌最大。標題、講者姓名、一句口號和二維碼差不多大。時間「星期六 14:00」和課室「會堂 L2」是淺灰小字，放在角落。眯起眼，剩下的是標誌和一塊平均的灰。"
+          ],
+          "en": [
+            "There is a talk in the university hall on Saturday at two. A student has one decision: whether to go. If they go, they need the time and the room within two seconds.",
+            "On the poster the sponsor’s logo is the largest thing. The title, the speaker’s name, a slogan, and a QR code are about the same size. “Saturday 14:00” and “Hall L2” are small light-gray type in a corner. Squint, and what remains is the logo and an even gray."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "这张海报的第一眼应该是什么？哪三样必须让路？说出你用大小、字重还是位置来建立这个顺序。",
+              "zhHant": "這張海報的第一眼應該是什麼？哪三樣必須讓路？說出你用大小、字重還是位置來建立這個順序。",
+              "en": "What should the first glance on this poster be? Which three things have to yield? Say whether you use size, weight, or position to build that order."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "眯眼测试失败时长什么样？",
+              "zhHant": "眯眼測試失敗時長什麼樣？",
+              "en": "What does a failed squint test look like?"
+            },
+            "options": [
+              {
+                "zh": "眯起眼后，几乎只剩下标题。",
+                "zhHant": "眯起眼後，幾乎只剩下標題。",
+                "en": "After squinting, almost only the title remains."
+              },
+              {
+                "zh": "时间和课室比赞助商更先被看见。",
+                "zhHant": "時間和課室比贊助商更先被看見。",
+                "en": "The time and the room are seen before the sponsor."
+              },
+              {
+                "zh": "眯起眼后是一块平均的灰，标志、标题和口号一样响。",
+                "zhHant": "眯起眼後是一塊平均的灰，標誌、標題和口號一樣響。",
+                "en": "After squinting there is an even gray, and the logo, title, and slogan are equally loud."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "为什么赞助商标志不能是最大的？",
+              "zhHant": "為什麼贊助商標誌不能是最大的？",
+              "en": "Why can the sponsor’s logo not be the largest thing?"
+            },
+            "options": [
+              {
+                "zh": "因为学生要做的决定是去不去，标志不是那个决定需要的事实。",
+                "zhHant": "因為學生要做的決定是去不去，標誌不是那個決定需要的事實。",
+                "en": "Because the student’s decision is whether to go, and the logo is not the fact that decision needs."
+              },
+              {
+                "zh": "因为赞助商不该出现在海报上。",
+                "zhHant": "因為贊助商不該出現在海報上。",
+                "en": "Because a sponsor should not appear on a poster."
+              },
+              {
+                "zh": "因为标志不能有颜色。",
+                "zhHant": "因為標誌不能有顏色。",
+                "en": "Because a logo cannot have a color."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "遮住小字还剩那一件事", zhHant: "遮住小字還剩那一件事", en: "Cover the small type and the one thing remains" },
-        concept: {
-          zh: ["小字是补充，不是第二件同样大的事。检验方法很具体：用手遮住小字，只留大字。如果剩下的仍是这一张海报要说的那一件，层次就成立。", "如果遮住大字，页面就不知道在说什么，说明大字选错了。小字只放一个补充，例如门口从哪边进，而不是再写一句口号。"],
-          zhHant: ["小字是補充，不是第二件同樣大的事。檢驗方法很具體：用手遮住小字，只留大字。如果剩下的仍是這一張海報要說的那一件，層次就成立。", "如果遮住大字，頁面就不知道在說什麼，說明大字選錯了。小字只放一個補充，例如門口從哪邊進，而不是再寫一句口號。"],
-          en: ["Small type adds. It is not a second thing at the same size. The test is physical: cover the small type and leave the large. If what remains is still the one thing, the hierarchy holds.", "If covering the large type leaves the poster mute, the large type was the wrong choice. Small type carries one extra, such as which door, not another slogan."],
+        "title": {
+          "zh": "事实不能放在最轻的一档",
+          "zhHant": "事實不能放在最輕的一檔",
+          "en": "A fact does not sit on the lightest step"
         },
-        case: {
-          zh: ["会堂海报改了一版。大字仍是「欢迎」。小字是「周六下午两点，大学会堂，从正门进」。遮住小字，走廊上的人只看见欢迎。", "遮住「欢迎」，才看见两点和会堂。这说明大字和小字装反了。正门可以从哪边进，才是该放进小字的那一个补充。"],
-          zhHant: ["會堂海報改了一版。大字仍是「歡迎」。小字是「週六下午兩點，大學會堂，從正門進」。遮住小字，走廊上的人只看見歡迎。", "遮住「歡迎」，才看見兩點和會堂。這說明大字和小字裝反了。正門從哪邊進，才是該放進小字的那一個補充。"],
-          en: ["A revised hall poster still has “Welcome” large. Small type says “Saturday at two, University Hall, enter by the main door.” Cover the small type and the corridor only sees welcome.", "Cover “Welcome” and the time and the hall appear. The sizes are reversed. Which side of the main door is the one extra that belongs in the small type."],
+        "concept": {
+          "zh": [
+            "字体层级是一套阶梯，不是很多种字体。标题明显大于次级信息，次级信息明显大于可以错过的说明。同一档上的字用同一种待遇。档与档之间要隔得开，否则又回到平均。",
+            "如果有一段需要阅读的正文，一行大约停在四十五到七十五个字符，行距要让下一行不是贴着上一行。海报往往不该有一段正文。一旦有，就要给它正文的待遇，而不是把正文缩成注解。",
+            "做决定要用的事实，不能放在最轻、最小的那一档。最轻的一档只给可以错过的信息。把时间做成注解，等于在阶梯上宣布它不重要。"
+          ],
+          "zhHant": [
+            "字體層級是一套階梯，不是很多種字體。標題明顯大於次級信息，次級信息明顯大於可以錯過的說明。同一檔上的字用同一種待遇。檔與檔之間要隔得開，否則又回到平均。",
+            "如果有一段需要閱讀的正文，一行大約停在四十五到七十五個字符，行距要讓下一行不是貼著上一行。海報往往不該有一段正文。一旦有，就要給它正文的待遇，而不是把正文縮成註解。",
+            "做決定要用的事實，不能放在最輕、最小的那一檔。最輕的一檔只給可以錯過的信息。把時間做成註解，等於在階梯上宣佈它不重要。"
+          ],
+          "en": [
+            "Typographic hierarchy is a scale, not a pile of typefaces. The title is clearly larger than the secondary information, and the secondary information is clearly larger than a note a person can miss. One step gets one treatment. The steps have to be far enough apart, or the page returns to an average.",
+            "If there is a paragraph someone must read, a line stops at about forty-five to seventy-five characters, and the leading keeps the next line from sitting on the one above. A poster often should not have a paragraph. If it does, that paragraph gets the treatment of body text, not the treatment of a footnote.",
+            "A fact the decision needs cannot sit on the lightest, smallest step. The lightest step is only for what a person can miss. Setting the time as a footnote announces, on the scale, that it does not matter."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 8, prompt: { zh: "写下遮住小字之后，这张会堂海报还剩的字。按现在这版，不要改。", zhHant: "寫下遮住小字之後，這張會堂海報還剩的字。按現在這版，不要改。", en: "Write the words left when the small type is covered, on this version. Do not correct it yet." } },
-          { kind: "write", min: 8, prompt: { zh: "把大字改成周六下午两点或大学会堂。再写小字里只留的那个补充：从正门进。", zhHant: "把大字改成週六下午兩點或大學會堂。再寫小字裡只留的那個補充：從正門進。", en: "Move Saturday at two or University Hall into the large type. Then write the one small-type extra: enter by the main door." } },
-          { kind: "check", answer: 1, prompt: { zh: "遮住小字后，会堂海报应该还剩什么？", zhHant: "遮住小字後，會堂海報應該還剩什麼？", en: "After the small type is covered, what should remain?" }, options: [
-            { zh: "只有欢迎", zhHant: "只有歡迎", en: "Only welcome" },
-            { zh: "周六下午两点或大学会堂", zhHant: "週六下午兩點或大學會堂", en: "Saturday at two, or University Hall" },
-            { zh: "从正门进的整段说明", zhHant: "從正門進的整段說明", en: "The whole note about the main door" },
-          ] },
-        ],
+        "case": {
+          "zh": [
+            "这张海报用了四种字体。标题、口号和讲者几乎一样大，档与档没有隔开。",
+            "时间「星期六 14:00」和课室「会堂 L2」用了最细的字重，比赞助商的一行小字还轻。底部另有三行挤在一起的说明，行距几乎没有。海报上并没有一段需要这样排的正文。"
+          ],
+          "zhHant": [
+            "這張海報用了四種字體。標題、口號和講者幾乎一樣大，檔與檔沒有隔開。",
+            "時間「星期六 14:00」和課室「會堂 L2」用了最細的字重，比贊助商的一行小字還輕。底部另有三行擠在一起的說明，行距幾乎沒有。海報上並沒有一段需要這樣排的正文。"
+          ],
+          "en": [
+            "The poster uses four typefaces. The title, the slogan, and the speaker are almost the same size, so the steps are not separated.",
+            "“Saturday 14:00” and “Hall L2” use the lightest weight, lighter than a small line under the sponsor. Three further lines are packed at the bottom with almost no leading. The poster does not have a paragraph that needs to be set that way."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "给这张海报定三档：哪一档给标题，哪一档给时间和课室，哪一档给赞助商。说明为什么时间不能在最轻的一档。",
+              "zhHant": "給這張海報定三檔：哪一檔給標題，哪一檔給時間和課室，哪一檔給贊助商。說明為什麼時間不能在最輕的一檔。",
+              "en": "Set three steps for this poster: which step is the title, which is the time and the room, and which is the sponsor. Say why the time cannot be on the lightest step."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "底部三行说明的问题在哪？",
+              "zhHant": "底部三行說明的問題在哪？",
+              "en": "What is wrong with the three lines at the bottom?"
+            },
+            "options": [
+              {
+                "zh": "三行说明应该再换一种新字体。",
+                "zhHant": "三行說明應該再換一種新字體。",
+                "en": "The three lines should switch to yet another typeface."
+              },
+              {
+                "zh": "行距几乎没有，它们挤在一起，既不像正文，也不像可以错过的注解。",
+                "zhHant": "行距幾乎沒有，它們擠在一起，既不像正文，也不像可以錯過的註解。",
+                "en": "There is almost no leading. They are packed together, so they are neither body text nor a note a person can miss."
+              },
+              {
+                "zh": "说明应该比标题更大。",
+                "zhHant": "說明應該比標題更大。",
+                "en": "The note should be larger than the title."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "四种差不多大的字体造成什么？",
+              "zhHant": "四種差不多大的字體造成什麼？",
+              "en": "What do four typefaces of nearly the same size do?"
+            },
+            "options": [
+              {
+                "zh": "阶梯消失，第一眼又变成平均。",
+                "zhHant": "階梯消失，第一眼又變成平均。",
+                "en": "The scale disappears, and the first glance becomes an average again."
+              },
+              {
+                "zh": "对比会因此自动达到 4.5 比 1。",
+                "zhHant": "對比會因此自動達到 4.5 比 1。",
+                "en": "Contrast then automatically reaches 4.5 to 1."
+              },
+              {
+                "zh": "网格会因此对齐。",
+                "zhHant": "網格會因此對齊。",
+                "en": "The grid then aligns itself."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "评语只收三个词", zhHant: "評語只收三個詞", en: "A critique accepts three words" },
-        concept: {
-          zh: ["海报拿去给人看，很容易收到「好看」「大气」「换个字体」。这些话没有指出改哪一组字。这一讲只收三个词：层次、可读、一个想法。", "记下的评语要能回到这张海报：一句你看见的事实，一句要改的。不能改的空话就放下。三个词是用来看这一张，不是用来谈审美。"],
-          zhHant: ["海報拿去給人看，很容易收到「好看」「大氣」「換個字體」。這些話沒有指出改哪一組字。這一講只收三個詞：層次、可讀、一個想法。", "記下的評語要能回到這張海報：一句你看見的事實，一句要改的。不能改的空話就放下。三個詞是用來看這一張，不是用來談審美。"],
-          en: ["Show a poster and you will hear nice, grander, try another typeface. None of that says which words to change. This lecture accepts three words: hierarchy, readable, one idea.", "The note has to come back to this poster: one fact you saw, one change. Set aside the sentence you cannot use. The three words look at this sheet, not at taste in general."],
+        "title": {
+          "zh": "对比要达得到，颜色也不能单独说话",
+          "zhHant": "對比要達得到，顏色也不能單獨說話",
+          "en": "Contrast has to be reached, and color cannot speak alone"
         },
-        case: {
-          zh: ["同学看了会堂海报，说：「好看是好看，再大气一点，字体也可以换。」他没有说欢迎是不是还比两点大，也没有说正门那一行远看读不读得完。", "你只能把他的话收成这张海报上的两句。如果收不成，这句评语就不要进记录。"],
-          zhHant: ["同學看了會堂海報，說：「好看是好看，再大氣一點，字體也可以換。」他沒有說歡迎是不是還比兩點大，也沒有說正門那一行遠看讀不讀得完。", "你只能把他的話收成這張海報上的兩句。如果收不成，這句評語就不要進記錄。"],
-          en: ["A classmate looks at the hall poster and says: “It is nice, make it grander, and you could change the typeface.” He does not say whether welcome is still larger than two o’clock, or whether the main-door line can be read from the corridor.", "You may only turn his words into two lines about this poster. If you cannot, the comment does not go in the note."],
+        "concept": {
+          "zh": [
+            "正文大小的文字，和背后的颜色，通常要达到大约 4.5 比 1，才算读得清。明显更大的标题可以稍低，大约 3 比 1。时间和课室如果是小字，就按正文的标准，不按大标题的标准。",
+            "浅灰放在米黄上，常常两边都浅，比数不够。这不是留白。留白是空出来的距离。把事实做成读不清，是把事实藏起来。",
+            "颜色不能单独传递一个必须知道的差别。如果某一项是决定要用的，它还得在大小或字重上不同，并且文字本身把事实写出来。只把一项改成另一种颜色，它仍然可能在阶梯上是最轻的。"
+          ],
+          "zhHant": [
+            "正文大小的文字，和背後的顏色，通常要達到大約 4.5 比 1，才算讀得清。明顯更大的標題可以稍低，大約 3 比 1。時間和課室如果是小字，就按正文的標準，不按大標題的標準。",
+            "淺灰放在米黃上，常常兩邊都淺，比數不夠。這不是留白。留白是空出來的距離。把事實做成讀不清，是把事實藏起來。",
+            "顏色不能單獨傳遞一個必須知道的差別。如果某一項是決定要用的，它還得在大小或字重上不同，並且文字本身把事實寫出來。只把一項改成另一種顏色，它仍然可能在階梯上是最輕的。"
+          ],
+          "en": [
+            "Body-sized text against its background usually needs about 4.5 to 1 before it counts as readable. A clearly larger title can sit a little lower, about 3 to 1. If the time and the room are small type, they take the body standard, not the large-title standard.",
+            "Light gray on cream is often light against light, so the ratio is not met. That is not whitespace. Whitespace is distance you leave empty. Making a fact hard to read hides the fact.",
+            "Color cannot be the only carrier of a difference someone must know. If an item is needed for the decision, it also has to differ in size or weight, and the words themselves have to state the fact. Changing an item’s color alone can still leave it on the lightest step of the scale."
+          ]
         },
-        tasks: [
-          { kind: "check", answer: 2, prompt: { zh: "同学那句「好看、大气、换字体」，哪一个词可以留下？", zhHant: "同學那句「好看、大氣、換字體」，哪一個詞可以留下？", en: "Of “nice, grander, change the typeface,” which word can stay?" }, options: [
-            { zh: "好看", zhHant: "好看", en: "Nice" },
-            { zh: "大气", zhHant: "大氣", en: "Grander" },
-            { zh: "三个都不留，改问层次、可读、一个想法", zhHant: "三個都不留，改問層次、可讀、一個想法", en: "None of them; ask hierarchy, readable, one idea" },
-          ] },
-          { kind: "write", min: 12, prompt: { zh: "替这张会堂海报写两句评语：一句事实，一句要改的。要用到大字还是欢迎。", zhHant: "替這張會堂海報寫兩句評語：一句事實，一句要改的。要用到大字還是歡迎。", en: "Write two lines on this hall poster: one fact, one change. Mention whether the large type is still welcome." } },
-          { kind: "write", min: 8, prompt: { zh: "用层次、可读、一个想法里的一个词，写你还会再看会堂海报的哪一处。", zhHant: "用層次、可讀、一個想法裡的一個詞，寫你還會再看會堂海報的哪一處。", en: "Using one of hierarchy, readable, or one idea, write the part of the hall poster you would look at again." } },
-        ],
+        "case": {
+          "zh": [
+            "时间和课室是浅灰，底是米黄。设计者说这是克制。赞助商标志是饱和的橙色，非常醒目。",
+            "没有任何其他文字再写一次星期六和课室。颜色一弱，决定要用的事实就没了。橙色很响，但它响的不是那个决定。"
+          ],
+          "zhHant": [
+            "時間和課室是淺灰，底是米黃。設計者說這是剋制。贊助商標誌是飽和的橙色，非常醒目。",
+            "沒有任何其他文字再寫一次星期六和課室。顏色一弱，決定要用的事實就沒了。橙色很響，但它響的不是那個決定。"
+          ],
+          "en": [
+            "The time and the room are light gray on a cream ground. The designer calls it restraint. The sponsor’s logo is a saturated orange and very loud.",
+            "No other text states Saturday and the room again. Once the color is weak, the fact the decision needs is gone. The orange is loud, and what it makes loud is not the decision."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "浅灰的时间放在米黄上，问题是什么？",
+              "zhHant": "淺灰的時間放在米黃上，問題是什麼？",
+              "en": "What is wrong with a light-gray time on cream?"
+            },
+            "options": [
+              {
+                "zh": "橙色不够多。",
+                "zhHant": "橙色不夠多。",
+                "en": "There is not enough orange."
+              },
+              {
+                "zh": "小字的对比很可能达不到大约 4.5 比 1，决定要用的事实读不清。",
+                "zhHant": "小字的對比很可能達不到大約 4.5 比 1，決定要用的事實讀不清。",
+                "en": "Small type at that contrast likely misses about 4.5 to 1, so the fact the decision needs cannot be read."
+              },
+              {
+                "zh": "米黄不能用在海报上。",
+                "zhHant": "米黃不能用在海報上。",
+                "en": "Cream cannot be used on a poster."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 80,
+            "prompt": {
+              "zh": "时间仍然可以安静一点。写出你怎样让它安静，但对比仍然达得到，并且不靠颜色单独存在。",
+              "zhHant": "時間仍然可以安靜一點。寫出你怎樣讓它安靜，但對比仍然達得到，並且不靠顏色單獨存在。",
+              "en": "The time can still be quiet. Write how you keep it quiet, still reach the contrast, and do not let color carry it alone."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "为什么不能只靠把时间改成橙色？",
+              "zhHant": "為什麼不能只靠把時間改成橙色？",
+              "en": "Why is it not enough to turn the time orange?"
+            },
+            "options": [
+              {
+                "zh": "颜色不能是唯一信号。它还要在阶梯上站得住，文字本身也要写清星期六和课室。",
+                "zhHant": "顏色不能是唯一信號。它還要在階梯上站得住，文字本身也要寫清星期六和課室。",
+                "en": "Color cannot be the only signal. It still has to hold a step on the scale, and the words themselves have to state Saturday and the room."
+              },
+              {
+                "zh": "橙色的对比一定不够。",
+                "zhHant": "橙色的對比一定不夠。",
+                "en": "Orange contrast is always insufficient."
+              },
+              {
+                "zh": "时间不该使用任何颜色。",
+                "zhHant": "時間不該使用任何顏色。",
+                "en": "The time should not use any color."
+              }
+            ]
+          }
+        ]
       },
-    ],
+      {
+        "title": {
+          "zh": "批评要叫得出接近和对齐",
+          "zhHant": "批評要叫得出接近和對齊",
+          "en": "A critique can name proximity and alignment"
+        },
+        "concept": {
+          "zh": [
+            "网格是看不见的列和边距。对齐是让相关的边落在同一条线上。一张海报以一条主对齐为准。全部居中时，多行事实没有一条可以跟随的边。",
+            "接近是分组里很强的一条：靠得近的被看成一组，离得远的被看成另一组。同一个决定的事实要彼此接近，并且接近那个决定的标题。无关的标志离这一组远一点，否则它会被看成决定的一部分。",
+            "批评要叫出你看见的那一项：层级、对比、对齐或接近。「我喜欢这个橙色」没有指出版面哪里失败。一次批评只先改最影响决定的那一处，而不是把所有间距同时改掉。"
+          ],
+          "zhHant": [
+            "網格是看不見的列和邊距。對齊是讓相關的邊落在同一條線上。一張海報以一條主對齊為準。全部居中時，多行事實沒有一條可以跟隨的邊。",
+            "接近是分組裡很強的一條：靠得近的被看成一組，離得遠的被看成另一組。同一個決定的事實要彼此接近，並且接近那個決定的標題。無關的標誌離這一組遠一點，否則它會被看成決定的一部分。",
+            "批評要叫出你看見的那一項：層級、對比、對齊或接近。「我喜歡這個橙色」沒有指出版面哪裡失敗。一次批評只先改最影響決定的那一處，而不是把所有間距同時改掉。"
+          ],
+          "en": [
+            "A grid is the columns and margins you do not see. Alignment puts related edges on one line. A poster keeps one main alignment. When everything is centered, several lines of fact have no edge to follow.",
+            "Proximity is a strong grouping rule: what sits close is read as one group, and what sits far apart is read as another. Facts that belong to one decision sit near each other, and near the title of that decision. An unrelated logo sits farther off, or it is read as part of the decision.",
+            "A critique names the thing you actually see: hierarchy, contrast, alignment, or proximity. “I like the orange” does not say where the layout fails. One critique changes the place that most affects the decision first. It does not move every gap at once."
+          ]
+        },
+        "case": {
+          "zh": [
+            "时间在左下，课室在右上，中间隔着口号。两边都不在标题的对齐线上。赞助商标志紧贴着标题，近到会被看成标题的一部分。",
+            "设计课的评语写着：「橙色很好看，再调调。」评语没有说哪一组被拆开，也没有说先改哪一条边。"
+          ],
+          "zhHant": [
+            "時間在左下，課室在右上，中間隔著口號。兩邊都不在標題的對齊線上。贊助商標誌緊貼著標題，近到會被看成標題的一部分。",
+            "設計課的評語寫著：「橙色很好看，再調調。」評語沒有說哪一組被拆開，也沒有說先改哪一條邊。"
+          ],
+          "en": [
+            "The time is at the lower left and the room is at the upper right, with the slogan between them. Neither sits on the title’s alignment. The sponsor’s logo is tight against the title, close enough to be read as part of the title.",
+            "The critique in class says: “The orange is nice, adjust it a bit.” It does not say which group was split, and it does not say which edge to move first."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 110,
+            "prompt": {
+              "zh": "写一条批评：点出接近上哪两样被拆开了，对齐上缺了什么，以及你只先改哪一处。不要写「好看」。",
+              "zhHant": "寫一條批評：點出接近上哪兩樣被拆開了，對齊上缺了什麼，以及你只先改哪一處。不要寫「好看」。",
+              "en": "Write one critique: which two facts proximity has split, what the alignment is missing, and the one place you would move first. Do not write “nice.”"
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "时间和课室分在两个角，首先破坏的是什么？",
+              "zhHant": "時間和課室分在兩個角，首先破壞的是什麼？",
+              "en": "Time and room in opposite corners break what first?"
+            },
+            "options": [
+              {
+                "zh": "对比度的 4.5 比 1。",
+                "zhHant": "對比度的 4.5 比 1。",
+                "en": "The 4.5 to 1 contrast ratio."
+              },
+              {
+                "zh": "字体的授权。",
+                "zhHant": "字體的授權。",
+                "en": "The license of the typeface."
+              },
+              {
+                "zh": "接近：同一个决定的两件事实没有被看成一组。",
+                "zhHant": "接近：同一個決定的兩件事實沒有被看成一組。",
+                "en": "Proximity: two facts of one decision are not read as one group."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "哪一条评语算批评？",
+              "zhHant": "哪一條評語算批評？",
+              "en": "Which comment counts as a critique?"
+            },
+            "options": [
+              {
+                "zh": "橙色很好看，再调调。",
+                "zhHant": "橙色很好看，再調調。",
+                "en": "The orange is nice. Adjust it a bit."
+              },
+              {
+                "zh": "时间和课室被口号拆开，又不在标题的对齐线上。先把这两件事实挪到标题下面，作为一组。",
+                "zhHant": "時間和課室被口號拆開，又不在標題的對齊線上。先把這兩件事實挪到標題下面，作為一組。",
+                "en": "The slogan splits the time from the room, and neither sits on the title’s alignment. First move those two facts under the title, as one group."
+              },
+              {
+                "zh": "我喜欢原来的，但也喜欢改后的。",
+                "zhHant": "我喜歡原來的，但也喜歡改後的。",
+                "en": "I like the original, and I also like the changed one."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
-  anquan: {
-    title: { zh: "守住自己的账号和交出去的页面", zhHant: "守住自己的帳號和交出去的頁面", en: "Keep the account, and the page you hand over" },
-    lessons: [
+  "anquan": {
+    "title": {
+      "zh": "用机密性、身份和最小权限判断一次失误",
+      "zhHant": "用機密性、身份和最小權限判斷一次失誤",
+      "en": "Judge a failure with confidentiality, identity, and least privilege"
+    },
+    "minutes": 45,
+    "lessons": [
       {
-        title: { zh: "两只重要账号不要共用一把钥匙", zhHant: "兩隻重要帳號不要共用一把鑰匙", en: "Two accounts that matter do not share a key" },
-        concept: {
-          zh: ["安全这一讲只看你自己会用到的两只账号：收验证码的邮箱，和放作品或页面的那个账号。它们算重要，就各自有密码，并打开双重验证。", "一把钥匙开两扇门，其中一扇被看见，另一扇也开了。聊天记录不是放密码的地方。这一讲不去试别人的系统，只把自己的两只账号分开。"],
-          zhHant: ["安全這一講只看你自己會用到的兩隻帳號：收驗證碼的郵箱，和放作品或頁面的那個帳號。它們算重要，就各自有密碼，並打開雙重驗證。", "一把鑰匙開兩扇門，其中一扇被看見，另一扇也開了。聊天記錄不是放密碼的地方。這一講不去試別人的系統，只把自己的兩隻帳號分開。"],
-          en: ["This lecture looks only at two accounts you actually use: the email that receives codes, and the account that holds your work or your page. If they matter, each has its own password, and two-factor is on.", "One key for two doors means seeing one opens the other. A chat is not where a password sits. This lecture does not try anyone else’s system. It separates your two accounts."],
+        "title": {
+          "zh": "先说清你在保护哪一项",
+          "zhHant": "先說清你在保護哪一項",
+          "en": "Name which property you are protecting"
         },
-        case: {
-          zh: ["六楼失物页放在一个托管账号里。验证码发到楼长常用的那个邮箱。现在两只账号用的是同一串密码，双重验证都没开。密码还在楼组聊天的一条旧消息里。", "楼长如果只改页面上的字，这把钥匙还是开着两扇门。"],
-          zhHant: ["六樓失物頁放在一個託管帳號裡。驗證碼發到樓長常用的那個郵箱。現在兩隻帳號用的是同一串密碼，雙重驗證都沒開。密碼還在樓組聊天的一條舊消息裡。", "樓長如果只改頁面上的字，這把鑰匙還是開著兩扇門。"],
-          en: ["Floor Six Lost Property lives in a hosting account. Codes go to the email the floor lead uses every day. Both accounts share one password, and neither has two-factor. The password is still in an old message in the floor chat.", "If she only edits the words on the page, that key still opens both doors."],
+        "concept": {
+          "zh": [
+            "安全事故先分类，再选办法。机密性：不该看的人看到了。完整性：不该改的人改了，或改完没有留下是谁。可用性：该用的时候用不了。三项会互相拉扯。多一道检查可能让页面在人最多的时候登不上，那就是用可用性去换机密性。你要说清这次保的是哪一项。",
+            "不是每一件麻烦都是同一种。电话被不该看的人拿走，是机密性。地点被没有权限的人改掉，是完整性。人最多的那天页面打不开，是可用性。用「加强安全」一句话盖过去，会选错办法。",
+            "办法要对着那一项。机密性靠限制谁能读取。完整性靠限制谁能修改，并留下是谁改的。可用性靠在需要用的时候仍然用得了，而不是把所有人锁在外面就算完成。"
+          ],
+          "zhHant": [
+            "安全事故先分類，再選辦法。機密性：不該看的人看到了。完整性：不該改的人改了，或改完沒有留下是誰。可用性：該用的時候用不了。三項會互相拉扯。多一道檢查可能讓頁面在人最多的時候登不上，那就是用可用性去換機密性。你要說清這次保的是哪一項。",
+            "不是每一件麻煩都是同一種。電話被不該看的人拿走，是機密性。地點被沒有權限的人改掉，是完整性。人最多的那天頁面打不開，是可用性。用「加強安全」一句話蓋過去，會選錯辦法。",
+            "辦法要對著那一項。機密性靠限制誰能讀取。完整性靠限制誰能修改，並留下是誰改的。可用性靠在需要用的時候仍然用得了，而不是把所有人鎖在外面就算完成。"
+          ],
+          "en": [
+            "Classify a security failure before you pick a fix. Confidentiality: someone who should not see it saw it. Integrity: someone who should not change it changed it, or the change does not record who. Availability: it cannot be used when it needs to be used. The three pull against each other. An extra check can lock the page on the day the most people need it. That spends availability to buy confidentiality. Say which one this incident is protecting.",
+            "Not every trouble is the same kind. A phone number taken by someone who should not have it is confidentiality. A place changed by someone without permission is integrity. A page that will not open on the busiest day is availability. Covering all three with “make it more secure” picks the wrong fix.",
+            "The fix has to face that property. Confidentiality limits who can read. Integrity limits who can change, and keeps who changed it. Availability means it still works at the moment it is needed. Locking everyone out is not the same as finishing the job."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 12, prompt: { zh: "写下这案例里的两只账号：哪只收验证码，哪只放着六楼失物页。", zhHant: "寫下這案例裡的兩隻帳號：哪隻收驗證碼，哪隻放著六樓失物頁。", en: "Name the two accounts in this case: which receives codes, and which holds the Floor Six page." } },
-          { kind: "check", answer: 1, prompt: { zh: "楼长现在最该先做的是哪一件？", zhHant: "樓長現在最該先做的是哪一件？", en: "What should the floor lead do first?" }, options: [
-            { zh: "只改页面上的标题", zhHant: "只改頁面上的標題", en: "Only change the title on the page" },
-            { zh: "两只账号分开密码，并打开双重验证，聊天里的那条删掉", zhHant: "兩隻帳號分開密碼，並打開雙重驗證，聊天裡的那條刪掉", en: "Separate the passwords, turn on two-factor, and delete the chat line" },
-            { zh: "把同一串密码再发给一位室友备份", zhHant: "把同一串密碼再發給一位室友備份", en: "Send the same password to a roommate as a backup" },
-          ] },
-          { kind: "write", min: 12, prompt: { zh: "写两行给楼长：邮箱改什么，托管账号改什么。不要写出那串密码。", zhHant: "寫兩行給樓長：郵箱改什麼，託管帳號改什麼。不要寫出那串密碼。", en: "Write two lines for her: what changes on the email, what changes on the host. Do not write the password." } },
-        ],
+        "case": {
+          "zh": [
+            "宿舍失物页这个月出了三件事。一名义工把全部联系电话导出并转发。有人把一条失物的地点改成了另一个楼层，办公处没有记录是谁改的。搬宿那天上午，页面完全打不开，人在柜台排队。",
+            "下午有人提议：把所有人锁在登录外，直到晚上再开放。这能减少不该看的访问，但排队的人当天仍然用不了这页。"
+          ],
+          "zhHant": [
+            "宿舍失物頁這個月出了三件事。一名義工把全部聯繫電話導出並轉發。有人把一條失物的地點改成了另一個樓層，辦公處沒有記錄是誰改的。搬宿那天上午，頁面完全打不開，人在櫃檯排隊。",
+            "下午有人提議：把所有人鎖在登入外，直到晚上再開放。這能減少不該看的訪問，但排隊的人當天仍然用不了這頁。"
+          ],
+          "en": [
+            "The lost-and-found had three incidents this month. A volunteer exported every phone number and forwarded the file. Someone changed a found item’s floor, and the office has no record of who. On the morning of move-out the page would not open at all, and people were queued at the counter.",
+            "In the afternoon someone proposes locking everyone out of the page until evening. That can reduce reads that should not happen. The people in the queue still cannot use the page that day."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "把这三件事分别归到机密性、完整性、可用性，并各用一句话说明你为什么这样归。",
+              "zhHant": "把這三件事分別歸到機密性、完整性、可用性，並各用一句話說明你為什麼這樣歸。",
+              "en": "Classify the three incidents as confidentiality, integrity, or availability, and give one sentence each on why."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "搬宿当天把所有人锁在登录外，直到下午才恢复。你保住了什么，损了什么？",
+              "zhHant": "搬宿當天把所有人鎖在登入外，直到下午才恢復。你保住了什麼，損了什麼？",
+              "en": "On move-out day everyone is locked out until afternoon. What did you keep, and what did you spend?"
+            },
+            "options": [
+              {
+                "zh": "你可能减少了不该看的访问，但损的是可用性：排队的人当天用不了这页。",
+                "zhHant": "你可能減少了不該看的訪問，但損的是可用性：排隊的人當天用不了這頁。",
+                "en": "You may have reduced reads that should not happen, and you spent availability: the queue could not use the page that day."
+              },
+              {
+                "zh": "你同时修好了完整性和可用性。",
+                "zhHant": "你同時修好了完整性和可用性。",
+                "en": "You repaired integrity and availability at the same time."
+              },
+              {
+                "zh": "你没有影响任何一项，因为页面终于安全了。",
+                "zhHant": "你沒有影響任何一項，因為頁面終於安全了。",
+                "en": "You affected none of them, because the page was finally secure."
+              }
+            ]
+          },
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "地点被改，又查不到是谁。这首先是哪一项？",
+              "zhHant": "地點被改，又查不到是誰。這首先是哪一項？",
+              "en": "A place was changed, and nobody can tell who. Which property is that first?"
+            },
+            "options": [
+              {
+                "zh": "可用性，因为页面还开着。",
+                "zhHant": "可用性，因為頁面還開著。",
+                "en": "Availability, because the page is still up."
+              },
+              {
+                "zh": "完整性，因为记录被不该改的方式改了，而且没有留下是谁。",
+                "zhHant": "完整性，因為記錄被不該改的方式改了，而且沒有留下是誰。",
+                "en": "Integrity, because the record was changed in a way it should not have been, and who did it was not kept."
+              },
+              {
+                "zh": "机密性，因为地点本来就可以公开。",
+                "zhHant": "機密性，因為地點本來就可以公開。",
+                "en": "Confidentiality, because the place was allowed to be public anyway."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "验证码不离开你自己打开的页面", zhHant: "驗證碼不離開你自己打開的頁面", en: "A code does not leave the page you opened" },
-        concept: {
-          zh: ["验证码是这只账号暂时的钥匙。它只填进你自己打开的那个页面。别人来问，即使说得出你的名字、楼层和页面，也不构成你该念给他的理由。", "链接也一样。不确定是不是托管商或邮箱的那一页，就从收藏夹进去，或自己输入地址。不要顺着刚收到的那条消息点。"],
-          zhHant: ["驗證碼是這隻帳號暫時的鑰匙。它只填進你自己打開的那個頁面。別人來問，即使說得出你的名字、樓層和頁面，也不構成你該念給他的理由。", "連結也一樣。不確定是不是託管商或郵箱的那一頁，就從收藏夾進去，或自己輸入地址。不要順著剛收到的那條消息點。"],
-          en: ["A code is a temporary key to that account. It is typed only into a page you opened yourself. Someone who knows your name, your floor, and your page still has not earned the code read aloud.", "Links follow the same rule. If you are not sure it is the host or the email site, use a bookmark or type the address. Do not follow the message that just arrived."],
+        "title": {
+          "zh": "认证、授权，和口令怎么放",
+          "zhHant": "認證、授權，和口令怎麼放",
+          "en": "Authentication, authorization, and where a password lives"
         },
-        case: {
-          zh: ["晚上有人给楼长发消息：「我是宿舍办公处的，六楼失物页要审核。把你邮箱刚收到的验证码念给我。」对方说得出她的名字，也说得出页面叫六楼失物。", "消息下面附了一条短链接，说点进去就能填验证码。楼长的收藏夹里本来就有邮箱和托管商的地址。"],
-          zhHant: ["晚上有人給樓長發消息：「我是宿舍辦公處的，六樓失物頁要審核。把你郵箱剛收到的驗證碼念給我。」對方說得出她的名字，也說得出頁面叫六樓失物。", "消息下面附了一條短連結，說點進去就能填驗證碼。樓長的收藏夾裡本來就有郵箱和託管商的地址。"],
-          en: ["At night someone messages the floor lead: “This is the hall office. Floor Six needs a review. Read me the code that just arrived in your email.” They know her name, and they know the page is called Floor Six.", "Under the message is a short link, supposedly where the code should be typed. Her bookmarks already have the email site and the host."],
+        "concept": {
+          "zh": [
+            "认证回答「你是谁」。授权回答「你被允许做什么」。登录成功只完成认证。一名已经登录的义工，并不因此被授权导出全部电话。授权要在服务器上对每一次敏感动作再查一次。只把按钮藏起来，请求仍然发得出去。",
+            "口令不能以能还原的方式放着，更不能写在会交给读者的页面上。要存的是加了盐、故意算得慢的散列。看到散列的人不能直接得到口令。很快的普通摘要不适合拿来存口令，因为可以大量猜。",
+            "多因素是另一种因素，不是在同一条聊天里再要一次口令。会话在服务器上结束才算登出，只清掉浏览器里的标记不够。401 是还没认证。403 是认证了，但这一项授权没有。"
+          ],
+          "zhHant": [
+            "認證回答「你是誰」。授權回答「你被允許做什麼」。登入成功只完成認證。一名已經登入的義工，並不因此被授權導出全部電話。授權要在服務器上對每一次敏感動作再查一次。只把按鈕藏起來，請求仍然發得出去。",
+            "口令不能以能還原的方式放著，更不能寫在會交給讀者的頁面上。要存的是加了鹽、故意算得慢的散列。看到散列的人不能直接得到口令。很快的普通摘要不適合拿來存口令，因為可以大量猜。",
+            "多因素是另一種因素，不是在同一條聊天裡再要一次口令。會話在服務器上結束才算登出，只清掉瀏覽器裡的標記不夠。401 是還沒認證。403 是認證了，但這一項授權沒有。"
+          ],
+          "en": [
+            "Authentication answers who you are. Authorization answers what you are allowed to do. A successful sign-in finishes authentication only. A volunteer who is signed in is not thereby authorized to export every phone number. Authorization is checked again on the server for every sensitive action. Hiding the button does not stop the request.",
+            "A password is not stored in a form that can be turned back into the password, and it is not written on a page the reader receives. What you store is a salted hash that is slow on purpose. Someone who sees the hash does not get the password. A fast general-purpose digest is a poor way to store one, because it can be guessed in bulk.",
+            "A second factor is a different factor, not another password asked in the same chat. A session is signed out when the server ends it. Clearing a mark in the browser is not enough. 401 means not authenticated. 403 means authenticated, and not authorized for this action."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 8, prompt: { zh: "写楼长回复这则消息的一句。要拒绝念出验证码。", zhHant: "寫樓長回覆這則消息的一句。要拒絕念出驗證碼。", en: "Write the sentence she sends back. It has to refuse to read the code aloud." } },
-          { kind: "check", answer: 2, prompt: { zh: "她要填验证码时，从哪里打开页面？", zhHant: "她要填驗證碼時，從哪裡打開頁面？", en: "Where does she open the page before typing the code?" }, options: [
-            { zh: "消息里的那条短链接", zhHant: "消息裡的那條短連結", en: "The short link in the message" },
-            { zh: "先把验证码发给对方再决定", zhHant: "先把驗證碼發給對方再決定", en: "Send the code first, then decide" },
-            { zh: "收藏夹里的邮箱或托管商", zhHant: "收藏夾裡的郵箱或託管商", en: "The email or the host, from her bookmarks" },
-          ] },
-          { kind: "write", min: 8, prompt: { zh: "写下她不该做的两件：一件关于念验证码，一件关于那条短链接。", zhHant: "寫下她不該做的兩件：一件關於念驗證碼，一件關於那條短連結。", en: "Write the two things she should not do: one about reading the code, one about the short link." } },
-        ],
+        "case": {
+          "zh": [
+            "义工用自己的账号登录。页面把「导出电话」藏了起来。他改了请求地址，服务器没有再查授权，电话表下载了。",
+            "办公处的口令存在数据库里，和登录时输入的原文一样。登出只清了这台浏览器里的一个标记。另一台已经打开的电脑仍然处于登录状态。"
+          ],
+          "zhHant": [
+            "義工用自己的賬號登入。頁面把「導出電話」藏了起來。他改了請求地址，服務器沒有再查授權，電話表下載了。",
+            "辦公處的口令存在數據庫裡，和登入時輸入的原文一樣。登出只清了這台瀏覽器裡的一個標記。另一台已經打開的電腦仍然處於登入狀態。"
+          ],
+          "en": [
+            "A volunteer signs in with their own account. The page hides “export phone numbers.” They change the request address. The server does not check authorization again, and the phone list downloads.",
+            "The office password sits in the database as the same text that was typed at sign-in. Signing out only clears a mark in this browser. Another computer that was already open stays signed in."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "导出电话这次，哪一层失败了？",
+              "zhHant": "導出電話這次，哪一層失敗了？",
+              "en": "On the export, which layer failed?"
+            },
+            "options": [
+              {
+                "zh": "认证：因为义工不应该有账号。",
+                "zhHant": "認證：因為義工不應該有賬號。",
+                "en": "Authentication: the volunteer should not have had an account."
+              },
+              {
+                "zh": "散列：因为页面把按钮藏起来了。",
+                "zhHant": "散列：因為頁面把按鈕藏起來了。",
+                "en": "The hash: because the page hid the button."
+              },
+              {
+                "zh": "授权：人已经认证，但服务器没有拒绝他不该做的导出。",
+                "zhHant": "授權：人已經認證，但服務器沒有拒絕他不該做的導出。",
+                "en": "Authorization: the person was already authenticated, and the server did not refuse an export they should not do."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 100,
+            "prompt": {
+              "zh": "说明口令为什么不能存成原文，以及登出为什么必须发生在服务器上。用这个案例里的两件事。",
+              "zhHant": "說明口令為什麼不能存成原文，以及登出為什麼必須發生在服務器上。用這個案例裡的兩件事。",
+              "en": "Explain why the password cannot be stored as the original text, and why signing out has to happen on the server. Use both facts from this case."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "义工已经登录，却不该导出。服务器应该回什么？",
+              "zhHant": "義工已經登入，卻不該導出。服務器應該回什麼？",
+              "en": "The volunteer is signed in and should not export. What should the server answer?"
+            },
+            "options": [
+              {
+                "zh": "403。认证已经完成，缺的是授权。",
+                "zhHant": "403。認證已經完成，缺的是授權。",
+                "en": "403. Authentication already succeeded. Authorization is what is missing."
+              },
+              {
+                "zh": "401。因为他还没登录。",
+                "zhHant": "401。因為他還沒登入。",
+                "en": "401, because he is not signed in yet."
+              },
+              {
+                "zh": "200。因为按钮已经藏了，所以没有风险。",
+                "zhHant": "200。因為按鈕已經藏了，所以沒有風險。",
+                "en": "200, because the button is hidden, so there is no risk."
+              }
+            ]
+          }
+        ]
       },
       {
-        title: { zh: "交出去的页面里不留钥匙", zhHant: "交出去的頁面裡不留鑰匙", en: "The page you hand over keeps no key" },
-        concept: {
-          zh: ["页面一旦给了地址，看到的人就不只是楼里的人。密钥、口令、数据库地址如果写在页面或公开的代码里，就和贴在门口一样。交出去之前要专门找这些，找到就移走，不贴到讨论里请人辨认。", "表单也只问这一页用得上的。六楼失物如果只要一句「我捡到了」和联系方式里的一个称呼，就不要再要证件号或住址。链接用 https。"],
-          zhHant: ["頁面一旦給了地址，看到的人就不只是樓裡的人。密鑰、口令、資料庫地址如果寫在頁面或公開的代碼裡，就和貼在門口一樣。交出去之前要專門找這些，找到就移走，不貼到討論裡請人辨認。", "表單也只問這一頁用得上的。六樓失物如果只要一句「我撿到了」和聯繫方式裡的一個稱呼，就不要再要證件號或住址。連結用 https。"],
-          en: ["Once a page has an address, the people who see it are not only the floor. A key, a password, or a database address in the page or in public code is the same as pinning it on the door. Look for these before you hand it over. Move them. Do not paste them into Discuss to ask what they are.", "A form asks only for what this page needs. If Floor Six only needs “I found it” and a name, it does not also ask for an ID number or an address. Links use https."],
+        "title": {
+          "zh": "验证码证明的是这一刻的渠道",
+          "zhHant": "驗證碼證明的是這一刻的渠道",
+          "en": "A code proves the channel, at that moment"
         },
-        case: {
-          zh: ["六楼失物页准备把地址发给全楼。楼长翻源代码，在一段注释里看见托管数据库的口令，是当初试连接时留下的。页面上看不见，查看源代码能看见。", "表单现在除了称呼，还要求证件号。失物页并不需要证件号才能说「我捡到了黑伞」。"],
-          zhHant: ["六樓失物頁準備把地址發給全樓。樓長翻源代碼，在一段註釋裡看見託管資料庫的口令，是當初試連接時留下的。頁面上看不見，查看源代碼能看見。", "表單現在除了稱呼，還要求證件號。失物頁並不需要證件號才能說「我撿到了黑傘」。"],
-          en: ["The Floor Six address is about to go to the whole floor. In the source, inside a comment, the floor lead finds the hosting database password from an old test. It is invisible on the page and visible in the source.", "The form asks for an ID number as well as a name. The page does not need an ID number for someone to say they found the black umbrella."],
+        "concept": {
+          "zh": [
+            "验证码证明的是：这一刻，你拿着那个渠道。谁能读到码，谁就能通过这一次认证。把码读给「听起来像办公处」的人，就是把这个因素交给他。他知道你的名字，并不等于他拿着你的渠道。",
+            "真正负责这套系统的人不会要你把码读回去，也不会因为你不读就威胁记录马上消失。催促加上保密，是常见的手法，不是你应该破例的理由。",
+            "码从一条渠道来，又在同一条聊天里被要走，就没有第二个因素。另一个因素要在另一条路上，例如你已经拿着的那台设备上的确认，而不是对方让你念出来的六个数字。"
+          ],
+          "zhHant": [
+            "驗證碼證明的是：這一刻，你拿著那個渠道。誰能讀到碼，誰就能通過這一次認證。把碼讀給「聽起來像辦公處」的人，就是把這個因素交給他。他知道你的名字，並不等於他拿著你的渠道。",
+            "真正負責這套系統的人不會要你把碼讀回去，也不會因為你不讀就威脅記錄馬上消失。催促加上保密，是常見的手法，不是你應該破例的理由。",
+            "碼從一條渠道來，又在同一條聊天裡被要走，就沒有第二個因素。另一個因素要在另一條路上，例如你已經拿著的那台設備上的確認，而不是對方讓你念出來的六個數字。"
+          ],
+          "en": [
+            "A verification code proves one thing: at this moment, you hold that channel. Whoever can read the code can pass this authentication. Reading it to someone who “sounds like the office” hands them the factor. Knowing your name is not the same as holding your channel.",
+            "The people who actually run the system will not ask you to read the code back, and they will not threaten that the records vanish if you refuse. Urgency plus secrecy is a common pattern. It is not a reason to make an exception.",
+            "A code that arrives on one channel and is then demanded in that same chat is not a second factor. The other factor has to travel a different path, such as a confirmation on a device you already hold, not six digits someone asks you to read aloud."
+          ]
         },
-        tasks: [
-          { kind: "write", min: 8, prompt: { zh: "写下楼长在注释里看见了什么，以及她该把它移到哪里之外。不要把口令写出来。", zhHant: "寫下樓長在註釋裡看見了什麼，以及她該把它移到哪裡之外。不要把口令寫出來。", en: "Write what she found in the comment, and where it must not stay. Do not write the password." } },
-          { kind: "check", answer: 0, prompt: { zh: "六楼失物的表单，不该再要哪一项？", zhHant: "六樓失物的表單，不該再要哪一項？", en: "What should the Floor Six form stop asking for?" }, options: [
-            { zh: "证件号", zhHant: "證件號", en: "An ID number" },
-            { zh: "一句我捡到了", zhHant: "一句我撿到了", en: "The line “I found it”" },
-            { zh: "一个称呼", zhHant: "一個稱呼", en: "A name" },
-          ] },
-          { kind: "write", min: 16, prompt: { zh: "写楼长交地址之前的三行：双重验证、验证码、源代码里的口令。每行只写这一案例里要看的那一处。", zhHant: "寫樓長交地址之前的三行：雙重驗證、驗證碼、源代碼裡的口令。每行只寫這一案例裡要看的那一處。", en: "Write her three lines before she shares the address: two-factor, the code, and the password in the source. Each line names only what this case asks her to check." } },
-        ],
+        "case": {
+          "zh": [
+            "在港铁上，有人说他是宿舍办公处，被锁在外面。他让你把刚收到的六位数读给他，否则失物页今天会全部删掉。",
+            "他说得出你的名字，也说得出这页叫什么。码是发到你自己的手机上的。他要你在这节车厢里念出来。"
+          ],
+          "zhHant": [
+            "在港鐵上，有人說他是宿舍辦公處，被鎖在外面。他讓你把剛收到的六位數讀給他，否則失物頁今天會全部刪掉。",
+            "他說得出你的名字，也說得出這頁叫什麼。碼是發到你自己的手機上的。他要你在這節車廂裡念出來。"
+          ],
+          "en": [
+            "On the MTR, someone says he is the residence office and that he is locked out. He asks you to read him the six digits you just received, or the lost-and-found will all be deleted today.",
+            "He can say your name, and he can say what the page is called. The code was sent to your own phone. He wants it read aloud in this carriage."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "这个六位数该怎么处理？",
+              "zhHant": "這個六位數該怎麼處理？",
+              "en": "What should happen to the six digits?"
+            },
+            "options": [
+              {
+                "zh": "读给他。他说了你的名字，也说了页面的名字。",
+                "zhHant": "讀給他。他說了你的名字，也說了頁面的名字。",
+                "en": "Read them to him. He said your name and the name of the page."
+              },
+              {
+                "zh": "不读。码证明的是你拿着这个渠道。读出去就把这一次认证交给他。",
+                "zhHant": "不讀。碼證明的是你拿著這個渠道。讀出去就把這一次認證交給他。",
+                "en": "Do not read them. The code proves you hold the channel. Reading it hands him this authentication."
+              },
+              {
+                "zh": "读一半，留下一半。",
+                "zhHant": "讀一半，留下一半。",
+                "en": "Read half, and keep half."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 90,
+            "prompt": {
+              "zh": "他催你马上读，否则记录会被删。用这一讲的概念说明，为什么催促和保密不能成为例外。",
+              "zhHant": "他催你馬上讀，否則記錄會被刪。用這一講的概念說明，為什麼催促和保密不能成為例外。",
+              "en": "He rushes you to read it now, or the records will be deleted. Use this lecture’s concept to say why urgency and secrecy are not an exception."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 0,
+            "prompt": {
+              "zh": "为什么在同一条聊天里再要一次口令，不算多因素？",
+              "zhHant": "為什麼在同一條聊天裡再要一次口令，不算多因素？",
+              "en": "Why is asking for the password again in the same chat not multi-factor?"
+            },
+            "options": [
+              {
+                "zh": "因为两次都在对方已经能听的这一条路上，没有第二个因素。",
+                "zhHant": "因為兩次都在對方已經能聽的這一條路上，沒有第二個因素。",
+                "en": "Because both travel the path the other person can already hear. There is no second factor."
+              },
+              {
+                "zh": "因为口令比验证码更长，所以已经足够。",
+                "zhHant": "因為口令比驗證碼更長，所以已經足夠。",
+                "en": "Because a password is longer than a code, so it is already enough."
+              },
+              {
+                "zh": "因为他说得出你的名字，认证就已经完成。",
+                "zhHant": "因為他說得出你的名字，認證就已經完成。",
+                "en": "Because he can say your name, authentication is already finished."
+              }
+            ]
+          }
+        ]
       },
-    ],
-  },
+      {
+        "title": {
+          "zh": "秘密、脚本，和最小权限",
+          "zhHant": "祕密、腳本，和最小權限",
+          "en": "Secrets, scripts, and least privilege"
+        },
+        "concept": {
+          "zh": [
+            "写在 HTML 注释里的口令会随着页面送到浏览器。查看源代码的人看得到。在你删掉注释之前，它已经算交出去的了。秘密放在运行时才能取到的地方，不放进会交给读者的文档。",
+            "失物描述如果按 HTML 插入，下一位读者的浏览器就会执行里面的脚本。描述作为文字插入，脚本就只是字。这一项和「浏览器里的检查不是记录」是同一条边界：读者收到的是文字，不是别人的程序。",
+            "最小权限是：一个人只拿到做这件事所必需的能力。义工可以新增一条失物。导出全部电话是另一件能力，留给办公处的账号。共用一个管理员口令时，你既给多了能力，也无法在事后说是谁做的。那同时伤到机密性和完整性。"
+          ],
+          "zhHant": [
+            "寫在 HTML 註釋裡的口令會隨著頁面送到瀏覽器。查看源代碼的人看得到。在你刪掉註釋之前，它已經算交出去的了。祕密放在運行時才能取到的地方，不放進會交給讀者的文檔。",
+            "失物描述如果按 HTML 插入，下一位讀者的瀏覽器就會執行裡面的腳本。描述作為文字插入，腳本就只是字。這一項和「瀏覽器裡的檢查不是記錄」是同一條邊界：讀者收到的是文字，不是別人的程序。",
+            "最小權限是：一個人只拿到做這件事所必需的能力。義工可以新增一條失物。導出全部電話是另一件能力，留給辦公處的賬號。共用一個管理員口令時，你既給多了能力，也無法在事後說是誰做的。那同時傷到機密性和完整性。"
+          ],
+          "en": [
+            "A password in an HTML comment is delivered to the browser with the page. Anyone who views the source can read it. Before you delete the comment, it has already been handed out. A secret lives where the running system can fetch it. It does not live in a document the reader receives.",
+            "If a found-item description is inserted as HTML, the next reader’s browser runs a script inside it. Inserted as text, the script is only characters. This is the same boundary as “a check in the browser is not the record”: the reader receives text, not someone else’s program.",
+            "Least privilege means a person receives only the capability this job needs. A volunteer can add one found item. Exporting every phone number is a different capability, and it stays with the office account. One shared administrator password both grants too much and leaves you unable to say who did it afterward. That hits confidentiality and integrity together."
+          ]
+        },
+        "case": {
+          "zh": [
+            "学生把办公处口令写在页面注释里，说是方便组员查找。失物描述被按 HTML 插入，一条描述里的脚本在别人的浏览器里跑了。",
+            "所有义工共用同一个管理员登录来发布失物，也用它导出电话。事后办公处无法说出是哪一名义工导出的。"
+          ],
+          "zhHant": [
+            "學生把辦公處口令寫在頁面註釋裡，說是方便組員查找。失物描述被按 HTML 插入，一條描述裡的腳本在別人的瀏覽器裡跑了。",
+            "所有義工共用同一個管理員登入來發布失物，也用它導出電話。事後辦公處無法說出是哪一名義工導出的。"
+          ],
+          "en": [
+            "A student puts the office password in a page comment, “so the team can find it.” Descriptions are inserted as HTML, and a script in one description runs in someone else’s browser.",
+            "Every volunteer shares one administrator sign-in to post a found item, and the same sign-in exports the phone numbers. Afterward the office cannot say which volunteer exported them."
+          ]
+        },
+        "tasks": [
+          {
+            "kind": "check",
+            "answer": 1,
+            "prompt": {
+              "zh": "注释里的口令为什么已经不算秘密？",
+              "zhHant": "註釋裡的口令為什麼已經不算祕密？",
+              "en": "Why is a password in a comment no longer a secret?"
+            },
+            "options": [
+              {
+                "zh": "因为注释只有组员看得到。",
+                "zhHant": "因為註釋只有組員看得到。",
+                "en": "Because only teammates can see a comment."
+              },
+              {
+                "zh": "因为注释在页面里，浏览器会收到，查看源代码就能看见。",
+                "zhHant": "因為註釋在頁面裡，瀏覽器會收到，查看源代碼就能看見。",
+                "en": "Because the comment is in the page, the browser receives it, and view-source shows it."
+              },
+              {
+                "zh": "因为口令只要够长，就可以放在注释里。",
+                "zhHant": "因為口令只要夠長，就可以放在註釋裡。",
+                "en": "Because a long enough password is safe in a comment."
+              }
+            ]
+          },
+          {
+            "kind": "write",
+            "min": 120,
+            "prompt": {
+              "zh": "给义工和办公处各写一件被允许的事和一件被拒绝的事，并说明为什么不能共用一个管理员口令。要写到事后无法知道是谁。",
+              "zhHant": "給義工和辦公處各寫一件被允許的事和一件被拒絕的事，並說明為什麼不能共用一個管理員口令。要寫到事後無法知道是誰。",
+              "en": "For the volunteer and for the office, write one action each is allowed and one each is refused. Then say why they cannot share one administrator password. Include that afterward nobody can tell who did it."
+            }
+          },
+          {
+            "kind": "check",
+            "answer": 2,
+            "prompt": {
+              "zh": "描述按 HTML 插入时，风险在谁身上？",
+              "zhHant": "描述按 HTML 插入時，風險在誰身上？",
+              "en": "When a description is inserted as HTML, who carries the risk?"
+            },
+            "options": [
+              {
+                "zh": "只在写描述的人身上，因为他的电脑会变慢。",
+                "zhHant": "只在寫描述的人身上，因為他的電腦會變慢。",
+                "en": "Only the person who wrote it, because their computer gets slower."
+              },
+              {
+                "zh": "只在服务器的磁盘上，读者不受影响。",
+                "zhHant": "只在服務器的磁盤上，讀者不受影響。",
+                "en": "Only on the server’s disk. The reader is unaffected."
+              },
+              {
+                "zh": "在下一位打开列表的人身上。他的浏览器会执行那段脚本。",
+                "zhHant": "在下一位打開列表的人身上。他的瀏覽器會執行那段腳本。",
+                "en": "On the next person who opens the list. Their browser runs the script."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 };

@@ -169,7 +169,7 @@
       });
       block.append(options);
     } else {
-      const field = h("textarea", { class: "field", maxlength: "400" });
+      const field = h("textarea", { class: "field", maxlength: "800" });
       const button = h("button", { type: "button", class: "btn btn-primary", text: tr("path.saveTask") });
       const note = h("p", { class: "status", role: "status" });
       button.addEventListener("click", () => {
@@ -453,6 +453,7 @@
     return h("a", { class: "path-card", href: courseHref(universe.id) }, [
       h("p", { class: "page-tag", text: universe.name }),
       h("h2", { text: line(skill.title) }),
+      h("p", { class: "local-note", text: trf("path.minutes", { n: skill.minutes || 45 }) }),
       h("p", { class: "local-note", text: progressLine(done, tasks.length) }),
       bar(done, tasks.length),
     ]);
@@ -504,7 +505,7 @@
       const slides = skillSlides(universe);
       const tasks = tasksOf(skill, opened);
       const index = Number(params.get("n") || "0") || 0;
-      root.append(h("p", { class: "local-note", text: progressLine(count(tasks), tasks.length) }));
+      root.append(h("p", { class: "local-note", text: trf("path.minutes", { n: skill.minutes || 45 }) + " · " + progressLine(count(tasks), tasks.length) }));
       root.append(h("p", { text: tr("path.notYet") }));
       root.append(deck(slides, index, line(skill.title)));
       return;
