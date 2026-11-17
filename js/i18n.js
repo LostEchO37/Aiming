@@ -225,7 +225,7 @@
     if (next.reduceMotion) root.setAttribute("data-motion", "reduce");
     else root.removeAttribute("data-motion");
     const theme = document.querySelector('meta[name="theme-color"]');
-    if (theme) theme.setAttribute("content", next.theme === "dark" ? "#1c1915" : "#f3efe7");
+    if (theme) theme.setAttribute("content", next.theme === "dark" ? "#14110f" : "#f8f5f2");
     window.AIMING_SETTINGS = next;
     applyI18n(document);
     document.dispatchEvent(new CustomEvent("aiming-i18n"));
