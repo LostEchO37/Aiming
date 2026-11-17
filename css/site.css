@@ -1261,6 +1261,21 @@ html[data-theme="dark"] .field {
 
 .sheet__row:first-child { border-top: 0; }
 
+.path-list, .extend-list { display: grid; gap: 0.8rem; margin: 1rem 0 2rem; }
+.path-card, .extend-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem 1.15rem;
+}
+.path-card h2, .extend-card h3 { margin: 0.2rem 0 0.35rem; font-family: var(--serif); font-weight: 600; }
+.path-bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; margin: 0.7rem 0; }
+.path-bar > span { display: block; height: 100%; background: linear-gradient(90deg, #ff6b35, #ff8a5b); }
+.step { padding: 0.85rem 0; border-top: 1px solid var(--border); }
+.step h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+.check-options { display: grid; gap: 0.4rem; margin: 0.5rem 0; }
+.check-options button { text-align: left; }
+
 .sheet__label {
   flex: 0 0 auto;
   font-weight: 500;
