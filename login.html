@@ -6,23 +6,23 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>登录 · Aiming</title>
+  <title data-i18n="login.doc">登录 · Aiming</title>
   <meta name="description" content="登录 Aiming。登录之后可以在宇宙里写下讨论。">
   <meta name="theme-color" content="#f8f5f2">
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600&family=Noto+Serif+TC:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
 </head>
 <body data-page="login">
-  <a class="skip" href="#content">跳到内容</a>
+  <a class="skip" href="#content" data-i18n="skip">跳到内容</a>
   <header class="top">
     <div class="top__bar">
       <a class="brand" href="index.html">Aiming</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="menu">菜单</button>
     </div>
-    <nav id="site-nav" class="nav" aria-label="站内">
+    <nav id="site-nav" class="nav" aria-label="站内" data-i18n-aria="nav.aria">
       <a href="index.html" data-i18n="nav.home">首页</a>
       <a href="universes.html" data-i18n="nav.universes">宇宙</a>
       <a href="learn.html" data-i18n="nav.learn">学习</a>
@@ -33,34 +33,35 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
   </header>
 
   <main id="content" class="page" tabindex="-1">
-    <p class="page-tag">账号</p>
-    <h1 class="page-title">登录</h1>
-    <p class="page-intro">登录之后，可以在一个宇宙里写下讨论。看和学不必登录。</p>
-    <noscript><p class="banner">需要打开浏览器的脚本，才能登录。</p></noscript>
+    <p class="page-tag" data-i18n="login.tag">账号</p>
+    <h1 class="page-title" data-i18n="login.title">登录</h1>
+    <p class="page-intro" data-i18n="login.intro">登录之后，可以在一个宇宙里写下讨论。看和学不必登录。</p>
+    <noscript><p class="banner" data-i18n="login.needJs">需要打开浏览器的脚本，才能登录。</p></noscript>
     <p class="status" id="status" role="status"></p>
     <form id="account-form" class="form-card" novalidate>
-      <label class="field-label">邮箱
+      <label class="field-label"><span data-i18n="login.email">邮箱</span>
         <input class="field" name="email" type="email" autocomplete="username" inputmode="email" maxlength="254" aria-describedby="err-email" required>
         <span class="field-error" id="err-email" hidden></span>
       </label>
-      <label class="field-label">密码
+      <label class="field-label"><span data-i18n="login.password">密码</span>
         <input class="field" name="password" type="password" autocomplete="current-password" maxlength="72" aria-describedby="err-password" required>
         <span class="field-error" id="err-password" hidden></span>
       </label>
       <div class="form-actions">
-        <button class="btn btn-primary" type="submit">登录</button>
+        <button class="btn btn-primary" type="submit" data-i18n="login.submit">登录</button>
       </div>
     </form>
-    <p>还没有账号？<a href="register.html" data-next>注册</a></p>
+    <p><span data-i18n="login.switch">还没有账号？</span><a href="register.html" data-next data-i18n="login.toRegister">注册</a></p>
   </main>
 
   <footer class="foot">
     <div class="foot__inner">
       <img src="assets/mark.svg" width="22" height="22" alt="">
       <p>Aiming</p>
-      <p>由香港的一间小公司制作。</p>
+      <p data-i18n="footer.maker">由香港的一间小公司制作。</p>
     </div>
   </footer>
+  <script src="js/chrome.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/site.js"></script>
   <script src="js/session.js"></script>

@@ -73,12 +73,13 @@
       { key: "language", value: "zh", label: "settings.language" },
     ], settings.language));
     const lang = h("div", { class: "segment", role: "radiogroup" });
-    [["zh", "简体"], ["zhHant", "繁体"], ["en", "English"]].forEach(([value, label]) => {
+    [["zh", "lang.zh"], ["zhHant", "lang.zhHant"], ["en", "lang.en"]].forEach(([value, label]) => {
       const button = h("button", {
         type: "button",
         class: "segment__btn",
         "aria-pressed": (settings.language || "zh") === value ? "true" : "false",
-        text: label,
+        text: t(label),
+        "data-i18n": label,
       });
       button.addEventListener("click", () => {
         lang.querySelectorAll("button").forEach((node) => node.setAttribute("aria-pressed", "false"));

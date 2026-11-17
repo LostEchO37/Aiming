@@ -36,7 +36,7 @@
     if (post.universeId) meta.append(h("a", { class: "tag", href: "universe.html?id=" + post.universeId }, universeName(post.universeId)));
     if (post.hidden) meta.append(h("span", { class: "badge badge--hidden", text: t("home.hidden") }));
     card.append(h("div", { class: "post-head" }, [
-      h("span", { class: "avatar", "aria-hidden": "true", text: (post.author || "我").charAt(0) }),
+      h("span", { class: "avatar", "aria-hidden": "true", text: (post.author || t("home.me")).charAt(0) }),
       h("div", {}, [h("p", { class: "post-name" }, name), meta]),
     ]));
     if (post.title) card.append(h("h3", { class: "who", text: post.title }));

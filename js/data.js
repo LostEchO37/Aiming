@@ -508,6 +508,26 @@
     },
   ];
 
-  const byId = Object.fromEntries(universes.map((u) => [u.id, u]));
-  window.AIMING = { universes, byId, posts, people };
+  function mergeUniverse(base, over) {
+    if (!over) return base;
+    const next = Object.assign({}, base, over);
+    if (over.rooms) next.rooms = Object.assign({}, base.rooms, over.rooms);
+    if (over.practice) next.practice = Object.assign({}, base.practice, over.practice);
+    if (over.related) next.related = Object.assign({}, base.related, over.related);
+    if (over.materials) {
+      next.materials = base.materials.map((item) => Object.assign({}, item, over.materials[item.id] || {}));
+    }
+    return next;
+  }
+
+  function publish() {
+    const lang = document.documentElement.getAttribute("data-lang") || "zh";
+    const pack = (window.AIMING_UNIVERSE_LANG || {})[lang] || {};
+    const localized = universes.map((item) => mergeUniverse(item, pack[item.id]));
+    const byId = Object.fromEntries(localized.map((item) => [item.id, item]));
+    window.AIMING = { universes: localized, byId, posts, people };
+  }
+
+  publish();
+  window.AIMING_LOCALIZE = publish;
 })();

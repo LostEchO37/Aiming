@@ -1,6 +1,18 @@
 /* Shared behavior: nav, universe pages, and the community feed. */
 (function () {
   const READ_KEY = "aiming.read.v1";
+  function tr(key) {
+    return window.t ? window.t(key) : key;
+  }
+
+  function trf(key, vars) {
+    return tr(key).replace(/\{(\w+)\}/g, (_, name) => (vars && vars[name] != null ? String(vars[name]) : ""));
+  }
+
+  function trm(message) {
+    return window.tMsg ? window.tMsg(message) : (message || "");
+  }
+
   const remote = {
     user: null,
     posts: [],
@@ -74,7 +86,7 @@
       localStorage.setItem(READ_KEY, JSON.stringify(read));
       return true;
     } catch (err) {
-      setStatus("这台浏览器没有记下看过标记。");
+      setStatus(tr("learn.noStore"));
       return false;
     }
   }
@@ -108,7 +120,7 @@
       let data = {};
       try { data = await res.json(); } catch (err) { data = {}; }
       if (!res.ok) {
-        const error = new Error(data.error || "没有完成");
+        const error = new Error(trm(data.error) || tr("feed.failed"));
         error.status = res.status;
         throw error;
       }
@@ -127,7 +139,7 @@
       seed: false,
       kind: item.kind,
       universeId: item.universeId,
-      author: item.author || "未署名",
+      author: item.author || tr("feed.anon"),
       authorId: item.authorId || "",
       title: item.title || "",
       body: item.body,
@@ -143,7 +155,7 @@
       list.push({
         id: item.id,
         seed: false,
-        author: item.author || "未署名",
+        author: item.author || tr("feed.anon"),
         authorId: item.authorId || "",
         body: item.body,
         created: item.created || "",
@@ -154,7 +166,7 @@
       id: item.id,
       seed: false,
       universeId: item.universeId,
-      name: item.name || "未署名",
+      name: item.name || tr("feed.anon"),
       authorId: item.authorId || "",
       can: item.can,
       want: item.want,
@@ -193,17 +205,22 @@
     });
 
     if (!toggle || !nav) return;
+    if (toggle.dataset.bound === "1") {
+      toggle.textContent = nav.classList.contains("is-open") ? tr("close") : tr("menu");
+      return;
+    }
+    toggle.dataset.bound = "1";
 
     function close() {
       nav.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
-      toggle.textContent = "菜单";
+      toggle.textContent = tr("menu");
     }
 
     function open() {
       nav.classList.add("is-open");
       toggle.setAttribute("aria-expanded", "true");
-      toggle.textContent = "关闭";
+      toggle.textContent = tr("close");
     }
 
     toggle.addEventListener("click", () => {
@@ -235,8 +252,8 @@
 
   function filters(extra) {
     const { id, invalid } = currentUniverse();
-    const bar = h("nav", { class: "filters", "aria-label": "按宇宙筛选" });
-    const items = [{ id: "", name: "全部" }].concat(
+    const bar = h("nav", { class: "filters", "aria-label": tr("learn.filter") });
+    const items = [{ id: "", name: tr("feed.all") }].concat(
       window.AIMING.universes.map((u) => ({ id: u.id, name: u.name }))
     );
     items.forEach((item) => {
@@ -252,25 +269,28 @@
   }
 
   function missingBanner(id) {
-    return h("p", { class: "banner", text: "没有「" + id + "」这个宇宙。可以改选上面的「全部」，或回到宇宙列表。" });
+    return h("p", { class: "banner", text: trf("u.missing", { id }) });
   }
 
   function renderUniverse() {
     const root = document.getElementById("content");
     if (!root) return;
+    [...root.children].forEach((node) => {
+      if (node.tagName !== "NOSCRIPT") node.remove();
+    });
     const { id, universe, invalid } = currentUniverse();
 
     if (!universe) {
-      document.title = "选择宇宙 · Aiming";
+      document.title = tr("u.pickDoc");
       const stack = h("div", { class: "stack" });
       if (invalid) stack.append(missingBanner(id));
-      stack.append(h("h1", { class: "page-title", text: invalid ? "没有这个宇宙" : "选择一个宇宙" }));
-      stack.append(h("p", { class: "page-intro", text: "可以从营销、人事、数字开发、美术、安全里选。点进去就是那一页。" }));
+      stack.append(h("h1", { class: "page-title", text: invalid ? tr("u.none") : tr("u.pick") }));
+      stack.append(h("p", { class: "page-intro", text: tr("u.pickIntro") }));
       const list = h("div", { class: "material-links" });
       window.AIMING.universes.forEach((u) => {
         list.append(h("a", { class: "material-link", href: "universe.html?id=" + u.id }, [
           h("strong", { text: u.index + "  " + u.name }),
-          h("span", { text: "进入" }),
+          h("span", { text: tr("home.enter") }),
         ]));
       });
       stack.append(list);
@@ -281,8 +301,8 @@
     document.title = universe.name + " · Aiming";
     const stack = h("div", { class: "stack" });
     const intro = h("div", { class: "intro" });
-    intro.append(h("a", { class: "back", href: "universes.html" }, "← 全部宇宙"));
-    intro.append(h("p", { class: "page-tag", text: "宇宙 " + universe.index }));
+    intro.append(h("a", { class: "back", href: "universes.html" }, tr("u.all")));
+    intro.append(h("p", { class: "page-tag", text: trf("u.tag", { index: universe.index }) }));
     intro.append(h("h1", { class: "page-title", text: universe.name }));
     universe.lede.forEach((line) => intro.append(h("p", { class: "lede", text: line })));
     if (universe.related) {
@@ -295,12 +315,12 @@
     stack.append(intro);
 
     const rooms = h("div", {});
-    rooms.append(h("h2", { class: "block-title", text: "三处" }));
+    rooms.append(h("h2", { class: "block-title", text: tr("u.three") }));
     const grid = h("div", { class: "room-grid", style: "margin-top:0.8rem" });
     [
-      ["01", "学习", universe.rooms.learn, "learn.html?id=" + universe.id, "进去"],
-      ["02", "讨论与机会", universe.rooms.discuss, "#community", "去搜索"],
-      ["03", "找同路人", universe.rooms.people, "#community", "去搜索"],
+      ["01", tr("u.learn"), universe.rooms.learn, "learn.html?id=" + universe.id, tr("u.goIn")],
+      ["02", tr("u.discussRoom"), universe.rooms.discuss, "#community", tr("u.goSearch")],
+      ["03", tr("u.peopleRoom"), universe.rooms.people, "#community", tr("u.goSearch")],
     ].forEach(([index, title, copy, href, go]) => {
       grid.append(h("a", { class: "room", href }, [
         h("span", { class: "idx", text: index }),
@@ -313,15 +333,15 @@
     stack.append(rooms);
 
     const practice = h("a", { class: "practice practice--block", href: "learn.html?id=" + universe.id + "#mat-" + universe.materials[0].id }, [
-      h("p", { class: "kicker", text: "可以先做的一件事" }),
+      h("p", { class: "kicker", text: tr("home.kicker") }),
       h("h2", { text: universe.practice.title }),
       h("p", { text: universe.practice.body }),
-      h("span", { class: "go" }, ["去学习 ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
+      h("span", { class: "go" }, [tr("u.goLearn") + " ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
     ]);
     stack.append(practice);
 
     const mats = h("div", {});
-    mats.append(h("h2", { class: "block-title", text: "材料" }));
+    mats.append(h("h2", { class: "block-title", text: tr("u.materials") }));
     const links = h("div", { class: "material-links", style: "margin-top:0.8rem" });
     universe.materials.forEach((material) => {
       links.append(h("a", {
@@ -329,7 +349,7 @@
         href: "learn.html?id=" + universe.id + "#mat-" + material.id,
       }, [
         h("strong", { text: material.title }),
-        h("span", { class: "meta", text: "约 " + material.minutes + " 分钟" }),
+        h("span", { class: "meta", text: trf("u.minutes", { n: material.minutes }) }),
       ]));
     });
     mats.append(links);
@@ -340,7 +360,7 @@
       id: "community",
       "aria-labelledby": "community-heading",
     });
-    community.append(h("h2", { class: "block-title", id: "community-heading", text: "讨论与同路人" }));
+    community.append(h("h2", { class: "block-title", id: "community-heading", text: tr("u.community") }));
     const mount = h("div", { id: "community-root" });
     community.append(mount);
     stack.append(community);
@@ -364,7 +384,7 @@
       class: "chip" + (readChipOn ? " is-on" : ""),
       href: hrefWith({ read: readMode ? null : "1" }),
       "aria-current": readChipOn ? "page" : null,
-    }, "已看过");
+    }, tr("learn.read"));
 
     root.append(filters({ node: readChip }));
 
@@ -375,13 +395,13 @@
     const readCount = pool.filter((m) => store.read[m.id]).length;
 
     root.append(h("div", { class: "toolbar" }, [
-      h("p", { class: "local-note", text: invalid ? "" : "已看过 " + readCount + " / " + pool.length + "。标记只留在这台浏览器。" }),
-      readCount ? clearControl("清除看过标记", () => {
+      h("p", { class: "local-note", text: invalid ? "" : trf("learn.progress", { read: readCount, total: pool.length }) }),
+      readCount ? clearControl(tr("learn.clear"), () => {
         const next = loadRead();
         pool.forEach((m) => { delete next[m.id]; });
         saveRead(next);
         renderLearn();
-        setStatus("看过标记已从这台浏览器清除。");
+        setStatus(tr("learn.cleared"));
       }) : null,
     ]));
 
@@ -390,10 +410,10 @@
 
     if (!visible.length) {
       const empty = invalid
-        ? { title: "没有材料", body: "这个地址对不上现有的宇宙。" }
+        ? { title: tr("learn.badTitle"), body: tr("learn.badBody") }
         : readMode
-          ? { title: "还没有标成看过", body: "打开一篇，按「标记为看过」。标记只留在这台浏览器。" }
-          : { title: "没有材料", body: "这个宇宙还没有短文。" };
+          ? { title: tr("learn.noneReadTitle"), body: tr("learn.noneReadBody") }
+          : { title: tr("learn.emptyTitle"), body: tr("learn.emptyBody") };
       root.append(emptyBox(empty.title, empty.body));
       return;
     }
@@ -405,14 +425,14 @@
         class: "btn btn-ghost read-btn",
         id: "read-" + material.id,
         "aria-pressed": pressed ? "true" : "false",
-        text: pressed ? "已看过" : "标记为看过",
+        text: pressed ? tr("learn.read") : tr("learn.mark"),
       });
       button.addEventListener("click", () => {
         const next = loadRead();
         if (next[material.id]) delete next[material.id];
         else next[material.id] = true;
         saveRead(next);
-        const message = next[material.id] ? "已记成看过。" : "已取消看过。";
+        const message = next[material.id] ? tr("learn.marked") : tr("learn.unmarked");
         const keep = document.activeElement && document.activeElement.id;
         renderLearn();
         setStatus(message);
@@ -423,7 +443,7 @@
       });
 
       const article = h("article", { class: "material", id: "mat-" + material.id }, [
-        h("p", { class: "meta", text: material.universe.name + " · 约 " + material.minutes + " 分钟" }),
+        h("p", { class: "meta", text: material.universe.name + " · " + trf("u.minutes", { n: material.minutes }) }),
         h("h2", { text: material.title }),
       ]);
       material.paragraphs.forEach((p) => article.append(h("p", { text: p })));
@@ -455,7 +475,7 @@
     button.addEventListener("click", () => {
       if (button.dataset.arm !== "1") {
         button.dataset.arm = "1";
-        button.textContent = "确认清除";
+        button.textContent = tr("learn.confirmClear");
         return;
       }
       onClear();
@@ -477,7 +497,7 @@
 
   function universeSelect(selected) {
     const sel = h("select", { class: "field", name: "universe" });
-    sel.append(h("option", { value: "", text: "选择宇宙" }));
+    sel.append(h("option", { value: "", text: tr("u.pick") }));
     window.AIMING.universes.forEach((u) => {
       sel.append(h("option", {
         value: u.id,
@@ -508,7 +528,7 @@
   }
 
 
-  const KIND = { topic: "话题", post: "帖子", opportunity: "机会" };
+  const KIND = { topic: tr("feed.topic"), post: tr("feed.post"), opportunity: tr("feed.opportunity") };
 
   function withQuery(file, params) {
     const sp = new URLSearchParams();
@@ -526,18 +546,18 @@
     if (!iso || Number.isNaN(t)) return "";
     const delta = Date.now() - t;
     const min = Math.floor(delta / 60000);
-    if (min < 1) return "刚刚";
-    if (min < 60) return min + " 分钟前";
+    if (min < 1) return tr("feed.justNow");
+    if (min < 60) return trf("feed.minutes", { n: min });
     const hr = Math.floor(min / 60);
-    if (hr < 24) return hr + " 小时前";
+    if (hr < 24) return trf("feed.hours", { n: hr });
     const day = Math.floor(hr / 24);
-    if (day < 7) return day + " 天前";
-    return (then.getMonth() + 1) + "月" + then.getDate() + "日";
+    if (day < 7) return trf("feed.days", { n: day });
+    return trf("feed.date", { month: then.getMonth() + 1, day: then.getDate() });
   }
 
   function initial(name) {
-    const ch = String(name || "我").trim().charAt(0);
-    return ch || "我";
+    const ch = String(name || tr("feed.me")).trim().charAt(0);
+    return ch || tr("feed.me");
   }
 
   function universeOrder(id) {
@@ -553,7 +573,7 @@
         seed: false,
         kind: p.kind,
         universeId: p.universeId,
-        author: p.author || "未署名",
+        author: p.author || tr("feed.anon"),
         authorId: p.authorId || "",
         title: p.title || "",
         body: p.body,
@@ -570,7 +590,7 @@
         seed: false,
         kind: "topic",
         universeId: item.universeId,
-        author: "我",
+        author: tr("feed.me"),
         title: item.title,
         body: item.body,
         created: item.created || "",
@@ -584,7 +604,7 @@
         seed: false,
         kind: "opportunity",
         universeId: item.universeId,
-        author: "我",
+        author: tr("feed.me"),
         title: item.title,
         body: item.body,
         created: item.created || "",
@@ -615,7 +635,7 @@
       id: p.id,
       seed: false,
       universeId: p.universeId,
-      name: p.name || "未署名",
+      name: p.name || tr("feed.anon"),
       authorId: p.authorId || "",
       can: p.can,
       want: p.want,
@@ -648,7 +668,7 @@
     const extra = (store.replies[post.id] || []).map((r) => ({
       id: r.id,
       seed: false,
-      author: r.author || "未署名",
+      author: r.author || tr("feed.anon"),
       authorId: r.authorId || "",
       body: r.body,
       created: r.created || "",
@@ -677,7 +697,7 @@
   }
 
   function personHay(person) {
-    return [person.name, person.can, person.want, universeName(person.universeId), "同路人"].join("\n");
+    return [person.name, person.can, person.want, universeName(person.universeId), tr("feed.companionsWord")].join("\n");
   }
 
   function avatar(name) {
@@ -708,19 +728,19 @@
     const input = document.getElementById("community-q");
     const q = input ? input.value.trim() : "";
     if (filterUniverse && filterUniverse.id !== universeId) {
-      return "已记在「" + universeName(universeId) + "」。当前只显示" + filterUniverse.name + "。";
+      return trf("feed.savedUniverse", { name: universeName(universeId), filter: filterUniverse.name });
     }
-    if (q) return kind + "已写下。如果和搜索对不上，清除搜索就能看见。";
-    return kind + "已写下。";
+    if (q) return trf("feed.savedSearch", { kind });
+    return trf("feed.saved", { kind });
   }
 
   function sharePost(post, button) {
     const url = new URL(withQuery("discuss.html", { post: post.id }), location.href).href;
     const title = post.title || "Aiming";
     const done = () => {
-      button.textContent = "已复制";
-      setStatus("链接已复制。");
-      setTimeout(() => { button.textContent = "转发"; }, 1600);
+      button.textContent = tr("feed.copied");
+      setStatus(tr("feed.copyLink"));
+      setTimeout(() => { button.textContent = tr("feed.share"); }, 1600);
     };
     if (navigator.share) {
       navigator.share({ title, text: post.body || title, url }).then(() => {}).catch((err) => {
@@ -735,10 +755,10 @@
   function copyLink(url, done) {
     const finish = () => { if (done) done(); };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(finish).catch(() => setStatus("链接：" + url));
+      navigator.clipboard.writeText(url).then(finish).catch(() => setStatus(trf("feed.link", { url })));
       return;
     }
-    setStatus("链接：" + url);
+    setStatus(trf("feed.link", { url }));
   }
 
   function owns(item) {
@@ -746,11 +766,11 @@
   }
 
   function deleteControl(kind, id) {
-    const button = h("button", { type: "button", class: "text-btn", text: "删除" });
+    const button = h("button", { type: "button", class: "text-btn", text: tr("feed.delete") });
     button.addEventListener("click", () => {
       if (button.dataset.arm !== "1") {
         button.dataset.arm = "1";
-        button.textContent = "确认删除";
+        button.textContent = tr("feed.confirmDelete");
         return;
       }
       button.disabled = true;
@@ -759,11 +779,11 @@
         next.searchParams.delete("post");
         next.searchParams.delete("person");
         history.replaceState(null, "", next);
-        setStatus("已删除。");
+        setStatus(tr("feed.deleted"));
         document.dispatchEvent(new CustomEvent("aiming-reload"));
       }).catch((err) => {
         button.disabled = false;
-        setStatus(err.message || "没有删除");
+        setStatus(trm(err.message) || tr("feed.notDeleted"));
       });
     });
     return h("div", { class: "note-actions" }, button);
@@ -772,7 +792,7 @@
   function actionRow(post, store, inThread) {
     const replies = allReplies(post, store);
     const row = h("div", { class: "post-actions" });
-    const replyText = replies.length ? "回复 " + replies.length : "回复";
+    const replyText = replies.length ? trf("feed.replyCount", { n: replies.length }) : tr("feed.reply");
     if (inThread) {
       const button = h("button", { type: "button", class: "action", text: replyText });
       button.addEventListener("click", () => {
@@ -783,7 +803,7 @@
     } else {
       row.append(h("a", { class: "action", href: stateHref({ post: post.id }) + "#reply" }, replyText));
     }
-    const share = h("button", { type: "button", class: "action", text: "转发" });
+    const share = h("button", { type: "button", class: "action", text: tr("feed.share") });
     share.addEventListener("click", () => sharePost(post, share));
     row.append(share);
     const liked = Boolean(store.likes[post.id]);
@@ -792,7 +812,7 @@
       type: "button",
       class: "action",
       "aria-pressed": liked ? "true" : "false",
-      text: count ? "赞 " + count : "赞",
+      text: count ? trf("feed.likeCount", { n: count }) : tr("feed.like"),
     });
     like.addEventListener("click", () => {
       if (!remote.user) {
@@ -804,7 +824,7 @@
         document.dispatchEvent(new CustomEvent("aiming-reload"));
       }).catch((err) => {
         like.disabled = false;
-        setStatus(err.message || "没有记下");
+        setStatus(trm(err.message) || tr("feed.notSaved"));
       });
     });
     row.append(like);
@@ -819,14 +839,14 @@
     }
     if (kindText) {
       line.append(h("span", {
-        class: kindText === "机会" ? "kind kind--opportunity" : "kind",
+        class: kindText === tr("feed.opportunity") ? "kind kind--opportunity" : "kind",
         text: kindText,
       }));
     }
     const time = formatTime(item.created);
     if (time) line.append(h("time", { datetime: item.created || "", text: time }));
-    if (item.seed) line.append(h("span", { class: "badge", text: "示例" }));
-    if (item.hidden) line.append(h("span", { class: "badge badge--hidden", text: window.t ? t("home.hidden") : "已隐藏" }));
+    if (item.seed) line.append(h("span", { class: "badge", text: tr("feed.example") }));
+    if (item.hidden) line.append(h("span", { class: "badge badge--hidden", text: tr("home.hidden") }));
     return line;
   }
 
@@ -840,14 +860,14 @@
   }
 
   function hideControl(post) {
-    const button = h("button", { type: "button", class: "text-btn", text: post.hidden ? (window.t ? t("home.show") : "重新公开") : (window.t ? t("home.hide") : "对别人隐藏") });
+    const button = h("button", { type: "button", class: "text-btn", text: post.hidden ? tr("home.show") : tr("home.hide") });
     button.addEventListener("click", () => {
       button.disabled = true;
       api("/api/hide", { method: "POST", body: { postId: post.id } }).then(() => {
         document.dispatchEvent(new CustomEvent("aiming-reload"));
       }).catch((err) => {
         button.disabled = false;
-        setStatus(err.message || "没有完成");
+        setStatus(trm(err.message) || tr("feed.failed"));
       });
     });
     return h("div", { class: "note-actions" }, button);
@@ -859,10 +879,10 @@
     const idcol = head.lastChild;
     const person = personForAuthor(store, post);
     const name = post.authorId
-      ? h("a", { href: "index.html?id=" + encodeURIComponent(post.authorId) }, post.author || "未署名")
+      ? h("a", { href: "index.html?id=" + encodeURIComponent(post.authorId) }, post.author || tr("feed.anon"))
       : person
         ? h("a", { href: stateHref({ person: person.id }) }, post.author)
-        : h("span", { text: post.author || "未署名" });
+        : h("span", { text: post.author || tr("feed.anon") });
     idcol.append(h("p", { class: "post-name" }, name));
     const kindText = post.kind === "post" ? "" : (KIND[post.kind] || "");
     idcol.append(postMeta(post, kindText));
@@ -880,7 +900,7 @@
   function replyCard(reply) {
     const card = h("article", { class: "post post--reply" });
     const idcol = h("div", { class: "post-id" });
-    idcol.append(h("p", { class: "post-name", text: reply.author || "未署名" }));
+    idcol.append(h("p", { class: "post-name", text: reply.author || tr("feed.anon") }));
     const meta = h("p", { class: "post-meta" });
     const time = formatTime(reply.created);
     if (time) meta.append(h("time", { datetime: reply.created || "", text: time }));
@@ -893,8 +913,8 @@
   function personRow(person) {
     const copy = h("span", { class: "person-copy" });
     const top = h("span", { class: "person-top" });
-    top.append(h("span", { class: "post-name", text: person.name || "未署名" }));
-    if (person.seed) top.append(h("span", { class: "badge", text: "示例" }));
+    top.append(h("span", { class: "post-name", text: person.name || tr("feed.anon") }));
+    if (person.seed) top.append(h("span", { class: "badge", text: tr("feed.example") }));
     copy.append(top);
     const sub = h("span", { class: "person-sub" });
     const uname = universeName(person.universeId);
@@ -904,15 +924,16 @@
     return h("a", { class: "person-row", id: "item-" + person.id, href: stateHref({ person: person.id }) }, [
       avatar(person.name),
       copy,
-      h("span", { class: "go" }, ["打开 ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
+      h("span", { class: "go" }, [tr("feed.open") + " ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
     ]);
   }
 
   function foundLine(people, posts, peopleFirst) {
-    const personBit = people.length ? people.length + " 位同路人" : "";
-    const postBit = posts.length ? posts.length + " 条讨论" : "";
+    const personBit = people.length ? trf("feed.peopleCount", { n: people.length }) : "";
+    const postBit = posts.length ? trf("feed.postCount", { n: posts.length }) : "";
     const bits = (peopleFirst ? [personBit, postBit] : [postBit, personBit]).filter(Boolean);
-    return bits.length ? "找到 " + bits.join("，") : "";
+    const sep = (document.documentElement.getAttribute("data-lang") || "zh") === "en" ? ", " : "，";
+    return bits.length ? trf("feed.found", { bits: bits.join(sep) }) : "";
   }
 
   function mountCommunity(root, options) {
@@ -924,8 +945,8 @@
     if (invalid) root.append(missingBanner(id));
 
     const placeholder = universe
-      ? "在" + universe.name + "里搜索"
-      : (lens === "people" ? "搜索同路人、话题、帖子、机会" : "搜索话题、帖子、机会、同路人");
+      ? trf("feed.searchIn", { name: universe.name })
+      : (lens === "people" ? tr("feed.searchPeople") : tr("feed.searchPosts"));
     const input = h("input", {
       id: "community-q",
       class: "search-input",
@@ -940,28 +961,28 @@
       type: "button",
       class: "search-clear",
       hidden: true,
-      text: "清除",
-      "aria-label": "清除搜索",
+      text: tr("feed.clear"),
+      "aria-label": tr("feed.clearSearch"),
     });
     const form = h("form", { class: "search-form", role: "search" }, [
       input,
       clearBtn,
-      h("button", { class: "btn btn-primary search-go", type: "submit", text: "搜索" }),
+      h("button", { class: "btn btn-primary search-go", type: "submit", text: tr("feed.search") }),
     ]);
     const searchBlock = h("div", { class: "search-block" }, [
       form,
-      h("p", { class: "local-note", text: "标成示例的不是真实的人。登录之后写下的内容会留下来。" }),
+      h("p", { class: "local-note", text: tr("feed.exampleNote") }),
     ]);
-    const scope = h("nav", { class: "scope", "aria-label": "范围" });
+    const scope = h("nav", { class: "scope", "aria-label": tr("feed.scope") });
     const tools = h("div", { class: "community-tools" });
-    const mineLink = h("a", { class: "text-btn", href: pageFile() }, "只看我写的");
-    const postBtn = lens === "people" ? null : h("button", { type: "button", class: "text-btn", text: "写下一条" });
-    const peopleBtn = lens === "feed" ? null : h("button", { type: "button", class: "text-btn", text: "留下纸条" });
+    const mineLink = h("a", { class: "text-btn", href: pageFile() }, tr("feed.mine"));
+    const postBtn = lens === "people" ? null : h("button", { type: "button", class: "text-btn", text: tr("feed.write") });
+    const peopleBtn = lens === "feed" ? null : h("button", { type: "button", class: "text-btn", text: tr("feed.note") });
     if (postBtn) tools.append(postBtn);
     if (peopleBtn) tools.append(peopleBtn);
     tools.append(mineLink);
 
-    [{ id: "", name: "全部" }].concat(window.AIMING.universes.map((u) => ({ id: u.id, name: u.name }))).forEach((item) => {
+    [{ id: "", name: tr("feed.all") }].concat(window.AIMING.universes.map((u) => ({ id: u.id, name: u.name }))).forEach((item) => {
       scope.append(h("a", { class: "chip", href: pageFile(), "data-id": item.id }, item.name));
     });
 
@@ -999,10 +1020,10 @@
       });
       const onMine = query().get("mine") === "1";
       if (!remote.user) {
-        mineLink.textContent = "只看我写的";
+        mineLink.textContent = tr("feed.mine");
         mineLink.setAttribute("href", loginHref());
       } else {
-        mineLink.textContent = onMine ? "看全部" : "只看我写的";
+        mineLink.textContent = onMine ? tr("feed.allMine") : tr("feed.mine");
         mineLink.setAttribute("href", withQuery(pageFile(), {
           id: query().get("id") || "",
           q: currentQ(),
@@ -1017,9 +1038,9 @@
 
     function syncTitle(post, person) {
       if (embedded) return;
-      const base = lens === "people" ? "同路人" : "讨论";
+      const base = lens === "people" ? tr("feed.companionsWord") : tr("feed.discussWord");
       let name = base;
-      if (person) name = (person.name || "同路人") + " · " + base;
+      if (person) name = (person.name || tr("feed.companionsWord")) + " · " + base;
       else if (post) name = (post.title || clip(post.body, 22)) + " · " + base;
       document.title = name + " · Aiming";
     }
@@ -1036,14 +1057,14 @@
       if (personId) {
         resultLine.textContent = "";
         const person = allPeople(store).find((p) => p.id === personId);
-        results.append(person ? personDetail(person) : missingDetail("没有这位同路人", "这条纸条不在了。"));
+        results.append(person ? personDetail(person) : missingDetail(tr("feed.missingPerson"), tr("feed.missingPersonBody")));
         syncTitle(null, person || null);
         return;
       }
       if (postId) {
         resultLine.textContent = "";
         const post = allPosts(store).find((p) => p.id === postId);
-        results.append(post ? threadView(post, store) : missingDetail("没有这条讨论", "这条内容不在了。"));
+        results.append(post ? threadView(post, store) : missingDetail(tr("feed.missingPost"), tr("feed.missingPostBody")));
         syncTitle(post || null, null);
         return;
       }
@@ -1061,14 +1082,14 @@
       }
 
       const peopleFirst = lens === "people" || Boolean(q);
-      resultLine.textContent = q ? foundLine(people, posts, peopleFirst) : (mine ? "只显示你写下的" : "");
+      resultLine.textContent = q ? foundLine(people, posts, peopleFirst) : (mine ? tr("feed.onlyMine") : "");
       const showPeopleHead = people.length && (posts.length || lens === "both");
       const showPostHead = posts.length && (people.length || lens === "both" || (lens === "people" && q));
       const order = peopleFirst ? ["people", "posts"] : ["posts", "people"];
       order.forEach((kind) => {
         if (kind === "people" && people.length) {
           const group = h("div", { class: "feed-group", id: "community-people" });
-          if (showPeopleHead) group.append(h(headingTag(), { class: "feed-heading", text: "同路人" }));
+          if (showPeopleHead) group.append(h(headingTag(), { class: "feed-heading", text: tr("feed.companionsWord") }));
           const list = h("div", { class: "people-list" });
           people.forEach((person) => list.append(personRow(person)));
           group.append(list);
@@ -1076,7 +1097,7 @@
         }
         if (kind === "posts" && posts.length) {
           const group = h("div", { class: "feed-group" });
-          if (showPostHead) group.append(h(headingTag(), { class: "feed-heading", text: "讨论" }));
+          if (showPostHead) group.append(h(headingTag(), { class: "feed-heading", text: tr("feed.discussWord") }));
           posts.forEach((post) => group.append(feedCard(post, store)));
           results.append(group);
         }
@@ -1093,29 +1114,29 @@
 
     function missingDetail(title, body) {
       const box = emptyBox(title, body);
-      box.append(h("p", {}, h("a", { class: "back", href: stateHref() }, "← 返回")));
+      box.append(h("p", {}, h("a", { class: "back", href: stateHref() }, tr("feed.back"))));
       return box;
     }
 
     function emptyState(q, mine, bad, scoped) {
-      let title = "还没有内容";
-      let body = "可以先写一条。";
+      let title = tr("feed.emptyTitle");
+      let body = tr("feed.emptyBody");
       if (bad) {
-        title = "没有内容";
-        body = "这个地址对不上现有的宇宙。可以改选上面的范围。";
+        title = tr("feed.badScopeTitle");
+        body = tr("feed.badScopeBody");
       } else if (q) {
-        title = "没有找到";
-        body = "没有和「" + q + "」有关的话题、帖子、机会或同路人。";
+        title = tr("feed.noHitTitle");
+        body = trf("feed.noHitBody", { q });
       } else if (mine) {
-        title = "你还没有写";
-        body = "登录后写下的内容会留在这里。";
+        title = tr("feed.noneMineTitle");
+        body = tr("feed.noneMineBody");
       } else if (scoped) {
-        title = "还没有内容";
-        body = scoped.name + "里还没有讨论或同路人。";
+        title = tr("feed.emptyTitle");
+        body = trf("feed.noneScopeBody", { name: scoped.name });
       }
       const box = emptyBox(title, body);
       if (q) {
-        const clear = h("button", { type: "button", class: "text-btn", text: "清除搜索" });
+        const clear = h("button", { type: "button", class: "text-btn", text: tr("feed.clearSearch") });
         clear.addEventListener("click", () => {
           input.value = "";
           syncUrl();
@@ -1123,7 +1144,7 @@
         });
         box.append(clear);
         if (scoped) {
-          box.append(h("p", {}, h("a", { href: withQuery("discuss.html", { q }) }, "在全站里搜「" + q + "」")));
+          box.append(h("p", {}, h("a", { href: withQuery("discuss.html", { q }) }, trf("feed.searchAll", { q }))));
         }
       }
       return box;
@@ -1131,32 +1152,32 @@
 
     function personDetail(person) {
       const card = h("article", { class: "post person-detail", id: "item-" + person.id });
-      card.append(h("a", { class: "back", href: stateHref() }, "← 返回"));
+      card.append(h("a", { class: "back", href: stateHref() }, tr("feed.back")));
       const idcol = h("div", { class: "post-id" });
-      idcol.append(h(headingTag(), { class: "who", text: person.name || "未署名" }));
+      idcol.append(h(headingTag(), { class: "who", text: person.name || tr("feed.anon") }));
       idcol.append(postMeta(person, ""));
       card.append(h("div", { class: "post-head" }, [avatar(person.name), idcol]));
-      card.append(h("h3", { class: "detail-label", text: "能做的" }));
+      card.append(h("h3", { class: "detail-label", text: tr("feed.can") }));
       card.append(h("p", { class: "post-body", text: person.can }));
-      card.append(h("h3", { class: "detail-label", text: "想一起做的" }));
+      card.append(h("h3", { class: "detail-label", text: tr("feed.want") }));
       card.append(h("p", { class: "post-body", text: person.want }));
-      if (person.seed) card.append(h("p", { class: "local-note", text: "这是示例纸条，不是真实的人。" }));
+      if (person.seed) card.append(h("p", { class: "local-note", text: tr("feed.examplePerson") }));
       else if (owns(person)) card.append(deleteControl("people", person.id));
       const uname = universeName(person.universeId);
       if (uname) {
-        card.append(h("p", {}, h("a", { href: "universe.html?id=" + person.universeId + "#community" }, "去" + uname + "里看看")));
+        card.append(h("p", {}, h("a", { href: "universe.html?id=" + person.universeId + "#community" }, trf("feed.seeUniverse", { name: uname }))));
       }
       return card;
     }
 
     function threadView(post, store) {
       const wrap = h("div", {});
-      wrap.append(h("a", { class: "back", href: stateHref() }, "← 返回"));
+      wrap.append(h("a", { class: "back", href: stateHref() }, tr("feed.back")));
       const card = h("article", { class: "post", id: "item-" + post.id });
       const person = personForAuthor(store, post);
       const name = person
-        ? h("a", { href: stateHref({ person: person.id }) }, post.author || "未署名")
-        : h("span", { text: post.author || "未署名" });
+        ? h("a", { href: stateHref({ person: person.id }) }, post.author || tr("feed.anon"))
+        : h("span", { text: post.author || tr("feed.anon") });
       const idcol = h("div", { class: "post-id" }, [
         h("p", { class: "post-name" }, name),
         postMeta(post, post.kind === "post" ? "" : (KIND[post.kind] || "")),
@@ -1164,7 +1185,7 @@
       card.append(h("div", { class: "post-head" }, [avatar(post.author), idcol]));
       if (post.title) card.append(h(headingTag(), { class: "who", text: post.title }));
       card.append(h("p", { class: "post-body", text: post.body }));
-      if (post.seed) card.append(h("p", { class: "local-note", text: "这是示例讨论，不是真实的人。" }));
+      if (post.seed) card.append(h("p", { class: "local-note", text: tr("feed.examplePost") }));
       card.append(actionRow(post, store, true));
       if (owns(post)) card.append(deleteControl("posts", post.id));
       wrap.append(card);
@@ -1172,10 +1193,10 @@
       const replies = allReplies(post, store);
       wrap.append(h(headingTag(), {
         class: "feed-heading",
-        text: replies.length ? "回复 " + replies.length : "回复",
+        text: replies.length ? trf("feed.replyCount", { n: replies.length }) : tr("feed.reply"),
       }));
       const list = h("div", { class: "replies" });
-      if (!replies.length) list.append(h("p", { class: "local-note", text: "还没有回复。" }));
+      if (!replies.length) list.append(h("p", { class: "local-note", text: tr("feed.noReplies") }));
       else replies.forEach((reply) => list.append(replyCard(reply)));
       wrap.append(list);
       wrap.append(replyForm(post));
@@ -1185,9 +1206,9 @@
     function replyForm(post) {
       if (!remote.user) {
         return h("p", { class: "local-note" }, [
-          "登录后可以回复。",
+          tr("feed.loginToReply"),
           " ",
-          h("a", { href: loginHref() }, "登录"),
+          h("a", { href: loginHref() }, tr("nav.login")),
         ]);
       }
       const body = h("textarea", {
@@ -1195,10 +1216,10 @@
         id: "reply-body",
         name: "reply",
         maxlength: "400",
-        placeholder: "写下回复。",
+        placeholder: tr("feed.replyPlaceholder"),
       });
-      const field = labeled("回复", body);
-      const submit = h("button", { class: "btn btn-primary", type: "submit", text: "回复" });
+      const field = labeled(tr("feed.reply"), body);
+      const submit = h("button", { class: "btn btn-primary", type: "submit", text: tr("feed.reply") });
       const panel = h("form", { class: "form-card reply-form", id: "reply", novalidate: true }, [
         field.wrap,
         h("div", { class: "form-actions" }, submit),
@@ -1207,21 +1228,21 @@
         event.preventDefault();
         const text = clip(body.value, 400);
         if (!text) {
-          showError(body, field.err, "请写回复");
+          showError(body, field.err, tr("feed.replyNeed"));
           body.focus();
           return;
         }
         showError(body, field.err, "");
         submit.disabled = true;
         api("/api/replies", { method: "POST", body: { postId: post.id, body: text } }).then(() => {
-          setStatus("回复已写下。");
+          setStatus(tr("feed.replied"));
           return reloadFeed();
         }).then(() => {
           const box = document.getElementById("reply-body");
           if (box) box.focus();
         }).catch((err) => {
           submit.disabled = false;
-          setStatus(err.message || "没有写下");
+          setStatus(trm(err.message) || tr("feed.notWritten"));
         });
       });
       return panel;
@@ -1310,37 +1331,37 @@
       return fetch("/api/feed", { credentials: "same-origin" }).then(async (res) => {
         let data = {};
         try { data = await res.json(); } catch (err) { data = {}; }
-        if (!res.ok) throw new Error(data.error || "没有完成");
+        if (!res.ok) throw new Error(trm(data.error) || tr("feed.failed"));
         applyFeed(data);
         paintScope();
         paintResults();
         paintLocalTools();
       }).catch((err) => {
-        setStatus(err.message === "数据库还没有接上" ? "数据库还没有接上。示例还在。" : "现在读不到新写下的内容。示例还在。");
+        setStatus(err.message === "数据库还没有接上" ? tr("feed.dbDown") : tr("feed.offline"));
       });
     }
 
     function buildPostForm() {
       const select = universeSelect(universe && universe.id);
       const kind = h("select", { class: "field", name: "kind" });
-      [["post", "帖子"], ["topic", "话题"], ["opportunity", "机会"]].forEach(([value, text]) => {
+      [["post", tr("feed.post")], ["topic", tr("feed.topic")], ["opportunity", tr("feed.opportunity")]].forEach(([value, text]) => {
         kind.append(h("option", { value, text }));
       });
-      const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: "一句话", autocomplete: "off" });
-      const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: "写短一点。一个问题，一句近况，或一件想一起做的事。" });
+      const title = h("input", { class: "field", name: "title", maxlength: "40", placeholder: tr("feed.titlePh"), autocomplete: "off" });
+      const body = h("textarea", { class: "field", name: "body", maxlength: "600", placeholder: tr("feed.bodyPh") });
       const file = h("input", { class: "field", type: "file", accept: "image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" });
-      const s = labeled("宇宙", select);
-      const k = labeled("这一条是", kind);
-      const t = labeled("标题", title);
-      const b = labeled("内容", body);
-      const f = labeled(window.t ? window.t("discuss.attach") : "图片或视频", file);
+      const s = labeled(tr("feed.universe"), select);
+      const k = labeled(tr("feed.kindLabel"), kind);
+      const t = labeled(tr("feed.title"), title);
+      const b = labeled(tr("feed.body"), body);
+      const f = labeled(tr("discuss.attach"), file);
       f.wrap.classList.add("field-label--full");
       t.wrap.classList.add("field-label--full");
       b.wrap.classList.add("field-label--full");
       const oppNote = h("p", {
         class: "local-note",
         hidden: true,
-        text: "机会是一件想一起做的小事，不是招聘，也不是岗位。",
+        text: tr("feed.opportunityNote"),
       });
       function syncKind() {
         const showTitle = kind.value !== "post";
@@ -1354,7 +1375,7 @@
       const panel = h("form", { class: "form-card", novalidate: true }, [
         h("div", { class: "form-grid" }, [s.wrap, k.wrap, t.wrap, b.wrap, f.wrap]),
         oppNote,
-        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "写下" })),
+        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: tr("feed.submit") })),
       ]);
       syncKind();
       panel.addEventListener("submit", (event) => {
@@ -1364,9 +1385,9 @@
         const bodyText = clip(body.value, 600);
         const universeId = select.value;
         let ok = true;
-        if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
-        if (kindValue !== "post" && !titleText) { showError(title, t.err, "请写一个标题"); ok = false; } else showError(title, t.err, "");
-        if (!bodyText) { showError(body, b.err, "请写内容"); ok = false; } else showError(body, b.err, "");
+        if (!universeId) { showError(select, s.err, tr("feed.needUniverse")); ok = false; } else showError(select, s.err, "");
+        if (kindValue !== "post" && !titleText) { showError(title, t.err, tr("feed.needTitle")); ok = false; } else showError(title, t.err, "");
+        if (!bodyText) { showError(body, b.err, tr("feed.needBody")); ok = false; } else showError(body, b.err, "");
         if (!ok) { focusInvalid([select, title, body]); return; }
         if (!remote.user) { location.href = loginHref(); return; }
         const submit = panel.querySelector("button[type=submit]");
@@ -1396,13 +1417,13 @@
           syncKind();
           closePanel(panel, postBtn);
           const state = currentUniverse();
-          setStatus(noticeAfterSave(kindValue === "opportunity" ? "机会" : "讨论", universeId, state.universe));
+          setStatus(noticeAfterSave(kindValue === "opportunity" ? tr("feed.opportunity") : tr("feed.discussWord"), universeId, state.universe));
           return reloadFeed().then(() => data.id);
         }).then((id) => {
           const node = document.getElementById("item-" + id);
           if (node) node.scrollIntoView({ block: "nearest" });
         }).catch((err) => {
-          setStatus(err.message || "没有写下");
+          setStatus(trm(err.message) || tr("feed.notWritten"));
         }).finally(() => {
           if (submit) submit.disabled = false;
         });
@@ -1411,18 +1432,18 @@
     }
 
     function buildPeopleForm() {
-      const can = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：能指出第一句里缺的信息" });
-      const want = h("textarea", { class: "field", maxlength: "200", placeholder: "例如：想一起把一家小店写成三句" });
+      const can = h("textarea", { class: "field", maxlength: "200", placeholder: tr("feed.canPh") });
+      const want = h("textarea", { class: "field", maxlength: "200", placeholder: tr("feed.wantPh") });
       const select = universeSelect(universe && universe.id);
-      const s = labeled("宇宙", select);
-      const c = labeled("能做的", can);
-      const w = labeled("想一起做的", want);
+      const s = labeled(tr("feed.universe"), select);
+      const c = labeled(tr("feed.can"), can);
+      const w = labeled(tr("feed.want"), want);
       c.wrap.classList.add("field-label--full");
       w.wrap.classList.add("field-label--full");
       const panel = h("form", { class: "form-card", novalidate: true }, [
-        h("p", { class: "local-note", text: "纸条上的称呼用你的账号称呼。" }),
+        h("p", { class: "local-note", text: tr("feed.noteName") }),
         h("div", { class: "form-grid" }, [s.wrap, c.wrap, w.wrap]),
-        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: "留下纸条" })),
+        h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: tr("feed.note") })),
       ]);
       panel.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -1430,9 +1451,9 @@
         const wantText = clip(want.value, 200);
         const universeId = select.value;
         let ok = true;
-        if (!universeId) { showError(select, s.err, "请选择宇宙"); ok = false; } else showError(select, s.err, "");
-        if (!canText) { showError(can, c.err, "请写你能做的"); ok = false; } else showError(can, c.err, "");
-        if (!wantText) { showError(want, w.err, "请写想一起做的事"); ok = false; } else showError(want, w.err, "");
+        if (!universeId) { showError(select, s.err, tr("feed.needUniverse")); ok = false; } else showError(select, s.err, "");
+        if (!canText) { showError(can, c.err, tr("feed.needCan")); ok = false; } else showError(can, c.err, "");
+        if (!wantText) { showError(want, w.err, tr("feed.needWant")); ok = false; } else showError(want, w.err, "");
         if (!ok) { focusInvalid([select, can, want]); return; }
         if (!remote.user) { location.href = loginHref(); return; }
         const submit = panel.querySelector("button[type=submit]");
@@ -1445,13 +1466,13 @@
           if (universe) select.value = universe.id;
           closePanel(panel, peopleBtn);
           const state = currentUniverse();
-          setStatus(noticeAfterSave("纸条", universeId, state.universe));
+          setStatus(noticeAfterSave(tr("feed.noteWord"), universeId, state.universe));
           return reloadFeed().then(() => data.id);
         }).then((id) => {
           const node = document.getElementById("item-" + id);
           if (node) node.scrollIntoView({ block: "nearest" });
         }).catch((err) => {
-          setStatus(err.message || "没有写下");
+          setStatus(trm(err.message) || tr("feed.notWritten"));
         }).finally(() => {
           if (submit) submit.disabled = false;
         });
@@ -1472,12 +1493,20 @@
     paintLocalTools();
     reloadFeed();
 
-    window.addEventListener("popstate", () => {
-      input.value = query().get("q") || "";
-      toggleClear();
+    if (!window.AIMING_POP) {
+      window.AIMING_POP = true;
+      window.addEventListener("popstate", () => {
+        const field = document.getElementById("community-q");
+        if (field) field.value = query().get("q") || "";
+        if (window.AIMING_REPAINT) window.AIMING_REPAINT();
+      });
+    }
+    window.AIMING_REPAINT = () => {
+      const field = document.getElementById("community-q");
+      if (field) toggleClear();
       paintScope();
       paintResults();
-    });
+    };
 
     const opening = query().get("post") || query().get("person") || location.hash;
     if (!embedded && !opening && window.matchMedia("(min-width: 841px)").matches) input.focus();
@@ -1491,12 +1520,18 @@
     }
   }
 
-  const page = document.body.dataset.page;
-  initNav();
-  if (page === "universe") renderUniverse();
-  if (page === "learn") renderLearn();
-  if (page === "discuss") {
-    const discussRoot = document.getElementById("discuss-root");
-    if (discussRoot) mountCommunity(discussRoot, { lens: "feed" });
+  function renderCurrent() {
+    if (window.AIMING_LOCALIZE) window.AIMING_LOCALIZE();
+    const page = document.body.dataset.page;
+    initNav();
+    if (page === "universe") renderUniverse();
+    if (page === "learn") renderLearn();
+    if (page === "discuss") {
+      const discussRoot = document.getElementById("discuss-root");
+      if (discussRoot) mountCommunity(discussRoot, { lens: "feed" });
+    }
   }
+
+  document.addEventListener("aiming-i18n", renderCurrent);
+  renderCurrent();
 })();

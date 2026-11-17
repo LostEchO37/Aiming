@@ -43,7 +43,7 @@
     .then((res) => (res.ok ? res.json() : { user: null }))
     .then((data) => {
       if (!data.user) return;
-      say("你已经登录，称呼是" + data.user.displayName + "。");
+      say(t("register.already") + data.user.displayName + "。");
     })
     .catch(() => {});
 
@@ -54,15 +54,15 @@
     const displayName = form.displayName ? form.displayName.value.trim() : "";
     let ok = true;
     if (mode === "register" && (!displayName || displayName.length > 20)) {
-      showError(form.displayName, "称呼请写 1 到 20 个字");
+      showError(form.displayName, t("register.nameError"));
       ok = false;
     }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showError(form.email, "这个邮箱看起来不对");
+      showError(form.email, t("register.emailError"));
       ok = false;
     }
     if (password.length < 8) {
-      showError(form.password, "密码至少 8 位");
+      showError(form.password, t("register.passwordError"));
       ok = false;
     }
     if (!ok) {
@@ -84,11 +84,11 @@
     }).then(async (res) => {
       let data = {};
       try { data = await res.json(); } catch (err) { data = {}; }
-      if (!res.ok) throw new Error(data.error || "没有完成");
+      if (!res.ok) throw new Error((window.tMsg && tMsg(data.error)) || t("feed.failed"));
       location.href = next;
     }).catch((err) => {
       button.disabled = false;
-      say(err.message || "没有完成");
+      say((window.tMsg && tMsg(err.message)) || t("feed.failed"));
     });
   });
 })();

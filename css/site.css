@@ -16,7 +16,7 @@
   --border: rgba(28, 25, 23, 0.1);
   --shadow: 0 10px 30px rgba(28, 25, 23, 0.06);
   --shadow-lift: 0 16px 40px rgba(255, 107, 53, 0.18);
-  --serif: "Noto Serif SC", "Songti SC", serif;
+  --serif: "Cormorant Garamond", "Noto Serif SC", "Songti SC", serif;
   --sans: "Outfit", "Noto Sans SC", "PingFang SC", sans-serif;
   --latin: "Cormorant Garamond", "Noto Serif SC", serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -50,6 +50,23 @@ html[data-theme="dark"] {
   --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   --shadow-lift: 0 16px 40px rgba(255, 107, 53, 0.22);
   color-scheme: dark;
+}
+
+html[lang="zh-Hant"] {
+  --serif: "Cormorant Garamond", "Noto Serif TC", "Noto Serif SC", serif;
+  --sans: "Outfit", "Noto Sans TC", "Noto Sans SC", "PingFang TC", sans-serif;
+  --latin: "Cormorant Garamond", "Noto Serif TC", serif;
+}
+
+html[lang="zh-Hans"] .mast h1,
+html[lang="zh-Hant"] .mast h1,
+html[lang="zh-Hans"] .page-title,
+html[lang="zh-Hant"] .page-title,
+html[lang="zh-Hans"] .section-head h2,
+html[lang="zh-Hant"] .section-head h2,
+html[lang="zh-Hans"] .block-title,
+html[lang="zh-Hant"] .block-title {
+  letter-spacing: 0;
 }
 
 html, body, .top, .post, .form-card, .u-card, .room, .sheet, .field {

@@ -190,15 +190,37 @@
     return STRINGS[lang] ? lang : "zh";
   }
 
+  function extra(lang) {
+    const packs = window.AIMING_CHROME || {};
+    return packs[lang] || {};
+  }
+
   function t(key) {
-    const pack = STRINGS[current()] || STRINGS.zh;
-    return pack[key] || STRINGS.zh[key] || key;
+    const lang = current();
+    const pack = STRINGS[lang] || STRINGS.zh;
+    return extra(lang)[key] || pack[key] || extra("zh")[key] || STRINGS.zh[key] || key;
   }
 
   function applyI18n(root) {
     (root || document).querySelectorAll("[data-i18n]").forEach((node) => {
-      node.textContent = t(node.getAttribute("data-i18n"));
+      const value = t(node.getAttribute("data-i18n"));
+      if (node.tagName === "META") node.setAttribute("content", value);
+      else node.textContent = value;
     });
+    (root || document).querySelectorAll("[data-i18n-html]").forEach((node) => {
+      node.innerHTML = t(node.getAttribute("data-i18n-html"));
+    });
+    (root || document).querySelectorAll("[data-i18n-aria]").forEach((node) => {
+      node.setAttribute("aria-label", t(node.getAttribute("data-i18n-aria")));
+    });
+  }
+
+  function tMsg(message) {
+    if (!message) return "";
+    const key = "msg." + message;
+    const lang = current();
+    const pack = STRINGS[lang] || STRINGS.zh;
+    return extra(lang)[key] || pack[key] || message;
   }
 
   function readSettings() {
@@ -233,6 +255,7 @@
   }
 
   window.t = t;
+  window.tMsg = tMsg;
   window.AIMING_APPLY_SETTINGS = applySettings;
   window.AIMING_SETTINGS = readSettings();
   applyI18n(document);

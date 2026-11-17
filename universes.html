@@ -6,7 +6,7 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>宇宙 · Aiming</title>
+  <title data-i18n="universe.doc">宇宙 · Aiming</title>
   <meta name="description" content="营销、人事、数字开发、美术、安全。每个宇宙都可以学习、讨论机会、找同路人。">
   <meta name="theme-color" content="#f8f5f2">
   <meta property="og:title" content="宇宙 · Aiming">
@@ -15,17 +15,17 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+SC:wght@400;600&family=Noto+Serif+TC:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
 </head>
 <body data-page="universes">
-  <a class="skip" href="#content">跳到内容</a>
+  <a class="skip" href="#content" data-i18n="skip">跳到内容</a>
   <header class="top">
     <div class="top__bar">
       <a class="brand" href="index.html">Aiming</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单</button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="menu">菜单</button>
     </div>
-    <nav id="site-nav" class="nav" aria-label="站内">
+    <nav id="site-nav" class="nav" aria-label="站内" data-i18n-aria="nav.aria">
       <a href="index.html" data-i18n="nav.home">首页</a>
       <a href="universes.html" data-i18n="nav.universes">宇宙</a>
       <a href="learn.html" data-i18n="nav.learn">学习</a>
@@ -37,54 +37,54 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
 
   <main id="content" class="wrap" tabindex="-1">
 
-    <p class="page-tag">目录</p>
-    <h1 class="page-title">宇宙</h1>
-    <p class="page-intro">点进一个宇宙，可以学习，讨论一件想一起做的事，或者留下同路人纸条。都免费。</p>
+    <p class="page-tag" data-i18n="universes.tag">目录</p>
+    <h1 class="page-title" data-i18n="universes.title">宇宙</h1>
+    <p class="page-intro" data-i18n="universes.intro">点进一个宇宙，可以学习，讨论一件想一起做的事，或者留下同路人纸条。都免费。</p>
     <div class="u-list">
       <a class="u-row" href="universe.html?id=yingxiao">
         <span class="idx">01</span>
         <div>
-          <h2>营销</h2>
-          <p>写给人看的短内容，并请别人指出没看懂的一句。</p>
-          <p class="list-note">先写三句介绍，再请人看一句。</p>
+          <h2 data-i18n="u.yingxiao.name">营销</h2>
+          <p data-i18n="u.yingxiao.blurb">写给人看的短内容，并请别人指出没看懂的一句。</p>
+          <p class="list-note" data-i18n="u.yingxiao.listNote">先写三句介绍，再请人看一句。</p>
         </div>
-        <span class="go">进入 <span class="go-arrow" aria-hidden="true">→</span></span>
+        <span class="go"><span data-i18n="home.enter">进入</span> <span class="go-arrow" aria-hidden="true">→</span></span>
       </a>
       <a class="u-row" href="universe.html?id=renshi">
         <span class="idx">02</span>
         <div>
-          <h2>人事</h2>
-          <p>把协作写清楚：一件任务、一句反馈、一次短对谈。</p>
-          <p class="list-note">先把一件小事写成四行，不写性格评价。</p>
+          <h2 data-i18n="u.renshi.name">人事</h2>
+          <p data-i18n="u.renshi.blurb">把协作写清楚：一件任务、一句反馈、一次短对谈。</p>
+          <p class="list-note" data-i18n="u.renshi.listNote">先把一件小事写成四行，不写性格评价。</p>
         </div>
-        <span class="go">进入 <span class="go-arrow" aria-hidden="true">→</span></span>
+        <span class="go"><span data-i18n="home.enter">进入</span> <span class="go-arrow" aria-hidden="true">→</span></span>
       </a>
       <a class="u-row" href="universe.html?id=kaifa">
         <span class="idx">03</span>
         <div>
-          <h2>数字开发</h2>
-          <p>用一个网页把一件小事做出来，并让别人在手机上打得开。</p>
-          <p class="list-note">先做标题、一段说明、一个列表，再用手机打开。</p>
+          <h2 data-i18n="u.kaifa.name">数字开发</h2>
+          <p data-i18n="u.kaifa.blurb">用一个网页把一件小事做出来，并让别人在手机上打得开。</p>
+          <p class="list-note" data-i18n="u.kaifa.listNote">先做标题、一段说明、一个列表，再用手机打开。</p>
         </div>
-        <span class="go">进入 <span class="go-arrow" aria-hidden="true">→</span></span>
+        <span class="go"><span data-i18n="home.enter">进入</span> <span class="go-arrow" aria-hidden="true">→</span></span>
       </a>
       <a class="u-row" href="universe.html?id=meishu">
         <span class="idx">04</span>
         <div>
-          <h2>美术</h2>
-          <p>一张图只说一件事，再用三个词来评：层次、可读、一个想法。</p>
-          <p class="list-note">先写下图上唯一的那件事，再请人按三点说。</p>
+          <h2 data-i18n="u.meishu.name">美术</h2>
+          <p data-i18n="u.meishu.blurb">一张图只说一件事，再用三个词来评：层次、可读、一个想法。</p>
+          <p class="list-note" data-i18n="u.meishu.listNote">先写下图上唯一的那件事，再请人按三点说。</p>
         </div>
-        <span class="go">进入 <span class="go-arrow" aria-hidden="true">→</span></span>
+        <span class="go"><span data-i18n="home.enter">进入</span> <span class="go-arrow" aria-hidden="true">→</span></span>
       </a>
       <a class="u-row" href="universe.html?id=anquan">
         <span class="idx">05</span>
         <div>
-          <h2>安全</h2>
-          <p>账号上的基本习惯，以及不要把不该公开的东西留在自己的页面里。</p>
-          <p class="list-note">先看双重验证和验证码，再检查页面有没有密钥。</p>
+          <h2 data-i18n="u.anquan.name">安全</h2>
+          <p data-i18n="u.anquan.blurb">账号上的基本习惯，以及不要把不该公开的东西留在自己的页面里。</p>
+          <p class="list-note" data-i18n="u.anquan.listNote">先看双重验证和验证码，再检查页面有没有密钥。</p>
         </div>
-        <span class="go">进入 <span class="go-arrow" aria-hidden="true">→</span></span>
+        <span class="go"><span data-i18n="home.enter">进入</span> <span class="go-arrow" aria-hidden="true">→</span></span>
       </a>
     </div>
 
@@ -94,10 +94,12 @@ try{var s=JSON.parse(localStorage.getItem("aiming.settings.v1")||"{}");var r=doc
     <div class="foot__inner">
       <img src="assets/mark.svg" width="22" height="22" alt="">
       <p>Aiming</p>
-      <p>由香港的一间小公司制作。</p>
+      <p data-i18n="footer.maker">由香港的一间小公司制作。</p>
     </div>
   </footer>
+  <script src="js/universe-lang.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/chrome.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/site.js"></script>
   <script src="js/session.js"></script>
