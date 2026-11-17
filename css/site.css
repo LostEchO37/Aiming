@@ -1275,6 +1275,34 @@ html[data-theme="dark"] .field {
 .step h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
 .check-options { display: grid; gap: 0.4rem; margin: 0.5rem 0; }
 .check-options button { text-align: left; }
+.lesson { margin-top: 1.2rem; padding-top: 0.4rem; }
+.lesson h3 { font-family: var(--serif); font-size: 1.45rem; margin: 0.2rem 0 0.5rem; }
+.task { margin: 0.8rem 0; padding: 0.8rem 0.9rem; border: 1px solid var(--border); border-radius: 16px; }
+.task.is-done { border-color: rgba(255, 107, 53, 0.45); }
+.lesson-fields { border: 1px solid var(--border); border-radius: 16px; margin: 0.8rem 0; padding: 0.8rem; }
+.certificate {
+  margin-top: 1.4rem;
+  padding: 1.8rem 1.3rem 1.5rem;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 107, 53, 0.5);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 107, 53, 0.18), transparent 60%),
+    var(--surface);
+}
+.certificate h2 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  margin: 0.2rem 0 0.6rem;
+}
+.certificate__skill {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  background: linear-gradient(135deg, #ff6b35, #ff8a5b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .sheet__label {
   flex: 0 0 auto;

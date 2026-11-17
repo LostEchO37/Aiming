@@ -1,57 +1,10 @@
-/* One self-paced series per universe, plus courses people submit for review. */
+/* A skill is several lessons. Each lesson is reading plus more than one task. */
 (function () {
   if (document.body.dataset.page !== "learn") return;
   const root = document.getElementById("path-root");
   if (!root) return;
   const KEY = "aiming.path.v1";
-
-  const CHECKS = {
-    yingxiao: {
-      q: { zh: "三句话的顺序是哪一个？", zhHant: "三句話的順序是哪一個？", en: "Which order are the three sentences?" },
-      options: [
-        { zh: "它是什么，谁会用，一个差别", zhHant: "它是什麼，誰會用，一個差別", en: "What it is, who uses it, one difference" },
-        { zh: "最好，所有人，很多优点", zhHant: "最好，所有人，很多優點", en: "Best, everyone, many advantages" },
-        { zh: "先问好不好，再改三句", zhHant: "先問好不好，再改三句", en: "Ask if it is good, then change all three" },
-      ],
-      answer: 0,
-    },
-    renshi: {
-      q: { zh: "四行纸条里不该留下哪一个词？", zhHant: "四行紙條裡不該留下哪一個詞？", en: "Which word does not belong on the four-line note?" },
-      options: [
-        { zh: "周四下午三点", zhHant: "週四下午三點", en: "Thursday at three" },
-        { zh: "尽快", zhHant: "盡快", en: "As soon as possible" },
-        { zh: "谁来做", zhHant: "誰來做", en: "Who does it" },
-      ],
-      answer: 1,
-    },
-    kaifa: {
-      q: { zh: "怎样才算用手机看过这一页？", zhHant: "怎樣才算用手機看過這一頁？", en: "What counts as looking at the page on a phone?" },
-      options: [
-        { zh: "把桌面窗口缩窄", zhHant: "把桌面窗口縮窄", en: "Narrow the desktop window" },
-        { zh: "用自己的手机打开公开地址", zhHant: "用自己的手機打開公開地址", en: "Open the public address on your phone" },
-        { zh: "先装一个框架", zhHant: "先裝一個框架", en: "Install a framework first" },
-      ],
-      answer: 1,
-    },
-    meishu: {
-      q: { zh: "请人评图时只收哪三个词？", zhHant: "請人評圖時只收哪三個詞？", en: "Which three words do you ask for?" },
-      options: [
-        { zh: "层次、可读、一个想法", zhHant: "層次、可讀、一個想法", en: "Hierarchy, readable, one idea" },
-        { zh: "好看、大气、换字体", zhHant: "好看、大氣、換字體", en: "Nice, grander, another typeface" },
-        { zh: "颜色、滤镜、心情", zhHant: "顏色、濾鏡、心情", en: "Color, filter, mood" },
-      ],
-      answer: 0,
-    },
-    anquan: {
-      q: { zh: "验证码该怎么处理？", zhHant: "驗證碼該怎麼處理？", en: "What do you do with a verification code?" },
-      options: [
-        { zh: "念给来说出你名字的人", zhHant: "念給來說出你名字的人", en: "Read it to someone who says your name" },
-        { zh: "只填进你自己打开的页面", zhHant: "只填進你自己打開的頁面", en: "Type it only on a page you opened" },
-        { zh: "贴到讨论里给大家看", zhHant: "貼到討論裡給大家看", en: "Paste it into Discuss" },
-      ],
-      answer: 1,
-    },
-  };
+  const ISSUED = "aiming.certificate.v1";
 
   function lang() {
     const value = document.documentElement.getAttribute("data-lang") || "zh";
@@ -59,7 +12,9 @@
   }
 
   function line(pack) {
-    return pack[lang()] || pack.zh;
+    if (!pack) return "";
+    if (typeof pack === "string") return pack;
+    return pack[lang()] || pack.zh || "";
   }
 
   function tr(key) {
@@ -85,34 +40,34 @@
     return node;
   }
 
-  function localDone() {
-    try { return JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (error) { return {}; }
+  function readMap(name) {
+    try { return JSON.parse(localStorage.getItem(name) || "{}") || {}; } catch (error) { return {}; }
   }
 
-  function saveLocal(done) {
-    localStorage.setItem(KEY, JSON.stringify(done));
+  function localDone() { return readMap(KEY); }
+
+  function saveLocal(done) { localStorage.setItem(KEY, JSON.stringify(done)); }
+
+  function issuedMap() { return readMap(ISSUED); }
+
+  function skillOf(id) {
+    return (window.AIMING_SKILLS || {})[id] || null;
   }
 
-  function stepsFor(universe) {
-    const materials = universe.materials || [];
-    const steps = [];
-    materials.forEach((material, index) => {
-      steps.push({ key: universe.id + ":read:" + material.id, kind: "read", title: material.title, body: (material.paragraphs || []).join("\n\n") });
-      if (index > 2) return;
-    });
-    if (universe.practice) {
-      steps.push({
-        key: universe.id + ":try",
-        kind: "try",
-        title: universe.practice.title,
-        body: universe.practice.body,
+  function tasksOf(skill, id) {
+    const tasks = [];
+    (skill.lessons || []).forEach((lesson, lessonIndex) => {
+      (lesson.tasks || []).forEach((task, taskIndex) => {
+        tasks.push({
+          key: "skill:" + id + ":" + lessonIndex + ":" + taskIndex,
+          lesson,
+          lessonIndex,
+          task,
+          taskIndex,
+        });
       });
-    }
-    const check = CHECKS[universe.id];
-    if (check) {
-      steps.push({ key: universe.id + ":check", kind: "check", title: line(check.q), check });
-    }
-    return steps.slice(0, 4);
+    });
+    return tasks;
   }
 
   let remoteDone = {};
@@ -142,7 +97,7 @@
     return Boolean(localDone()[key] || remoteDone[key]);
   }
 
-  function mark(key) {
+  function mark(key, skillId) {
     const done = localDone();
     done[key] = true;
     saveLocal(done);
@@ -155,74 +110,171 @@
         body: JSON.stringify({ stepKey: key }),
       }).catch(() => {});
     }
-    const read = key.split(":read:")[1];
-    if (read) {
-      try {
-        const marks = JSON.parse(localStorage.getItem("aiming.read.v1") || "{}") || {};
-        marks[read] = true;
-        localStorage.setItem("aiming.read.v1", JSON.stringify(marks));
-      } catch (error) { /* the series still records its own mark */ }
+    const skill = skillOf(skillId);
+    if (skill) {
+      const tasks = tasksOf(skill, skillId);
+      if (tasks.length && tasks.every((item) => isDone(item.key))) {
+        const stamps = issuedMap();
+        if (!stamps[skillId]) {
+          stamps[skillId] = new Date().toISOString();
+          localStorage.setItem(ISSUED, JSON.stringify(stamps));
+        }
+      }
     }
     draw();
   }
 
-  function seriesCard(universe) {
-    const steps = stepsFor(universe);
-    const done = steps.filter((step) => isDone(step.key)).length;
-    const card = h("a", { class: "path-card", href: "learn.html?id=" + universe.id + "#series" }, [
-      h("p", { class: "page-tag", text: universe.name }),
-      h("h2", { text: universe.practice ? universe.practice.title : universe.name }),
-      h("p", { class: "local-note", text: trf("path.progress", { done, total: steps.length }) }),
-      h("div", { class: "path-bar" }, h("span", { style: "width:" + (steps.length ? Math.round(done / steps.length * 100) : 0) + "%" })),
-    ]);
+  function count(tasks) {
+    return tasks.filter((item) => isDone(item.key)).length;
+  }
+
+  function progressLine(done, total) {
+    return trf("path.taskProgress", { done, total });
+  }
+
+  function bar(done, total) {
+    const width = total ? Math.round(done / total * 100) : 0;
+    return h("div", { class: "path-bar" }, h("span", { style: "width:" + width + "%" }));
+  }
+
+  function certificate(name, holder) {
+    const card = h("section", { class: "certificate", id: "certificate" });
+    card.append(h("p", { class: "kicker", text: tr("path.certificateLead") }));
+    card.append(h("h2", { text: tr("path.certificate") }));
+    card.append(h("p", { class: "certificate__skill", text: name }));
+    card.append(h("p", { text: tr("path.holder") + " " + (holder || tr("path.learner")) }));
+    card.append(h("p", { class: "local-note", text: tr("path.certificateNote") }));
     return card;
   }
 
+  function taskBlock(item, skillId) {
+    const task = item.task;
+    const done = isDone(item.key);
+    const block = h("div", { class: "task" + (done ? " is-done" : "") });
+    block.append(h("p", { class: "kicker", text: tr("path.task") + " " + (item.taskIndex + 1) }));
+    block.append(h("p", { text: line(task.prompt) }));
+    if (done) {
+      block.append(h("p", { class: "local-note", text: tr("path.taskDone") }));
+      return block;
+    }
+    if (task.kind === "check") {
+      const options = h("div", { class: "check-options" });
+      (task.options || []).forEach((option, optionIndex) => {
+        const button = h("button", { type: "button", class: "btn btn-ghost", text: line(option) });
+        button.addEventListener("click", () => {
+          if (optionIndex === task.answer) mark(item.key, skillId);
+          else button.textContent = tr("path.wrong");
+        });
+        options.append(button);
+      });
+      block.append(options);
+    } else {
+      const field = h("textarea", { class: "field", maxlength: "400" });
+      const button = h("button", { type: "button", class: "btn btn-primary", text: tr("path.saveTask") });
+      const note = h("p", { class: "status", role: "status" });
+      button.addEventListener("click", () => {
+        const text = field.value.trim();
+        if (text.length < (task.min || 8)) {
+          note.textContent = tr("path.taskShort");
+          return;
+        }
+        mark(item.key, skillId);
+      });
+      block.append(field, button, note);
+    }
+    return block;
+  }
+
+  function seriesCard(universe) {
+    const skill = skillOf(universe.id);
+    if (!skill) return null;
+    const tasks = tasksOf(skill, universe.id);
+    const done = count(tasks);
+    return h("a", { class: "path-card", href: "learn.html?id=" + universe.id + "#series" }, [
+      h("p", { class: "page-tag", text: universe.name }),
+      h("h2", { text: line(skill.title) }),
+      h("p", { class: "local-note", text: progressLine(done, tasks.length) }),
+      bar(done, tasks.length),
+    ]);
+  }
+
   function seriesDetail(universe) {
-    const steps = stepsFor(universe);
+    const skill = skillOf(universe.id);
+    if (!skill) return null;
+    const tasks = tasksOf(skill, universe.id);
+    const done = count(tasks);
     const wrap = h("section", { class: "path-card", id: "series" });
     wrap.append(h("p", { class: "page-tag", text: universe.name }));
-    wrap.append(h("h2", { text: universe.practice ? universe.practice.title : universe.name }));
-    steps.forEach((step, index) => {
-      const block = h("article", { class: "step" + (isDone(step.key) ? " is-done" : "") });
-      block.append(h("p", { class: "kicker", text: (index + 1) + " · " + tr("path." + step.kind) }));
-      block.append(h("h3", { text: step.title }));
-      if (step.body) step.body.split("\n\n").forEach((paragraph) => block.append(h("p", { text: paragraph })));
-      if (step.kind === "check" && !isDone(step.key)) {
-        const options = h("div", { class: "check-options" });
-        step.check.options.forEach((option, optionIndex) => {
-          const button = h("button", { type: "button", class: "btn btn-ghost", text: line(option) });
-          button.addEventListener("click", () => {
-            if (optionIndex === step.check.answer) mark(step.key);
-            else button.textContent = tr("path.wrong");
-          });
-          options.append(button);
-        });
-        block.append(options);
-      } else if (!isDone(step.key)) {
-        const button = h("button", { type: "button", class: "btn btn-primary", text: tr("path.done") });
-        button.addEventListener("click", () => mark(step.key));
-        block.append(button);
-      } else {
-        block.append(h("p", { class: "local-note", text: tr("path.correct") }));
-      }
+    wrap.append(h("h2", { text: line(skill.title) }));
+    wrap.append(h("p", { class: "local-note", text: progressLine(done, tasks.length) }));
+    wrap.append(bar(done, tasks.length));
+    wrap.append(h("p", { text: tr("path.notYet") }));
+    (skill.lessons || []).forEach((lesson, lessonIndex) => {
+      const block = h("article", { class: "lesson" });
+      block.append(h("p", { class: "kicker", text: trf("path.lesson", { n: lessonIndex + 1 }) }));
+      block.append(h("h3", { text: line(lesson.title) }));
+      (lesson.reading[lang()] || lesson.reading.zh || []).forEach((paragraph) => block.append(h("p", { text: paragraph })));
+      tasks.filter((item) => item.lessonIndex === lessonIndex).forEach((item) => block.append(taskBlock(item, universe.id)));
       wrap.append(block);
     });
+    if (tasks.length && done === tasks.length) {
+      wrap.append(certificate(line(skill.title), viewer && viewer.displayName));
+    }
     return wrap;
   }
 
+  function courseTasks(course) {
+    return (course.steps || []).map((step) => ({
+      key: "c:" + course.id + ":" + step.id,
+      step,
+    }));
+  }
+
   function extendCard(course) {
+    const tasks = courseTasks(course);
+    const done = count(tasks);
     const card = h("article", { class: "extend-card" });
     card.append(h("p", { class: "page-tag", text: course.status === "approved" ? tr("path.approved") : course.status === "rejected" ? tr("path.rejected") : tr("path.pending") }));
     card.append(h("h3", { text: course.title }));
     if (course.summary) card.append(h("p", { text: course.summary }));
-    card.append(h("p", { class: "local-note", text: course.author ? tr("path.by") + " " + course.author : "" }));
-    (course.steps || []).forEach((step, index) => {
-      card.append(h("h3", { text: (index + 1) + ". " + step.title }));
-      card.append(h("p", { text: step.body }));
+    card.append(h("p", { class: "local-note", text: progressLine(done, tasks.length) }));
+    card.append(bar(done, tasks.length));
+    if (course.author) card.append(h("p", { class: "local-note", text: tr("path.by") + " " + course.author }));
+    const groups = [];
+    tasks.forEach((item) => {
+      const index = item.step.lessonIndex || 1;
+      let group = groups.find((entry) => entry.index === index);
+      if (!group) {
+        group = { index, title: item.step.lessonTitle, reading: item.step.lessonReading, items: [] };
+        groups.push(group);
+      }
+      group.items.push(item);
     });
-    if (course.fileId) {
-      card.append(h("p", {}, h("a", { href: "/api/course-file?id=" + course.fileId }, tr("path.open"))));
+    groups.forEach((group) => {
+      card.append(h("h3", { text: trf("path.lesson", { n: group.index }) + " " + (group.title || "") }));
+      if (group.reading) card.append(h("p", { text: group.reading }));
+      group.items.forEach((item, taskIndex) => {
+        const block = h("div", { class: "task" + (isDone(item.key) ? " is-done" : "") });
+        block.append(h("p", { class: "kicker", text: tr("path.task") + " " + (taskIndex + 1) }));
+        block.append(h("p", { text: item.step.title }));
+        if (course.status === "approved" && viewer) {
+          if (isDone(item.key)) block.append(h("p", { class: "local-note", text: tr("path.taskDone") }));
+          else {
+            const field = h("textarea", { class: "field", maxlength: "400" });
+            const button = h("button", { type: "button", class: "btn btn-primary", text: tr("path.saveTask") });
+            button.addEventListener("click", () => {
+              if (field.value.trim().length < 8) return;
+              mark(item.key, "");
+            });
+            block.append(field, button);
+          }
+        }
+        card.append(block);
+      });
+    });
+    if (course.fileId) card.append(h("p", {}, h("a", { href: "/api/course-file?id=" + course.fileId }, tr("path.open"))));
+    if (course.status === "approved" && tasks.length && done === tasks.length) {
+      card.append(certificate(course.title, viewer && viewer.displayName));
     }
     if (viewer && viewer.reviewer && course.status === "pending") {
       const row = h("div", { class: "form-actions" });
@@ -246,23 +298,44 @@
     draw();
   }
 
+  function lessonFields(index) {
+    const title = h("input", { class: "field", maxlength: "40" });
+    const reading = h("textarea", { class: "field", maxlength: "1200" });
+    const taskA = h("input", { class: "field", maxlength: "200" });
+    const taskB = h("input", { class: "field", maxlength: "200" });
+    const box = h("fieldset", { class: "lesson-fields" }, [
+      h("legend", { text: trf("path.lesson", { n: index }) }),
+      h("label", { class: "field-label" }, [h("span", { text: tr("path.lessonTitle") }), title]),
+      h("label", { class: "field-label" }, [h("span", { text: tr("path.reading") }), reading]),
+      h("label", { class: "field-label" }, [h("span", { text: tr("path.task") + " 1" }), taskA]),
+      h("label", { class: "field-label" }, [h("span", { text: tr("path.task") + " 2" }), taskB]),
+    ]);
+    box.collect = () => ({
+      title: title.value,
+      reading: reading.value,
+      tasks: [{ prompt: taskA.value }, { prompt: taskB.value }],
+    });
+    return box;
+  }
+
   function maker() {
     if (!viewer) return h("p", {}, h("a", { href: "login.html?next=" + encodeURIComponent("learn.html") }, tr("path.needLogin")));
     const universe = h("select", { class: "field" });
     (window.AIMING.universes || []).forEach((item) => universe.append(h("option", { value: item.id, text: item.name })));
     const title = h("input", { class: "field", maxlength: "40" });
     const summary = h("input", { class: "field", maxlength: "200" });
-    const stepTitle = h("input", { class: "field", maxlength: "40" });
-    const stepBody = h("textarea", { class: "field", maxlength: "1200" });
+    const first = lessonFields(1);
+    const second = lessonFields(2);
     const file = h("input", { class: "field", type: "file", accept: "application/pdf" });
     const status = h("p", { class: "status", role: "status" });
     const form = h("form", { class: "form-card", novalidate: true }, [
       h("h3", { text: tr("path.make") }),
+      h("p", { class: "local-note", text: tr("path.makeRule") }),
       h("label", { class: "field-label" }, [h("span", { text: tr("feed.universe") }), universe]),
-      h("label", { class: "field-label" }, [h("span", { text: tr("feed.title") }), title]),
+      h("label", { class: "field-label" }, [h("span", { text: tr("path.skillName") }), title]),
       h("label", { class: "field-label" }, [h("span", { text: tr("path.summary") }), summary]),
-      h("label", { class: "field-label" }, [h("span", { text: tr("path.stepTitle") }), stepTitle]),
-      h("label", { class: "field-label" }, [h("span", { text: tr("path.stepBody") }), stepBody]),
+      first,
+      second,
       h("label", { class: "field-label" }, [h("span", { text: tr("path.upload") }), file]),
       h("div", { class: "form-actions" }, h("button", { class: "btn btn-primary", type: "submit", text: tr("path.submit") })),
       status,
@@ -273,7 +346,7 @@
         universeId: universe.value,
         title: title.value,
         summary: summary.value,
-        steps: [{ title: stepTitle.value, body: stepBody.value }],
+        lessons: [first.collect(), second.collect()],
       };
       const chosen = file.files && file.files[0];
       if (chosen) {
@@ -305,11 +378,16 @@
     root.replaceChildren();
     root.append(h("h2", { class: "block-title", text: tr("path.series") }));
     root.append(h("p", { class: "page-intro", text: tr("path.intro") }));
-    if (id && window.AIMING.byId[id]) root.append(seriesDetail(window.AIMING.byId[id]));
+    if (id && window.AIMING.byId[id]) {
+      const detail = seriesDetail(window.AIMING.byId[id]);
+      if (detail) root.append(detail);
+    }
     const list = h("div", { class: "path-list" });
-    universes.forEach((universe) => list.append(seriesCard(universe)));
+    universes.forEach((universe) => {
+      const card = seriesCard(universe);
+      if (card) list.append(card);
+    });
     root.append(list);
-
     root.append(h("h2", { class: "block-title", text: tr("path.extend") }));
     root.append(h("p", { class: "page-intro", text: tr("path.extendIntro") }));
     const courses = await fetch("/api/courses" + (id ? "?universe=" + encodeURIComponent(id) : ""), { credentials: "same-origin" })
