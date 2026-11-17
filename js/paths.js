@@ -478,6 +478,8 @@
     const approved = rows.filter((course) => course.status === "approved");
     root.replaceChildren();
 
+    const intro = document.querySelector(".page-intro");
+    if (intro) intro.hidden = Boolean(opened);
     if (opened) {
       root.append(h("p", {}, h("a", { class: "back", href: "learn.html" }, tr("path.backIndex"))));
       if (opened.indexOf("x:") === 0) {
