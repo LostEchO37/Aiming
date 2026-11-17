@@ -1275,7 +1275,15 @@ html[data-theme="dark"] .field {
 .step h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
 .check-options { display: grid; gap: 0.4rem; margin: 0.5rem 0; }
 .check-options button { text-align: left; }
-.lesson { margin-top: 1.2rem; padding-top: 0.4rem; }
+.lecture-prose { max-width: 40rem; }
+.lecture-case {
+  margin: 0.9rem 0 1rem;
+  padding: 0.85rem 1rem 0.4rem;
+  border-left: 3px solid #ff6b35;
+  border-radius: 0 18px 18px 0;
+  background: rgba(255, 107, 53, 0.08);
+}
+.lesson { margin-top: 1.4rem; padding-top: 0.2rem; }
 .lesson h3 { font-family: var(--serif); font-size: 1.45rem; margin: 0.2rem 0 0.5rem; }
 .task { margin: 0.8rem 0; padding: 0.8rem 0.9rem; border: 1px solid var(--border); border-radius: 16px; }
 .task.is-done { border-color: rgba(255, 107, 53, 0.45); }

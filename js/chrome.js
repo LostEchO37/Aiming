@@ -70,7 +70,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Aiming 里的短文。可以按宇宙筛选，也可以把看过的标在这台浏览器里。",
     "learn.tag": "学习",
     "learn.title": "学习",
-    "learn.intro": "每个宇宙是一项技能，分成几节课。每节有阅读，也有不止一个任务。做完一个任务不算结课。",
+    "learn.intro": "每个宇宙是一门科目。每一讲先讲清一个概念，再给一个案例，任务只做这一讲。全部任务做完，才有 Aiming 的证书。",
     "people.doc": "同伴 · Aiming",
     "people.meta": "互相关注之后可以发消息。也可以从讨论里找到人。",
     "people.needJs": "需要打开浏览器的脚本，才能看到同伴。",
@@ -226,7 +226,7 @@ window.AIMING_CHROME = {
     "u.anquan.blurb": "账号上的基本习惯，以及不要把不该公开的东西留在自己的页面里。",
     "u.anquan.listNote": "先看双重验证和验证码，再检查页面有没有密钥。",
     "path.series": "课程系列",
-    "path.intro": "一项技能要整门做完。进度是已完成的任务比上全部任务。全部做完，才有 Aiming 自己的证书，上面写着这项技能的名字。",
+    "path.intro": "一门科目分成几讲。进度是已完成的任务比上全部任务。做完一个任务不算结课。",
     "path.progress": "完成 {done} / {total}",
     "path.read": "阅读",
     "path.try": "试做",
@@ -267,7 +267,9 @@ window.AIMING_CHROME = {
     "path.lessonTitle": "这一节的标题",
     "path.reading": "这一节读什么",
     "path.makeRule": "一门技能至少两节课，每节至少两个任务。审核通过后，别人做完全部任务才有证书。",
-    "path.skillName": "这项技能的名字"
+    "path.skillName": "这项技能的名字",
+    "path.concept": "这一讲",
+    "path.case": "案例"
   },
   "zhHant": {
     "skip": "跳到內容",
@@ -339,7 +341,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Aiming 裡的短文。可以按宇宙篩選，也可以把看過的標在這台瀏覽器裡。",
     "learn.tag": "學習",
     "learn.title": "學習",
-    "learn.intro": "每個宇宙是一項技能，分成幾節課。每節有閱讀，也有不止一個任務。做完一個任務不算結課。",
+    "learn.intro": "每個宇宙是一門科目。每一講先講清一個概念，再給一個案例，任務只做這一講。全部任務做完，才有 Aiming 的證書。",
     "people.doc": "同伴 · Aiming",
     "people.meta": "互相關注之後可以發消息。也可以從討論裡找到人。",
     "people.needJs": "需要打開瀏覽器的腳本，才能看到同伴。",
@@ -531,7 +533,7 @@ window.AIMING_CHROME = {
     "u.anquan.blurb": "帳號上的基本習慣，以及不要把不該公開的東西留在自己的頁面裡。",
     "u.anquan.listNote": "先看雙重驗證和驗證碼，再檢查頁面有沒有密鑰。",
     "path.series": "課程系列",
-    "path.intro": "一項技能要整門做完。進度是已完成的任務比上全部任務。全部做完，才有 Aiming 自己的證書，上面寫著這項技能的名字。",
+    "path.intro": "一門科目分成幾講。進度是已完成的任務比上全部任務。做完一個任務不算結課。",
     "path.progress": "完成 {done} / {total}",
     "path.read": "閱讀",
     "path.try": "試做",
@@ -572,7 +574,9 @@ window.AIMING_CHROME = {
     "path.lessonTitle": "這一節的標題",
     "path.reading": "這一節讀什麼",
     "path.makeRule": "一門技能至少兩節課，每節至少兩個任務。審核通過後，別人做完全部任務才有證書。",
-    "path.skillName": "這項技能的名字"
+    "path.skillName": "這項技能的名字",
+    "path.concept": "這一講",
+    "path.case": "案例"
   },
   "en": {
     "skip": "Skip to content",
@@ -644,7 +648,7 @@ window.AIMING_CHROME = {
     "learn.meta": "Short pieces in Aiming. Filter by universe. Read marks stay in this browser.",
     "learn.tag": "Learn",
     "learn.title": "Learn",
-    "learn.intro": "Each universe is one skill, taught in several lessons. A lesson has reading and more than one task. Finishing one task does not finish the skill.",
+    "learn.intro": "Each universe is one subject. A lecture explains one concept, then one case. The tasks belong only to that lecture. Aiming’s certificate comes after every task.",
     "people.doc": "Companions · Aiming",
     "people.meta": "After you follow each other, you can send a message. You can also find people from a post.",
     "people.needJs": "The browser needs scripts on to see companions.",
@@ -836,7 +840,7 @@ window.AIMING_CHROME = {
     "u.anquan.blurb": "Ordinary habits for an account, and nothing private left on a page you publish.",
     "u.anquan.listNote": "Look at two-factor and codes, then check the page for a secret.",
     "path.series": "Course series",
-    "path.intro": "A skill is finished only as a whole. Progress is tasks done out of the total. Aiming’s own certificate, naming the skill, appears after every task is done.",
+    "path.intro": "A subject is several lectures. Progress is tasks done out of the total. One finished task is not a finished subject.",
     "path.progress": "{done} / {total} done",
     "path.read": "Read",
     "path.try": "Try",
@@ -877,6 +881,8 @@ window.AIMING_CHROME = {
     "path.lessonTitle": "Title of this lesson",
     "path.reading": "Reading for this lesson",
     "path.makeRule": "A skill needs at least two lessons, and each lesson needs at least two tasks. After review, a certificate appears only when every task is done.",
-    "path.skillName": "Name of this skill"
+    "path.skillName": "Name of this skill",
+    "path.concept": "This lecture",
+    "path.case": "Case"
   }
 };

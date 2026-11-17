@@ -213,7 +213,15 @@
       const block = h("article", { class: "lesson" });
       block.append(h("p", { class: "kicker", text: trf("path.lesson", { n: lessonIndex + 1 }) }));
       block.append(h("h3", { text: line(lesson.title) }));
-      (lesson.reading[lang()] || lesson.reading.zh || []).forEach((paragraph) => block.append(h("p", { text: paragraph })));
+      block.append(h("p", { class: "kicker", text: tr("path.concept") }));
+      const concept = lesson.concept || lesson.reading || { zh: [] };
+      (concept[lang()] || concept.zh || []).forEach((paragraph) => block.append(h("p", { class: "lecture-prose", text: paragraph })));
+      if (lesson.case) {
+        const caseBox = h("div", { class: "lecture-case" });
+        caseBox.append(h("p", { class: "kicker", text: tr("path.case") }));
+        (lesson.case[lang()] || lesson.case.zh || []).forEach((paragraph) => caseBox.append(h("p", { text: paragraph })));
+        block.append(caseBox);
+      }
       tasks.filter((item) => item.lessonIndex === lessonIndex).forEach((item) => block.append(taskBlock(item, universe.id)));
       wrap.append(block);
     });
