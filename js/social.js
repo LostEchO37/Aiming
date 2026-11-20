@@ -14,6 +14,11 @@
     return node;
   }
 
+  function face(name, fileId) {
+    if (window.AIMING_AVATAR) return window.AIMING_AVATAR(name, fileId);
+    return h("span", { class: "avatar", "aria-hidden": "true", text: (name || "?").charAt(0) });
+  }
+
   function mediaNode(file) {
     if (file.kind === "video") return h("video", { class: "media", controls: true, src: "/api/files?id=" + file.id, preload: "metadata" });
     return h("img", { class: "media", alt: "", src: "/api/files?id=" + file.id });
@@ -22,7 +27,7 @@
   function postCard(post) {
     const card = h("article", { class: "post" });
     card.append(h("div", { class: "post-head" }, [
-      h("span", { class: "avatar", "aria-hidden": "true", text: (post.author || "").charAt(0) }),
+      face(post.author, post.avatarId),
       h("div", {}, [
         h("p", { class: "post-name" }, h("a", { href: "index.html?id=" + encodeURIComponent(post.authorId) }, post.author)),
         h("p", { class: "post-meta" }, post.universeId ? h("span", { class: "tag", text: (window.AIMING.byId[post.universeId] || {}).name || "" }) : null),
@@ -86,7 +91,7 @@
         return (person.displayName + person.signature + person.about).toLowerCase().includes(q);
       }).slice(0, 12).forEach((person) => {
         found.append(h("a", { class: "person-row", href: "index.html?id=" + encodeURIComponent(person.id) }, [
-          h("span", { class: "avatar", "aria-hidden": "true", text: person.displayName.charAt(0) }),
+          face(person.displayName, person.avatarId),
           h("span", { class: "person-copy" }, [
             h("span", { class: "post-name", text: person.displayName }),
             h("span", { class: "person-line", text: person.signature || person.about || "" }),
@@ -103,7 +108,7 @@
     if (!people.length) list.append(h("p", { class: "local-note", text: t("companions.empty") }));
     people.forEach((person) => {
       list.append(h("a", { class: "person-row", href: "people.html?with=" + encodeURIComponent(person.id) }, [
-        h("span", { class: "avatar", "aria-hidden": "true", text: person.displayName.charAt(0) }),
+        face(person.displayName, person.avatarId),
         h("span", { class: "person-copy" }, [
           h("span", { class: "post-name", text: person.displayName }),
           h("span", { class: "person-line", text: person.signature || t("home.message") }),

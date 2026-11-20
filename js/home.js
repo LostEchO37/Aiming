@@ -36,7 +36,7 @@
     if (post.universeId) meta.append(h("a", { class: "tag", href: "universe.html?id=" + post.universeId }, universeName(post.universeId)));
     if (post.hidden) meta.append(h("span", { class: "badge badge--hidden", text: t("home.hidden") }));
     card.append(h("div", { class: "post-head" }, [
-      h("span", { class: "avatar", "aria-hidden": "true", text: (post.author || t("home.me")).charAt(0) }),
+      face(post.author || t("home.me"), post.avatarId),
       h("div", {}, [h("p", { class: "post-name" }, name), meta]),
     ]));
     if (post.title) card.append(h("h3", { class: "who", text: post.title }));
@@ -64,6 +64,11 @@
     return card;
   }
 
+  function face(name, fileId) {
+    if (window.AIMING_AVATAR) return window.AIMING_AVATAR(name, fileId);
+    return h("span", { class: "avatar", "aria-hidden": "true", text: (name || "?").charAt(0) });
+  }
+
   function editor(profile) {
     const name = h("input", { class: "field", name: "displayName", maxlength: "20", value: profile.displayName });
     const signature = h("input", { class: "field", maxlength: "80", value: profile.signature || "" });
@@ -78,10 +83,13 @@
       ]);
       tags.append(box);
     });
+    const portrait = h("input", { class: "field", type: "file", accept: "image/jpeg,image/png,image/webp,image/gif" });
     const file = h("input", { class: "field", type: "file", accept: "application/pdf" });
     const pub = h("input", { type: "checkbox", checked: profile.cvPublic ? true : null });
     const status = h("p", { class: "status", role: "status" });
     const form = h("form", { class: "form-card", novalidate: true }, [
+      label(t("home.avatar"), portrait),
+      h("p", { class: "local-note", text: t("home.avatarHint") }),
       label(t("home.name"), name),
       label(t("home.signature"), signature),
       label(t("home.about"), about),
@@ -113,6 +121,26 @@
       if (!res.ok) {
         status.textContent = data.error || "";
         return;
+      }
+      const picture = portrait.files && portrait.files[0];
+      if (picture) {
+        const dataUrl = await blobToData(picture);
+        const up = await fetch("/api/avatar", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ mime: picture.type, name: picture.name, data: dataUrl }),
+        });
+        const uploaded = await up.json().catch(() => ({}));
+        if (!up.ok) {
+          status.textContent = (window.tMsg && tMsg(uploaded.error)) || uploaded.error || "";
+          return;
+        }
+        if (window.AIMING_USER) {
+          window.AIMING_USER.avatarId = uploaded.id || "";
+          window.AIMING_USER.displayName = name.value.trim();
+          document.dispatchEvent(new CustomEvent("aiming-session"));
+        }
       }
       const cv = file.files && file.files[0];
       if (cv) {
@@ -177,19 +205,37 @@
     const profile = data.profile;
     const mine = Boolean(me && me.id === profile.id);
     app.replaceChildren();
-    const head = h("header", { class: "profile-head" });
-    head.append(h("p", { class: "page-tag", text: profile.displayName }));
-    head.append(h("h1", { class: "page-title", text: profile.displayName }));
-    if (profile.signature) head.append(h("p", { class: "signature", text: profile.signature }));
-    if (profile.place) head.append(h("p", { class: "local-note", text: profile.place }));
-    if (profile.about) head.append(h("p", { class: "lede", text: profile.about }));
+    const counts = profile.counts || { posts: data.posts.length, following: 0, companions: 0 };
+    const sheet = h("section", { class: "profile-sheet" });
+    sheet.append(h("div", { class: "profile-cover", "aria-hidden": "true" }));
+    const copy = h("div", { class: "profile-copy" });
+    copy.append(h("h1", { text: profile.displayName }));
+    if (profile.signature) copy.append(h("p", { class: "signature", text: profile.signature }));
+    if (profile.place) copy.append(h("p", { class: "local-note", text: profile.place }));
+    if (profile.about) copy.append(h("p", { class: "lede", text: profile.about }));
+    sheet.append(h("div", { class: "profile-id" }, [
+      face(profile.displayName, profile.avatarId),
+      copy,
+    ]));
+    const stats = h("div", { class: "profile-counts" });
+    [
+      [counts.posts, t("home.posts")],
+      [counts.following, t("home.followingCount")],
+      [counts.companions, t("home.companion")],
+    ].forEach(([n, labelText]) => {
+      stats.append(h("p", { class: "profile-count" }, [
+        h("strong", { text: String(n) }),
+        h("span", { text: labelText }),
+      ]));
+    });
+    sheet.append(stats);
     if (profile.tags.length) {
-      const row = h("p", { class: "post-meta" });
+      const row = h("p", { class: "post-meta profile-tags" });
       profile.tags.forEach((id) => row.append(h("a", { class: "tag", href: "universe.html?id=" + id }, universeName(id))));
-      head.append(row);
+      sheet.append(row);
     }
     if (profile.cvId && (mine || profile.cvPublic)) {
-      head.append(h("p", {}, h("a", { href: "/api/files?id=" + profile.cvId }, t("home.download"))));
+      sheet.append(h("p", { class: "profile-cv" }, h("a", { href: "/api/files?id=" + profile.cvId }, t("home.download"))));
     }
     const actions = h("div", { class: "form-actions" });
     if (mine) {
@@ -201,7 +247,7 @@
         edit.setAttribute("aria-expanded", form.hidden ? "false" : "true");
       });
       actions.append(edit);
-      head.append(actions, form);
+      sheet.append(actions, form);
     } else if (me) {
       const follow = h("button", {
         type: "button",
@@ -222,9 +268,9 @@
       if (profile.companion) {
         actions.append(h("a", { class: "btn btn-ghost", href: "people.html?with=" + encodeURIComponent(profile.id) }, t("home.message")));
       }
-      head.append(actions);
+      sheet.append(actions);
     }
-    app.append(head);
+    app.append(sheet);
     app.append(h("h2", { class: "block-title", text: t("home.posts") }));
     if (!data.posts.length) app.append(h("p", { class: "local-note", text: t("home.empty") }));
     data.posts.forEach((post) => app.append(postCard(post, mine)));

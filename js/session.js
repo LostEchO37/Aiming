@@ -21,7 +21,8 @@
     const name = document.createElement("a");
     name.className = "nav-name";
     name.href = "index.html?id=" + encodeURIComponent(user.id);
-    name.textContent = user.displayName || "";
+    if (user.avatarId && window.AIMING_AVATAR) name.append(window.AIMING_AVATAR(user.displayName, user.avatarId));
+    name.append(document.createTextNode(user.displayName || ""));
     const out = document.createElement("button");
     out.type = "button";
     out.className = "nav-btn";

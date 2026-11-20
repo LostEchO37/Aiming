@@ -147,6 +147,7 @@
       likes: remote.likeCounts[item.id] || 0,
       hidden: Boolean(item.hidden),
       media: item.media || [],
+      avatarId: item.avatarId || "",
       replies: [],
     }));
     const replies = {};
@@ -157,6 +158,7 @@
         seed: false,
         author: item.author || tr("feed.anon"),
         authorId: item.authorId || "",
+        avatarId: item.avatarId || "",
         body: item.body,
         created: item.created || "",
       });
@@ -168,6 +170,7 @@
       universeId: item.universeId,
       name: item.name || tr("feed.anon"),
       authorId: item.authorId || "",
+      avatarId: item.avatarId || "",
       can: item.can,
       want: item.want,
       created: item.created || "",
@@ -581,6 +584,7 @@
         likes: p.likes || 0,
         hidden: Boolean(p.hidden),
         media: p.media || [],
+        avatarId: p.avatarId || "",
         replies: [],
       });
     });
@@ -637,6 +641,7 @@
       universeId: p.universeId,
       name: p.name || tr("feed.anon"),
       authorId: p.authorId || "",
+      avatarId: p.avatarId || "",
       can: p.can,
       want: p.want,
       created: p.created || "",
@@ -670,6 +675,7 @@
       seed: false,
       author: r.author || tr("feed.anon"),
       authorId: r.authorId || "",
+      avatarId: r.avatarId || "",
       body: r.body,
       created: r.created || "",
     }));
@@ -700,9 +706,11 @@
     return [person.name, person.can, person.want, universeName(person.universeId), tr("feed.companionsWord")].join("\n");
   }
 
-  function avatar(name) {
+  function avatar(name, fileId) {
+    if (fileId) return h("img", { class: "avatar", alt: "", src: "/api/files?id=" + encodeURIComponent(fileId) });
     return h("span", { class: "avatar", "aria-hidden": "true", text: initial(name) });
   }
+  window.AIMING_AVATAR = avatar;
 
   function stateHref(extra) {
     const input = document.getElementById("community-q");
@@ -875,7 +883,7 @@
 
   function feedCard(post, store) {
     const card = h("article", { class: "post", id: "item-" + post.id });
-    const head = h("div", { class: "post-head" }, [avatar(post.author), h("div", { class: "post-id" })]);
+    const head = h("div", { class: "post-head" }, [avatar(post.author, post.avatarId), h("div", { class: "post-id" })]);
     const idcol = head.lastChild;
     const person = personForAuthor(store, post);
     const name = post.authorId
@@ -905,7 +913,7 @@
     const time = formatTime(reply.created);
     if (time) meta.append(h("time", { datetime: reply.created || "", text: time }));
     idcol.append(meta);
-    card.append(h("div", { class: "post-head" }, [avatar(reply.author), idcol]));
+    card.append(h("div", { class: "post-head" }, [avatar(reply.author, reply.avatarId), idcol]));
     card.append(h("p", { class: "post-body", text: reply.body }));
     return card;
   }
@@ -922,7 +930,7 @@
     sub.append(h("span", { class: "person-line", text: person.can }));
     copy.append(sub);
     return h("a", { class: "person-row", id: "item-" + person.id, href: stateHref({ person: person.id }) }, [
-      avatar(person.name),
+      avatar(person.name, person.avatarId),
       copy,
       h("span", { class: "go" }, [tr("feed.open") + " ", h("span", { class: "go-arrow", "aria-hidden": "true" }, "→")]),
     ]);
@@ -1156,7 +1164,7 @@
       const idcol = h("div", { class: "post-id" });
       idcol.append(h(headingTag(), { class: "who", text: person.name || tr("feed.anon") }));
       idcol.append(postMeta(person, ""));
-      card.append(h("div", { class: "post-head" }, [avatar(person.name), idcol]));
+      card.append(h("div", { class: "post-head" }, [avatar(person.name, person.avatarId), idcol]));
       card.append(h("h3", { class: "detail-label", text: tr("feed.can") }));
       card.append(h("p", { class: "post-body", text: person.can }));
       card.append(h("h3", { class: "detail-label", text: tr("feed.want") }));
@@ -1182,7 +1190,7 @@
         h("p", { class: "post-name" }, name),
         postMeta(post, post.kind === "post" ? "" : (KIND[post.kind] || "")),
       ]);
-      card.append(h("div", { class: "post-head" }, [avatar(post.author), idcol]));
+      card.append(h("div", { class: "post-head" }, [avatar(post.author, post.avatarId), idcol]));
       if (post.title) card.append(h(headingTag(), { class: "who", text: post.title }));
       card.append(h("p", { class: "post-body", text: post.body }));
       if (post.seed) card.append(h("p", { class: "local-note", text: tr("feed.examplePost") }));
