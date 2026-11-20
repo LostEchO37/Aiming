@@ -1047,9 +1047,10 @@ h3.feed-heading {
 .profile-count { margin: 0; }
 .profile-count strong {
   display: block;
-  font-family: var(--serif);
-  font-size: 1.45rem;
-  font-weight: 600;
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
 .profile-count span { color: var(--muted); font-size: 0.82rem; }
