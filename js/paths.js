@@ -54,12 +54,20 @@
     return (window.AIMING_SKILLS || {})[id] || null;
   }
 
-  function tasksOf(skill, id) {
+  function coursesOf(id) {
+    const skill = skillOf(id);
+    if (!skill) return [];
+    if (skill.courses && skill.courses.length) return skill.courses;
+    if (skill.lessons) return [Object.assign({ id: "course" }, skill)];
+    return [];
+  }
+
+  function tasksOf(course, universeId) {
     const tasks = [];
-    (skill.lessons || []).forEach((lesson, lessonIndex) => {
+    (course.lessons || []).forEach((lesson, lessonIndex) => {
       (lesson.tasks || []).forEach((task, taskIndex) => {
         tasks.push({
-          key: "skill:" + id + ":" + lessonIndex + ":" + taskIndex,
+          key: "skill:" + universeId + ":" + course.id + ":" + lessonIndex + ":" + taskIndex,
           lesson,
           lessonIndex,
           task,
@@ -68,6 +76,19 @@
       });
     });
     return tasks;
+  }
+
+  function universeTasks(universeId) {
+    const tasks = [];
+    coursesOf(universeId).forEach((course) => {
+      tasksOf(course, universeId).forEach((item) => tasks.push(item));
+    });
+    return tasks;
+  }
+
+  function universeDone(universeId) {
+    const tasks = universeTasks(universeId);
+    return Boolean(tasks.length && tasks.every((item) => isDone(item.key)));
   }
 
   let remoteDone = {};
@@ -110,15 +131,11 @@
         body: JSON.stringify({ stepKey: key }),
       }).catch(() => {});
     }
-    const skill = skillOf(skillId);
-    if (skill) {
-      const tasks = tasksOf(skill, skillId);
-      if (tasks.length && tasks.every((item) => isDone(item.key))) {
-        const stamps = issuedMap();
-        if (!stamps[skillId]) {
-          stamps[skillId] = new Date().toISOString();
-          localStorage.setItem(ISSUED, JSON.stringify(stamps));
-        }
+    if (skillId && universeDone(skillId)) {
+      const stamps = issuedMap();
+      if (!stamps[skillId]) {
+        stamps[skillId] = new Date().toISOString();
+        localStorage.setItem(ISSUED, JSON.stringify(stamps));
       }
     }
     draw();
@@ -185,25 +202,19 @@
     return block;
   }
 
-  function courseHref(id) {
-    return "learn.html?course=" + encodeURIComponent(id);
+  function courseHref(universeId, courseId) {
+    return "learn.html?course=" + encodeURIComponent(universeId) + "&unit=" + encodeURIComponent(courseId);
   }
 
-  function skillSlides(universe) {
-    const skill = skillOf(universe.id);
-    if (!skill) return [];
+  function skillSlides(universe, course) {
     const slides = [];
-    (skill.lessons || []).forEach((lesson, lessonIndex) => {
+    (course.lessons || []).forEach((lesson, lessonIndex) => {
       slides.push({ type: "concept", lesson, lessonIndex, skillId: universe.id });
       if (lesson.case) slides.push({ type: "case", lesson, lessonIndex, skillId: universe.id });
-      tasksOf(skill, universe.id).filter((item) => item.lessonIndex === lessonIndex).forEach((item) => {
+      tasksOf(course, universe.id).filter((item) => item.lessonIndex === lessonIndex).forEach((item) => {
         slides.push({ type: "task", item, skillId: universe.id });
       });
     });
-    const tasks = tasksOf(skill, universe.id);
-    if (tasks.length && count(tasks) === tasks.length) {
-      slides.push({ type: "certificate", name: line(skill.title), skillId: universe.id });
-    }
     return slides;
   }
 
@@ -223,10 +234,6 @@
       slides.push({ type: "reading", title: group.title, reading: group.reading, course });
       group.items.forEach((item) => slides.push({ type: "extra-task", item, course }));
     });
-    const tasks = courseTasks(course);
-    if (course.status === "approved" && tasks.length && count(tasks) === tasks.length) {
-      slides.push({ type: "certificate", name: course.title, course });
-    }
     return slides;
   }
 
@@ -347,9 +354,6 @@
       });
     });
     if (course.fileId) card.append(h("p", {}, h("a", { href: "/api/course-file?id=" + course.fileId }, tr("path.open"))));
-    if (course.status === "approved" && tasks.length && done === tasks.length) {
-      card.append(certificate(course.title, viewer && viewer.displayName));
-    }
     if (viewer && viewer.reviewer && course.status === "pending") {
       const row = h("div", { class: "form-actions" });
       ["approved", "rejected"].forEach((status) => {
@@ -445,15 +449,13 @@
     return form;
   }
 
-  function skillCard(universe) {
-    const skill = skillOf(universe.id);
-    if (!skill) return null;
-    const tasks = tasksOf(skill, universe.id);
+  function skillCard(universe, course) {
+    const tasks = tasksOf(course, universe.id);
     const done = count(tasks);
-    return h("a", { class: "path-card", href: courseHref(universe.id) }, [
+    return h("a", { class: "path-card", href: courseHref(universe.id, course.id) }, [
       h("p", { class: "page-tag", text: universe.name }),
-      h("h2", { text: line(skill.title) }),
-      h("p", { class: "local-note", text: trf("path.minutes", { n: skill.minutes || 45 }) }),
+      h("h2", { text: line(course.title) }),
+      h("p", { class: "local-note", text: trf("path.minutes", { n: course.minutes || 45 }) }),
       h("p", { class: "local-note", text: progressLine(done, tasks.length) }),
       bar(done, tasks.length),
     ]);
@@ -461,7 +463,7 @@
 
   function extraCard(course) {
     const tasks = courseTasks(course);
-    return h("a", { class: "path-card", href: courseHref("x:" + course.id) }, [
+    return h("a", { class: "path-card", href: "learn.html?course=" + encodeURIComponent("x:" + course.id) }, [
       h("p", { class: "page-tag", text: tr("path.extend") }),
       h("h2", { text: course.title }),
       h("p", { class: "local-note", text: progressLine(count(tasks), tasks.length) }),
@@ -479,9 +481,11 @@
     const approved = rows.filter((course) => course.status === "approved");
     root.replaceChildren();
 
+    const unit = params.get("unit") || "";
+    const viewing = Boolean(opened && (opened.indexOf("x:") === 0 || unit));
     const intro = document.querySelector(".page-intro");
-    if (intro) intro.hidden = Boolean(opened);
-    if (opened) {
+    if (intro) intro.hidden = viewing;
+    if (viewing) {
       root.append(h("p", {}, h("a", { class: "back", href: "learn.html" }, tr("path.backIndex"))));
       if (opened.indexOf("x:") === 0) {
         const course = rows.find((item) => item.id === opened.slice(2));
@@ -497,17 +501,18 @@
         return;
       }
       const universe = window.AIMING.byId[opened];
-      const skill = universe && skillOf(opened);
-      if (!skill) {
+      const course = universe && coursesOf(opened).find((item) => item.id === unit);
+      if (!course) {
         root.append(h("p", { text: tr("path.missing") }));
         return;
       }
-      const slides = skillSlides(universe);
-      const tasks = tasksOf(skill, opened);
+      const slides = skillSlides(universe, course);
+      const tasks = tasksOf(course, opened);
       const index = Number(params.get("n") || "0") || 0;
-      root.append(h("p", { class: "local-note", text: trf("path.minutes", { n: skill.minutes || 45 }) + " · " + progressLine(count(tasks), tasks.length) }));
+      root.append(h("p", { class: "local-note", text: trf("path.minutes", { n: course.minutes || 45 }) + " · " + progressLine(count(tasks), tasks.length) }));
       root.append(h("p", { text: tr("path.notYet") }));
-      root.append(deck(slides, index, line(skill.title)));
+      root.append(deck(slides, index, line(course.title)));
+      if (universeDone(opened)) root.append(certificate(universe.name, viewer && viewer.displayName));
       return;
     }
 
@@ -529,11 +534,12 @@
     root.append(h("form", { class: "search-form", role: "search" }, search));
 
     const tags = h("div", { class: "tag-row" });
-    const all = h("a", { class: "tag" + (tag ? "" : " is-on"), href: q ? "learn.html?q=" + encodeURIComponent(q) : "learn.html" }, tr("feed.all"));
+    const focus = tag || (opened && window.AIMING.byId[opened] ? opened : "");
+    const all = h("a", { class: "tag" + (focus ? "" : " is-on"), href: q ? "learn.html?q=" + encodeURIComponent(q) : "learn.html" }, tr("feed.all"));
     tags.append(all);
     universes.forEach((universe) => {
       tags.append(h("a", {
-        class: "tag" + (tag === universe.id ? " is-on" : ""),
+        class: "tag" + (focus === universe.id ? " is-on" : ""),
         href: "learn.html?tag=" + universe.id,
       }, universe.name));
     });
@@ -547,13 +553,13 @@
 
     const list = h("div", { class: "path-list" });
     universes.forEach((universe) => {
-      const skill = skillOf(universe.id);
-      const title = skill ? line(skill.title) : universe.name;
-      const hay = (universe.name + " " + title).toLowerCase();
-      if (tag && tag !== universe.id) return;
-      if (q && !hay.includes(q)) return;
-      const card = skillCard(universe);
-      if (card) list.append(card);
+      if (focus && focus !== universe.id) return;
+      coursesOf(universe.id).forEach((course) => {
+        const hay = (universe.name + " " + line(course.title)).toLowerCase();
+        if (q && !hay.includes(q)) return;
+        list.append(skillCard(universe, course));
+      });
+      if (universeDone(universe.id)) list.append(certificate(universe.name, viewer && viewer.displayName));
     });
     approved.forEach((course) => {
       const hay = (course.title + " " + (course.summary || "")).toLowerCase();
